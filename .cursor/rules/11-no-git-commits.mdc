@@ -1,0 +1,17 @@
+---
+description: Never commit or push; the user handles all git history changes
+alwaysApply: true
+---
+# No Git Commits
+
+The user commits and pushes by themselves.
+
+Never run:
+- `git commit` (including `--amend`)
+- `git push`
+- `git merge`, `git rebase`, `git cherry-pick`, `git revert`, `git reset`, `git tag`
+- Any other command that creates commits or rewrites history.
+
+Allowed: read-only git commands such as `git status`, `git diff`, `git log`, `git show`, `git blame`.
+
+When work is ready, leave changes uncommitted in the working tree and tell the user.
