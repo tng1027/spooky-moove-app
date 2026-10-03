@@ -1,0 +1,17 @@
+---
+description: Dart coding standards for production Flutter code
+globs:
+  - "**/*.dart"
+alwaysApply: true
+---
+# Dart Standards
+
+Follow Effective Dart conventions.
+
+Prefer strong typing, final, const, early returns, small functions, named parameters for complex APIs, and exhaustive state handling.
+
+Avoid dynamic unless genuinely necessary, force unwraps unless safety is guaranteed, unnecessary nullable values, deeply nested conditionals, and overly long methods.
+
+Use intent-revealing names such as calculateMonthlyBudget(), isLoading, hasPermission, and canSubmit.
+
+Do not catch exceptions without meaningful handling. Avoid swallowing errors. Preserve useful error context.

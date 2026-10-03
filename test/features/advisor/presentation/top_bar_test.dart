@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:cataland/core/engine/engine_models.dart';
+import 'package:cataland/core/theme/app_colors.dart';
+import 'package:cataland/core/theme/app_dimens.dart';
+import 'package:cataland/features/advisor/domain/eval_format.dart';
+import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
+import 'package:cataland/features/advisor/presentation/turn_status.dart';
+import 'package:cataland/features/advisor/presentation/widgets/top_bar.dart';
+import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
+import 'package:cataland/features/chess/data/chess_package_rules.dart';
+import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
+import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:cataland/features/persona/application/persona_suggester.dart';
+
+class FixedSuggestionController extends SuggestionController {
+  FixedSuggestionController(this.fixed);
+
+  final SuggestionState fixed;
+
+  @override
+  SuggestionState build() => fixed;
+}
+
+SuggestionReady ready({
+  EngineScore score = const CentipawnScore(40),
+  double winChance = 62,
+}) => SuggestionReady(
+  suggestion: PersonaSuggestion(
+    move: 'e2e4',
+    score: score,
+    winChance: winChance,
+  ),
+);
+
+void main() {
+  Future<void> pumpTopBar(
+    WidgetTester tester, {
+    TurnStatus? turn = TurnStatus.yourMove,
+    SuggestionState suggestion = const SuggestionWaiting(),
+    String fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+  }) {
+    return tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          turnStatusProvider.overrideWithValue(turn),
+          suggestionControllerProvider.overrideWith(
+            () => FixedSuggestionController(suggestion),
+          ),
+          chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
+        ],
+        child: const MaterialApp(home: Scaffold(body: TopBar())),
+      ),
+    );
+  }
+
+  Color? colorOf(WidgetTester tester, String text) =>
+      tester.widget<Text>(find.text(text)).style?.color;
+
+  testWidgets('a favorable suggestion: green WIN RATE, centered', (
+    tester,
+  ) async {
+    await pumpTopBar(tester, suggestion: ready());
+
+    final label = find.text('WIN RATE 62%');
+    expect(colorOf(tester, 'WIN RATE 62%'), AppColors.accentGreen);
+    final bar = tester.getRect(find.byKey(TopBar.regionKey));
+    expect(tester.getCenter(label).dx, closeTo(bar.center.dx, 0.5));
+  });
+
+  testWidgets('below 50 % the win rate is red', (tester) async {
+    await pumpTopBar(
+      tester,
+      suggestion: ready(score: const CentipawnScore(-130), winChance: 38),
+    );
+    expect(colorOf(tester, 'WIN RATE 38%'), AppColors.accentRed);
+  });
+
+  testWidgets('a forced mate is spelled out', (tester) async {
+    await pumpTopBar(
+      tester,
+      suggestion: ready(score: const MateScore(-4), winChance: 0),
+    );
+    expect(colorOf(tester, 'OPPONENT MATES IN 4'), AppColors.accentRed);
+  });
+
+  testWidgets('no suggestion yet: WIN RATE -- in textSecondary', (
+    tester,
+  ) async {
+    for (final (turn, state) in [
+      (TurnStatus.opponentToMove, const SuggestionWaiting()),
+      (TurnStatus.yourMove, const SuggestionThinking()),
+      (TurnStatus.yourMove, const SuggestionNoTier()),
+      (TurnStatus.yourMove, const SuggestionFailed()),
+    ]) {
+      await pumpTopBar(tester, turn: turn, suggestion: state);
+      expect(
+        colorOf(tester, EvalFormat.unknownWinRate),
+        AppColors.textSecondary,
+        reason: '$state',
+      );
+    }
+  });
+
+  testWidgets('a finished game reads GAME OVER', (tester) async {
+    await pumpTopBar(tester, turn: null, fen: '8/8/8/4k3/8/8/8/4KN2 w - - 0 1');
+
+    expect(find.text(TopBar.gameOverLabel), findsOneWidget);
+    expect(find.text(EvalFormat.unknownWinRate), findsNothing);
+  });
+
+  testWidgets('no game: no label', (tester) async {
+    await pumpTopBar(tester, turn: null);
+
+    expect(find.text(EvalFormat.unknownWinRate), findsNothing);
+    expect(find.text(TopBar.gameOverLabel), findsNothing);
+  });
+
+  testWidgets('UNDO top-left, NEW GAME top-right', (tester) async {
+    await pumpTopBar(tester);
+
+    final bar = tester.getRect(find.byKey(TopBar.regionKey));
+    final undo = tester.getRect(find.byKey(UndoKey.regionKey));
+    final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
+    expect(undo.left, bar.left + AppDimens.spacingSmall);
+    expect(newGame.right, bar.right - AppDimens.spacingSmall);
+  });
+
+  for (final textScale in [1.0, 2.0]) {
+    testWidgets('no overflow at 360 dp, text scale $textScale', (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      tester.platformDispatcher.textScaleFactorTestValue = textScale;
+      addTearDown(tester.view.reset);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+      await pumpTopBar(
+        tester,
+        suggestion: ready(score: const MateScore(-4), winChance: 0),
+      );
+      expect(tester.takeException(), isNull);
+      final label = tester.getRect(find.text('OPPONENT MATES IN 4'));
+      final undo = tester.getRect(find.byKey(UndoKey.regionKey));
+      final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
+      expect(label.left, greaterThanOrEqualTo(undo.right));
+      expect(label.right, lessThanOrEqualTo(newGame.left));
+    });
+  }
+}

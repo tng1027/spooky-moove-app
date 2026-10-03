@@ -1,0 +1,17 @@
+---
+description: Flutter performance standards
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# Flutter Performance
+
+Performance optimization must be evidence-driven.
+
+Prefer const widgets, small widget trees, lazy lists, efficient keys, and avoiding unnecessary rebuilds.
+
+For large collections use ListView.builder or equivalent lazy builders. Avoid expensive calculations inside build() and duplicate network requests caused by rebuilds.
+
+Do not perform expensive synchronous work on the UI thread. Use appropriate async/isolate mechanisms when necessary.
+
+When claiming a performance improvement, prefer evidence from Flutter DevTools, frame metrics, memory profiling, network measurements, startup time, or benchmarks.

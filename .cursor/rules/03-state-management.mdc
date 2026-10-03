@@ -1,0 +1,19 @@
+---
+description: Flutter state management standards
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# State Management
+
+Use the state-management solution already adopted by the project.
+
+Do not introduce a second state-management framework for a feature without a strong architectural reason.
+
+Prefer explicit states such as Initial, Loading, Success, Empty, and Error.
+
+Avoid representing complex state using multiple unrelated booleans that permit impossible combinations.
+
+Keep state at the lowest level that needs to own it. Do not move local UI state into global application state without a reason.
+
+Keep side effects outside pure UI rendering.

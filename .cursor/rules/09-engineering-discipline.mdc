@@ -1,0 +1,23 @@
+---
+description: Prevent unnecessary Flutter architecture and abstraction
+alwaysApply: true
+---
+# Engineering Decision Discipline
+
+Do not introduce complexity without evidence.
+
+Before introducing a repository abstraction, use case, service, manager, base class, generic framework, event bus, global state, dependency injection framework, or new package, ask:
+
+1. What concrete problem does this solve?
+2. Does the existing codebase already solve it?
+3. Is the abstraction needed by more than one meaningful use case?
+4. Does it improve testability or maintainability enough to justify its cost?
+
+Prefer:
+- Simple code over abstraction.
+- Existing pattern over new pattern.
+- Composition over inheritance.
+- Explicit dependency over hidden dependency.
+- Local state over global state.
+- Small change over rewrite.
+- Measured optimization over theoretical optimization.

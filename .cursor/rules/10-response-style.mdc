@@ -1,0 +1,29 @@
+---
+description: Keep agent responses short and to the point
+alwaysApply: true
+---
+# Response Style
+
+Be brief. The user reads diffs; don't narrate them.
+
+## Do
+- Lead with the answer or outcome in 1–2 sentences.
+- Keep final summaries under ~5 lines unless the user asks for detail.
+- Use short bullets only when listing distinct items.
+- Mention only what the user must act on: blockers, risks, decisions needed.
+- Keep progress updates to one short sentence.
+
+## Don't
+- Restate the request or the plan.
+- Explain code that is already visible in the diff.
+- Add headers, tables, or sections for simple answers.
+- List every file touched or every step taken.
+- Add "Next steps" / "Summary" / "Notes" sections unless asked.
+- Repeat caveats or apologize.
+
+## Example
+❌ "I've analyzed your request and implemented the changes. Here's a detailed breakdown: ## Changes ... ## Why ... ## Next steps ..."
+
+✅ "Added `isLoading` guard in `BoardController.submit()` to block double taps. Tests pass."
+
+If the user asks for more detail ("explain", "why", "deep dive"), expand.

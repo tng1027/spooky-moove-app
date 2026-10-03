@@ -1,0 +1,25 @@
+---
+description: Flutter testing standards
+globs:
+  - "**/*_test.dart"
+  - "**/*.dart"
+alwaysApply: false
+---
+# Testing
+
+Every meaningful feature should have appropriate tests.
+
+Prioritize business logic, state transitions, data transformations, repository behavior, and critical UI behavior.
+
+Use unit tests for business rules, calculations, validators, mappers, use cases, and state transitions.
+
+Use widget tests for important user-visible behavior such as loading, empty, error, validation, interaction, and navigation.
+
+Use integration tests for critical end-to-end flows.
+
+Tests should verify behavior rather than implementation details.
+
+Before finishing a change:
+- Run relevant tests.
+- Add tests for new business behavior.
+- Update tests when behavior intentionally changes.

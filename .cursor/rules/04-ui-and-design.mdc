@@ -1,0 +1,25 @@
+---
+description: Flutter UI and design implementation standards
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# Flutter UI Standards
+
+Build UI that is consistent with the existing design system.
+
+Prefer:
+- Small reusable widgets.
+- Theme-based colors, typography, spacing, and shapes.
+- const widgets where possible.
+- Clear loading, empty, error, and success states.
+- Accessible touch targets and readable text.
+- Responsive layouts.
+
+Avoid:
+- Hardcoded colors and dimensions when design tokens already exist.
+- Duplicated UI patterns.
+- Giant build() methods.
+- Business logic embedded in presentation code.
+
+Do not redesign unrelated screens while implementing a feature unless explicitly requested.

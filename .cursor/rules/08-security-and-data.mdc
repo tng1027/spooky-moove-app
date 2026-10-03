@@ -1,0 +1,19 @@
+---
+description: Flutter application security and data handling
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# Security
+
+Treat all external data as untrusted.
+
+Never hardcode secrets, commit API keys, log authentication tokens, log passwords, store sensitive credentials in plain text, or rely solely on client-side authorization.
+
+Use appropriate secure storage for sensitive local credentials.
+
+Validate and safely parse external data. Do not assume server responses are valid.
+
+Production logs must not expose access tokens, refresh tokens, passwords, private financial information, personal data, or sensitive identifiers.
+
+Authentication must explicitly handle loading, authenticated, unauthenticated, expired session, and failure states.

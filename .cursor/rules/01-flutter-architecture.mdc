@@ -1,0 +1,22 @@
+---
+description: Flutter architecture and application layering
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# Flutter Architecture
+
+Follow the architecture already established by the project.
+
+Recommended dependency direction:
+Presentation → Domain/Application → Data
+
+Widgets should primarily render state, handle interaction, trigger actions, and display states.
+
+Widgets should not perform HTTP requests, access databases directly, contain complex business rules, parse API responses, or implement authentication logic.
+
+Business rules belong outside widgets and should be deterministic and testable when possible.
+
+Repositories should hide implementation details such as REST, GraphQL, SQLite, Firebase, or local storage.
+
+Prefer explicit dependency injection. Avoid service locators unless the existing project already depends on one.

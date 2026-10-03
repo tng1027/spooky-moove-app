@@ -1,0 +1,21 @@
+---
+description: Flutter error handling and reliability standards
+globs:
+  - "**/*.dart"
+alwaysApply: false
+---
+# Error Handling
+
+Treat network, storage, parsing, and external services as unreliable.
+
+Handle expected failures explicitly.
+
+Provide meaningful application-level errors to the UI instead of exposing infrastructure exceptions directly when appropriate.
+
+Do not silently swallow exceptions.
+
+Every async operation that can fail should have a clear failure path.
+
+Avoid displaying raw technical exceptions to end users.
+
+Preserve diagnostic context for logging while protecting sensitive information.
