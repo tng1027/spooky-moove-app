@@ -1,5 +1,7 @@
 # Ticket Analysis
 
+> **Status: Done on iOS simulator (2026-10-03).** One-time EN/VI notice gate with a versioned acknowledgment in `shared_preferences` (`lib/features/fair_play`); `FairPlayScreen.readOnly()` opens from the new-game screen's FAIR PLAY key (header since OB-050). Legal review of the text is still required before release.
+
 TICKET_TYPE: NEW_FEATURE
 CONFIDENCE: HIGH
 

@@ -10,6 +10,8 @@ import 'package:cataland/features/chess/presentation/chess_board_controller.dart
 import 'package:cataland/features/chess/presentation/widgets/promotion_chooser.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,6 +55,8 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(NewGameScreen.startKey));
     await tester.pumpAndSettle();
   }

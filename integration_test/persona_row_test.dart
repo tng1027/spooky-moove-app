@@ -7,6 +7,8 @@ import 'package:cataland/core/theme/app_colors.dart';
 import 'package:cataland/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
 import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
@@ -51,6 +53,8 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(NewGameScreen.startKey));
     await tester.pumpAndSettle();
     final prompt = find.text(SuggestionCard.pickTierPrompt);

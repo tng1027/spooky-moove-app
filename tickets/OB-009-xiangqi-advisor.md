@@ -1,6 +1,6 @@
 # Ticket Analysis
 
-> **Progress (2026-10-04):** OB-042–OB-047 (plus OB-048, always two-tap entry) are done on the iOS simulator. Still open: the Xiangqi pass of OB-010 (DoD item "latency per tier, input cycle, FPS and thermal recorded"; ≤ 1000 ms on reference devices) and the real-device check of the 35 dp cells on 360×640 (XQ3).
+> **Progress (2026-10-04):** OB-042–OB-047 (plus OB-048, always two-tap entry) are done on the iOS simulator. Still open: the Xiangqi pass of OB-010 (harness and size done 2026-10-04; simulator latency run pending, device numbers in the final pass) (DoD item "latency per tier, input cycle, FPS and thermal recorded"; ≤ 1000 ms on reference devices) and the real-device check of the 35 dp cells on 360×640 (XQ3).
 
 > **Status: Rewritten as the Phase 2 epic (2026-10-03).** The keypad-era draft is superseded by the tap board (OB-006) and every later Chess decision. The work is split into OB-042–OB-047 plus the Xiangqi pass of OB-010. This file holds the carry-over matrix, the Xiangqi Definition of Done and the Phase 2 PO decisions. Implementation status lives in the child tickets.
 >

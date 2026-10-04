@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/app_dialog.dart';
 import '../../../../core/widgets/app_key.dart';
+import '../../domain/game_kind.dart';
 import '../game_session_controller.dart';
-import '../new_game_screen.dart';
+import '../home_screen.dart';
 
 /// "NEW GAME" key on the advisor screen (OB-011 REQ-001, REQ-007).
 ///
-/// Asks for confirmation, then opens the new-game screen over the advisor.
-/// The current game and its tier are only discarded once a side is tapped,
-/// so backing out leaves them unchanged.
+/// Asks for confirmation; confirming discards the current game and opens the
+/// new-game screen (OB-050). CANCEL leaves the game unchanged.
 class NewGameKey extends ConsumerWidget {
   const NewGameKey({super.key = regionKey});
 
@@ -35,22 +35,20 @@ class NewGameKey extends ConsumerWidget {
       builder: (_) => const NewGameConfirmDialog(),
     );
     if (isConfirmed != true || !context.mounted) return;
-    await openNewGameScreen(context, ref);
+    openNewGameScreen(context, ref);
   }
 
-  /// Opens the new-game screen without asking; BACK keeps the current game.
-  static Future<void> openNewGameScreen(BuildContext context, WidgetRef ref) {
-    return Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (routeContext) => NewGameScreen(
-          initialGame: ref.read(gameSessionProvider)?.game,
-          onStart: (game, userSide, tier) {
-            ref.read(gameSessionProvider.notifier).start(game, userSide, tier);
-            Navigator.of(routeContext).pop();
-          },
-        ),
-      ),
-    );
+  /// Discards the current game without asking (OB-050 D1) and opens the
+  /// new-game screen for the same game, with Home as the root beneath it.
+  ///
+  /// The navigator and notifier are captured first: discarding swaps the
+  /// root from the advisor to Home, which disposes [context] and [ref].
+  static void openNewGameScreen(BuildContext context, WidgetRef ref) {
+    final navigator = Navigator.of(context);
+    final session = ref.read(gameSessionProvider.notifier);
+    final game = ref.read(gameSessionProvider)?.game ?? GameKind.values.first;
+    session.discard();
+    HomeScreen.openNewGame(navigator, game: game, onStart: session.start);
   }
 }
 
@@ -63,45 +61,30 @@ class NewGameConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: AppColors.surfaceDark,
-      elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(AppDimens.radius)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimens.spacingLarge),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppDimens.spacingLarge,
+    return AppDialog(
+      title: 'DISCARD THE CURRENT GAME?',
+      spokenTitle: 'Discard the current game?',
+      children: [
+        Row(
+          spacing: AppDimens.spacing,
           children: [
-            const Text(
-              'DISCARD THE CURRENT GAME?',
-              style: AppTypography.primary,
+            Expanded(
+              child: AppKey(
+                key: cancelKey,
+                label: 'CANCEL',
+                onTap: () => Navigator.of(context).maybePop(false),
+              ),
             ),
-            Row(
-              spacing: AppDimens.spacing,
-              children: [
-                Expanded(
-                  child: AppKey(
-                    key: cancelKey,
-                    label: 'CANCEL',
-                    onTap: () => Navigator.of(context).maybePop(false),
-                  ),
-                ),
-                Expanded(
-                  child: AppKey(
-                    key: confirmKey,
-                    label: 'NEW GAME',
-                    onTap: () => Navigator.of(context).maybePop(true),
-                  ),
-                ),
-              ],
+            Expanded(
+              child: AppKey(
+                key: confirmKey,
+                label: 'NEW GAME',
+                onTap: () => Navigator.of(context).maybePop(true),
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

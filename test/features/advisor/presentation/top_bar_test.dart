@@ -117,14 +117,14 @@ void main() {
     expect(find.text(TopBar.gameOverLabel), findsNothing);
   });
 
-  testWidgets('UNDO top-left, NEW GAME top-right', (tester) async {
+  testWidgets('NEW GAME top-left, UNDO top-right', (tester) async {
     await pumpTopBar(tester);
 
     final bar = tester.getRect(find.byKey(TopBar.regionKey));
     final undo = tester.getRect(find.byKey(UndoKey.regionKey));
     final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
-    expect(undo.left, bar.left + AppDimens.spacingSmall);
-    expect(newGame.right, bar.right - AppDimens.spacingSmall);
+    expect(newGame.left, bar.left + AppDimens.spacingSmall);
+    expect(undo.right, bar.right - AppDimens.spacingSmall);
   });
 
   for (final textScale in [1.0, 2.0]) {
@@ -143,8 +143,8 @@ void main() {
       final label = tester.getRect(find.text('OPPONENT MATES IN 4'));
       final undo = tester.getRect(find.byKey(UndoKey.regionKey));
       final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
-      expect(label.left, greaterThanOrEqualTo(undo.right));
-      expect(label.right, lessThanOrEqualTo(newGame.left));
+      expect(label.left, greaterThanOrEqualTo(newGame.right));
+      expect(label.right, lessThanOrEqualTo(undo.left));
     });
   }
 }

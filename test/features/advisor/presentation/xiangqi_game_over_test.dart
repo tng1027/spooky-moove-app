@@ -17,6 +17,7 @@ import 'package:cataland/features/fair_play/presentation/fair_play_controller.da
 import 'package:cataland/features/new_game/domain/game_kind.dart';
 import 'package:cataland/features/new_game/presentation/game_registry.dart';
 import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
 import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
@@ -193,8 +194,8 @@ void main() {
           child: const CatalandApp(),
         ),
       );
-      await tester.tap(find.byKey(NewGameScreen.gameKey(GameKind.xiangqi)));
-      await tester.pump();
+      await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.xiangqi)));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(NewGameScreen.startKey));
       await tester.pumpAndSettle();
     }
@@ -216,6 +217,32 @@ void main() {
       expect(find.text(TopBar.gameOverLabel), findsOneWidget);
       expect(find.byKey(StatusLine.newGameKey), findsOneWidget);
       expect(find.byKey(ConfirmPlayedKey.regionKey), findsNothing);
+    });
+
+    testWidgets('game-over NEW GAME discards the game, opens XIANGQI', (
+      tester,
+    ) async {
+      await pumpXiangqi(tester, _redMatesInOne);
+      engine.last.complete([fakeLine(1, 'a1a10', const MateScore(1))]);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(ConfirmPlayedKey.regionKey));
+      await tester.pumpAndSettle();
+      await tester.pump(StatusLine.newGameTapGuard);
+
+      await tester.tap(find.byKey(StatusLine.newGameKey));
+      await tester.pumpAndSettle();
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(CatalandApp)),
+      );
+      expect(container.read(gameSessionProvider), isNull);
+      final screen = tester.widget<NewGameScreen>(find.byType(NewGameScreen));
+      expect(screen.game, GameKind.xiangqi);
+
+      await tester.tap(find.byKey(NewGameScreen.backKey));
+      await tester.pumpAndSettle();
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(find.text('BACK'), findsNothing);
     });
 
     testWidgets('no moves for the user: red NO MOVES / YOU LOSE', (

@@ -1,5 +1,29 @@
 # Ticket Analysis
 
+> **Xiangqi pass: harness done, simulator baseline in progress (2026-10-04).** Device numbers come in the final device pass with the same harness.
+>
+> **Decisions:** Q1 → the 30 MB budget is the **store download size** (App Store thinned size, Play per-ABI download) (PO 2026-10-04). Q2 → engineering-proposed position set below; PO confirms.
+>
+> **Harness (re-run each milestone):**
+> - Positions: `integration_test/benchmark/xiangqi_bench_positions.dart`. 9 FENs: start (44 legal moves), central cannon (35), developed with rooks out (48, worst case for the all-move tiers), midgame (29), cannon screens (26), horse and elephant endgame (21), crossed soldiers (9), mate in one (36), in check (4).
+> - Per-tier latency + win-chance band check: `flutter test integration_test/xiangqi_benchmark_test.dart -d <device>` (add `--profile` on a real device; the simulator supports debug only, the engine is always built optimized). 9 positions × 7 tiers × 3 cold runs (hash cleared, no cache). Prints `BENCH|…` per run, `SUMMARY|tier|median|p95|max|min depth|over 1000ms` per tier, `SPREAD|…` per position and one `BANDS|…` line.
+> - Input cycle with snapping + frames: `flutter test integration_test/xiangqi_input_cycle_test.dart -d <device>`; for frame data on a device: `flutter drive --profile --driver=test_driver/perf_driver.dart --target=integration_test/xiangqi_input_cycle_test.dart -d <device>` (writes `build/xiangqi_frames.json`). 10 Red moves entered as BLACK (second tap off the point so it snaps), timed from the first tap to the suggestion on screen. Prints `CYCLE|…`, `SUMMARY|input cycle|…` and `FRAMES|…`.
+> - Size: `flutter build ios --release --no-codesign --analyze-size`; `flutter build apk --release --target-platform android-arm64 --analyze-size`. Store sizes: App Store Connect (TestFlight build, "App Store file size") and Play Console (App bundle explorer, download size per device).
+>
+> **Results so far (2026-10-04):**
+>
+> | Item | Measured | NFR | Result |
+> |------|----------|-----|--------|
+> | iOS arm64 `Runner.app` | 18 MB uncompressed, **≈ 9.3 MB zipped** (estimate of the download; Flutter 10 MB, App 5.3 MB, engine 0.9 MB, Assets.car 1.9 MB) | ≤ 30 MB download | Pass (estimate; confirm thinned size on the next TestFlight upload) |
+> | Android arm64 APK | 19.5 MB file (native libs stored uncompressed), **≈ 9.4 MB gzip** (estimate of the Play download; `libflutter` 11.7 MB, `libapp` 4.3 MB, `libfairy_stockfish` 1.6 MB) | ≤ 30 MB download | Pass (estimate; confirm in Play Console) |
+> | Xiangqi glyph assets (item a) | 64 KB (`assets/pieces/xiangqi`) | < 100 KB | Pass |
+> | Per-tier latency, simulator | Pending: simulator run | ≤ 1000 ms | — |
+> | Input cycle with snapping (item b), simulator | Pending: simulator run | < 1.2 s | — |
+> | Win-chance band check (item c) | Pending: simulator run | Bands reachable | — |
+> | Frames during search, thermal 30 min, tap accuracy at 360×640 (item d) | Device pass | 60 FPS, no throttling | — |
+>
+> Size notes: both platforms have ~20 MB headroom, so arm64-only Android and NNUE stay optional. The 1.9 MB `Assets.car` (iOS) and a 553 KB PNG in the APK resources are probably the app icon / launch images; worth a look before release, not blocking.
+
 TICKET_TYPE: TECHNICAL_TASK
 CONFIDENCE: HIGH
 

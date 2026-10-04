@@ -6,7 +6,7 @@ import 'features/advisor/presentation/advisor_screen.dart';
 import 'features/fair_play/presentation/fair_play_controller.dart';
 import 'features/fair_play/presentation/fair_play_screen.dart';
 import 'features/new_game/presentation/game_session_controller.dart';
-import 'features/new_game/presentation/new_game_screen.dart';
+import 'features/new_game/presentation/home_screen.dart';
 
 class CatalandApp extends StatelessWidget {
   const CatalandApp({super.key});
@@ -26,7 +26,7 @@ class CatalandApp extends StatelessWidget {
 
 /// The fair-play notice is the root screen until acknowledged, so no route
 /// sits beneath it and system back cannot bypass it (OB-008 REQ-001). The
-/// new-game screen is the root until the first game starts (OB-011).
+/// Home screen is the root until the first game starts (OB-049).
 class _HomeGate extends ConsumerWidget {
   const _HomeGate();
 
@@ -42,6 +42,6 @@ class _HomeGate extends ConsumerWidget {
     }
     final hasGame = ref.watch(gameSessionProvider) != null;
     if (hasGame) return const AdvisorScreen();
-    return NewGameScreen(onStart: ref.read(gameSessionProvider.notifier).start);
+    return HomeScreen(onStart: ref.read(gameSessionProvider.notifier).start);
   }
 }

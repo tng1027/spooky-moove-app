@@ -35,8 +35,8 @@ An **offline tactical training companion** mobile app for people playing on a **
 - Target audience: **adults** (parents/players operate the phone; children play on the physical board). Not Apple Kids Category / not Google Play Families. Lowest content rating (4+ / Everyone). Parental gate before purchases and external links. **No personal data collected** (OB-040, PO delegated to BA recommendation). Legal obligations still to be confirmed by counsel (deferred).
 
 ## Hard constraints
-- Flutter (Dart) client, engines on background isolates. Current development approach: engines **in-process over Dart FFI** (OB-004), **provisional** until the license-boundary decision (OB-032, counsel).
+- Flutter (Dart) client, engines on background isolates. Current development approach: engines **in-process over Dart FFI** (OB-004), final under the GPLv3 decision (OB-002, 2026-10-04).
 - Android API 24+ (7.0+), iOS 13.0+.
 - Apple rule: no downloaded executable code. Only **data** (NNUE, NN weights, opening books) is downloaded; engine binaries ship in the app. iOS apps cannot spawn child processes.
 - Fair-play: a one-time notice forbidding use in rated/sanctioned/tournament play without arbiter permission (FIDE, EGF, Nihon Ki-in, etc.) (OB-008).
-- **Open release blocker:** GPLv3 engines (Fairy-Stockfish, Edax) vs. a closed client and App Store distribution (OB-002, OB-032; counsel deferred).
+- **Licensing:** the app is GPLv3 open source (PO 2026-10-04, OB-002). Release blocker until counsel confirms GPLv3 store distribution and compliance (OB-032).

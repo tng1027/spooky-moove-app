@@ -1,5 +1,10 @@
 # Ticket Analysis
 
+> **Status: RESOLVED (PO 2026-10-04), counsel to confirm before release (OB-032).**
+> - **Q1/Q2 → GPLv3 open source.** The app is released under GPLv3 with its source published, and Fairy-Stockfish stays in-process over FFI on both iOS and Android (OB-004 becomes the final architecture, not provisional). The IPC process-separation proposal is dropped. Counsel's remaining job (OB-032) is to confirm GPLv3 App Store distribution and the compliance checklist (source offer, license text, attributions), not to choose an architecture.
+> - Consequences: every dependency and asset must be GPL-compatible (current ones are: `chess` BSD/MIT, Cburnett pieces BSD, JetBrains Mono and Noto Serif TC OFL); `dartchess` (GPL) is now allowed if ever useful; the licenses screen (OB-033) must show the GPLv3 text and where to get the source.
+> - Q3: decided per game (Chess `chess`, Xiangqi hand-written); later games in their phases. Q4: Phase 5 (OB-017); an open engine fits the GPL direction, Yixin would need permission compatible with GPL. Q5: required (OB-033). Q6: answered (OB-035, deferred).
+
 TICKET_TYPE: NEEDS_CLARIFICATION
 CONFIDENCE: HIGH
 

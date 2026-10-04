@@ -13,9 +13,12 @@ import 'package:cataland/features/fair_play/presentation/fair_play_controller.da
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
+import 'package:cataland/features/settings/presentation/language_dialog.dart';
+import 'package:cataland/features/settings/presentation/settings_dialog.dart';
 import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
 import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
-import 'package:cataland/core/widgets/app_key.dart';
+import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
 import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
 import 'package:cataland/features/new_game/domain/game_kind.dart';
@@ -64,9 +67,27 @@ void main() {
         child: const CatalandApp(),
       ),
     );
-    expect(find.byType(NewGameScreen), findsOneWidget);
-    await shot(tester, 'new_game_root');
+    expect(find.byType(HomeScreen), findsOneWidget);
+    await shot(tester, 'home_root');
 
+    await tap(tester, HomeScreen.settingsKey);
+    expect(find.text(SettingsDialog.emptyLabel), findsOneWidget);
+    await shot(tester, 'settings_dialog');
+    await tap(tester, SettingsDialog.closeKey);
+
+    await tap(tester, HomeScreen.languageKey);
+    expect(find.text('ENGLISH'), findsOneWidget);
+    await shot(tester, 'language_dialog');
+    await tap(tester, LanguageDialog.closeKey);
+    expect(find.byType(LanguageDialog), findsNothing);
+
+    await tap(tester, HomeScreen.gameKey(GameKind.chess));
+    expect(find.text('CHESS'), findsOneWidget);
+    await shot(tester, 'new_game_chess');
+    await tap(tester, NewGameScreen.backKey);
+    expect(find.byType(NewGameScreen), findsNothing);
+
+    await tap(tester, HomeScreen.gameKey(GameKind.chess));
     await tap(tester, NewGameScreen.startKey);
     expect(find.byType(AdvisorScreen), findsOneWidget);
     expect(container.read(personaTierProvider), PersonaTier.even);
@@ -84,16 +105,18 @@ void main() {
 
     await tap(tester, NewGameKey.regionKey);
     await tap(tester, NewGameConfirmDialog.confirmKey);
-    await shot(tester, 'new_game_pushed');
-    await tap(tester, NewGameScreen.backKey);
     expect(
-      container.read(chessBoardControllerProvider).sideToMove,
-      PieceColor.black,
-      reason: 'backing out keeps the game',
+      container.read(gameSessionProvider),
+      isNull,
+      reason: 'confirming discards the game',
     );
+    await shot(tester, 'new_game_after_discard');
+    await tap(tester, NewGameScreen.backKey);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(find.text('BACK'), findsNothing);
+    await shot(tester, 'home_after_discard');
 
-    await tap(tester, NewGameKey.regionKey);
-    await tap(tester, NewGameConfirmDialog.confirmKey);
+    await tap(tester, HomeScreen.gameKey(GameKind.chess));
     await tap(tester, NewGameScreen.sideKey(PlayerSide.second));
     await tap(tester, NewGameScreen.startKey);
     final board = container.read(chessBoardControllerProvider);
@@ -122,7 +145,7 @@ void main() {
       ),
     );
 
-    await tap(tester, NewGameScreen.gameKey(GameKind.xiangqi));
+    await tap(tester, HomeScreen.gameKey(GameKind.xiangqi));
     expect(find.text('RED'), findsOneWidget);
     await shot(tester, 'new_game_xiangqi');
 
@@ -147,10 +170,7 @@ void main() {
 
     await tap(tester, NewGameKey.regionKey);
     await tap(tester, NewGameConfirmDialog.confirmKey);
-    final xiangqiKey = tester.widget<AppKey>(
-      find.byKey(NewGameScreen.gameKey(GameKind.xiangqi)),
-    );
-    expect(xiangqiKey.isSelected, isTrue);
+    expect(find.text('XIANGQI'), findsOneWidget);
 
     await tap(tester, NewGameScreen.sideKey(PlayerSide.second));
     await shot(tester, 'new_game_xiangqi_black');

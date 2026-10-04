@@ -29,4 +29,8 @@ class GameSessionController extends Notifier<GameSession?> {
     ref.read(personaTierProvider.notifier).reset(tier);
     state = GameSession(game: game, userSide: userSide);
   }
+
+  /// Ends the current game without starting another (OB-050 D1). The
+  /// suggestion controller hears the change and cancels any running search.
+  void discard() => state = null;
 }

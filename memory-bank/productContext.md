@@ -32,7 +32,7 @@
 - **Undo:** one tap removes the last entered move (either side); repeated taps go further back (OB-012; in the Chess DoD).
 - Game end: checkmate, stalemate and automatic FIDE draws detected; claimable draws shown as a plain-language hint; no resign/draw buttons (accepted assumptions, OB-024).
 - "Accepted assumption" = the PO did not object (2026-10-02); can be revisited.
-- Not yet decided: resuming a game after the app is killed (OB-001 Q6).
+- No resume after the app is killed in M1: the app always opens at Home (OB-001 Q6, PO 2026-10-04).
 
 ### Move entry (tap board, OB-006)
 - **Move-based (Chess, Xiangqi):** smart 1–2-tap entry. The first tap on an own movable piece = source; on any other square = destination. The move auto-commits when unambiguous. Chess promotion = a 4-pictogram chooser (queen first). Xiangqi: see "Xiangqi (Phase 2)" below.

@@ -4,7 +4,7 @@ Source: `memory-bank/` (all 7 files) reviewed on 2026-10-02, plus PO decisions r
 Codebase status (2026-10-03): Flutter 3.47.6 / Dart 3.13.5 installed; git repository initialized; app shell scaffolded by OB-003 (originally `omni_board`, `com.thuannguyen.omniboard`); Fairy-Stockfish FFI bridge by OB-004. No feature logic yet.
 App renamed 2026-10-04: **Cataland** — package `cataland`, bundle ID `com.cataland.app`.
 
-Testing policy (PO 2026-10-03): every ticket is implemented and verified on the iOS simulator. Physical-device testing (iPhone and Android) and all Android verification happen in one pass after all tickets are finished.
+Testing policy (PO 2026-10-03, revised 2026-10-04): every ticket is implemented and verified on the iOS simulator. The developer agent runs `flutter analyze` and `flutter test` and keeps the integration tests up to date, but does not run them; the PO runs the integration tests on the simulator. Physical-device testing (iPhone and Android) and all Android verification happen in one pass after all tickets are finished.
 
 PO request (2026-10-02): "BA sắp xếp plan/tickets theo từng game. Bắt đầu với Chess trước" — organize the plan per game, Chess first.
 PO compliance document (2026-10-02): "Legal, Architecture & Monetization Compliance" → OB-032–OB-040 (licensing architecture, licenses screen, store positioning, freemium). See "M1 release readiness".
@@ -34,8 +34,8 @@ Every game phase must include: input (tap board, no-notation principle), undo (O
 
 | # | ID | Title | Type | Priority | Depends on | Status |
 |---|----|-------|------|----------|------------|--------|
-| 0.1 | [OB-001](OB-001-clarify-core-session-flow.md) | Define the core advisor session flow and move notation | NEEDS_CLARIFICATION | P0 | — | **Resolved for Chess** (2026-10-02): decisions Q1, Q4, Q7–Q9, Q11, and Q2 (option b, 2026-10-03, OB-041); accepted assumptions Q3, Q5. **Q10 resolved** (PO 2026-10-03, XQ4). Open, not blocking: Q6 (resume) |
-| 0.2 | [OB-002](OB-002-clarify-licensing-strategy.md) | Decide licensing strategy (GPL engines, rules library, Gomoku engine) | NEEDS_CLARIFICATION | P0 | — | Waiting for PO/legal; **Q3 resolved for Chess: `chess` package** (other games open); Q1/Q2 moved to OB-032 |
+| 0.1 | [OB-001](OB-001-clarify-core-session-flow.md) | Define the core advisor session flow and move notation | NEEDS_CLARIFICATION | P0 | — | **Resolved** (2026-10-04): all questions decided. Q2 option b (OB-041); Q3, Q5 confirmed; Q6 no resume after app kill in M1; Q10 (XQ4) |
+| 0.2 | [OB-002](OB-002-clarify-licensing-strategy.md) | Decide licensing strategy (GPL engines, rules library, Gomoku engine) | NEEDS_CLARIFICATION | P0 | — | **Resolved** (PO 2026-10-04): app is **GPLv3 open source**, Fairy-Stockfish in-process on both stores, IPC dropped; counsel confirms before release (OB-032). Q3 per game; Q4 in OB-017 |
 | 0.2b | [OB-032](OB-032-clarify-engine-license-boundary-architecture.md) | Decide the engine license boundary and process architecture (IPC mandate vs. iOS) | NEEDS_CLARIFICATION | P0 (blocks release, not development) | Legal counsel (assignment deferred by PO) | **Release blocker**; development continues with FFI (OB-004), OB-005 stays transport-agnostic |
 | 0.3 | [OB-021](OB-021-clarify-persona-purpose-and-rules.md) | Purpose and per-tier rules of the 7-tier persona system | NEEDS_CLARIFICATION | P0 | — | **Resolved** (decision record) |
 | 0.4 | [OB-003](OB-003-scaffold-app-shell-and-design-tokens.md) | Scaffold Flutter app shell, design tokens, offline fonts, layout | TECHNICAL_TASK | P0 | Flutter installed | **Done** (2026-10-03); iOS minimum is 15.0 (Flutter 3.47), not 13.0 |
@@ -43,7 +43,7 @@ Every game phase must include: input (tap board, no-notation principle), undo (O
 | 0.6 | [OB-005](OB-005-engine-abstraction-and-uci-adapter.md) | Game-agnostic engine interface + UCI adapter (multi-line, depth caps, 900 ms cap) | TECHNICAL_TASK | P0 | OB-004 | **Done on iOS simulator** (2026-10-03); UCCI not needed (`UCI_Variant xiangqi`); device timing deferred to OB-010 / final device pass |
 | 0.7 | [OB-022](OB-022-persona-move-selection.md) (core) | Persona tier logic core: WC conversion + 7-tier selection (pure Dart) | NEW_FEATURE | P0 | OB-003 | **Done on iOS simulator** (2026-10-03): tier logic, WC conversion, config, plus engine-facing `PersonaSuggester` (tier search limits, cache per position+tier, superseded results discarded); screen wiring in Phase 1 (row 1.5) |
 | 0.8 | [OB-023](OB-023-persona-selector-ui.md) | Persona tier selector row (7 buttons, design tokens) | NEW_FEATURE | P0 | OB-003 | **Done on iOS simulator** (2026-10-03): `PersonaRow` + nullable `personaTierProvider`, card prompt until a tier is chosen; Open Question 2 (< 360 dp) still open |
-| 0.9 | [OB-008](OB-008-fair-play-terms-notice.md) | One-time fair-play notice (EN/VI), acknowledged before first use | NEW_FEATURE | P0 | OB-003, OB-011 (info key) | Ready (HIGH); legal review of the text before release |
+| 0.9 | [OB-008](OB-008-fair-play-terms-notice.md) | One-time fair-play notice (EN/VI), acknowledged before first use | NEW_FEATURE | P0 | OB-003, OB-011 (info key) | **Done on iOS simulator** (2026-10-03): EN/VI one-time gate, versioned acknowledgment; FAIR PLAY key on the new-game screen header. Legal review of the text before release |
 
 ---
 
@@ -89,7 +89,7 @@ Not in the Chess DoD: custom start positions, resuming after app kill, match his
 2. App display name and tier-7 label (OB-034) → `projectbrief.md` title. Bundle ID decided 2026-10-03: `com.thuannguyen.omniboard`; changed 2026-10-04 to `com.cataland.app` (app name Cataland).
 3. Final color tokens `keyDisabled` / `bgDark` (provisional `#1A1B20` / `#0F1015`, OB-003 Q1); light theme in or out (OB-003 Q2) → `designSystem.md`.
 4. Input-cycle target 1.2 s vs. 1.5 s (PO sign-off) → `techContext.md`, `activeContext.md`.
-5. Resume after app kill (OB-001 Q6) → `productContext.md`. Intersection board, character discs and `pieceRed` token (XQ1–XQ3, decided) → `designSystem.md` (done with OB-044). (Xiangqi decisions XQ1–XQ11 applied to `productContext.md` on 2026-10-03.)
+5. ~~Resume after app kill (OB-001 Q6)~~ → decided 2026-10-04 (no resume in M1), applied to `productContext.md`. Intersection board, character discs and `pieceRed` token (XQ1–XQ3, decided) → `designSystem.md` (done with OB-044). (Xiangqi decisions XQ1–XQ11 applied to `productContext.md` on 2026-10-03.)
 6. Licenses screen content after counsel (OB-033/OB-032) → `techContext.md`.
 
 (Chess rules library = `chess`: applied to `techContext.md`, `systemPatterns.md`, `activeContext.md` and `progress.md` on 2026-10-02.)
@@ -110,7 +110,10 @@ PO request (2026-10-03): "For chess, it is all good now. I would like to move al
 | 2.4 | [OB-046](OB-046-xiangqi-advisor-wiring.md) | Advisor wiring: `UCI_Variant xiangqi`, 7 tiers, card `[炮] H3 ➔ E3` + WXF expert line, highlight, I PLAYED IT, undo | NEW_FEATURE | P1 | OB-042–OB-045 | **Done on iOS simulator** (2026-10-03): card disc + `H3 ➔ E3 ✕`, WXF expert line ported from Fairy-Stockfish (`.` for sideways), `GameWidgets.expertLine` slot; fixed the stale variant on a game switch; 7 tiers + Xiangqi turn loop on the simulator |
 | 2.5 | [OB-047](OB-047-xiangqi-game-end.md) | Game end: CHECKMATE / NO MOVES = loss for the side to move; no draws, no perpetual adjudication | NEW_FEATURE | P1 | OB-042–OB-044, OB-046 | **Done on iOS simulator** (2026-10-04): `XiangqiGameStatus` + `XiangqiResultFormat` (`CHECKMATE` / `NO MOVES`, `YOU WIN` / `YOU LOSE`) through the seam; shared game-over path unchanged; mate-in-1 flows on the simulator |
 | 2.5b | [OB-048](OB-048-always-two-tap-entry.md) | Never commit on the first tap: always show the options, commit on the second tap (Chess and Xiangqi, shared smart entry) | ENHANCEMENT | P1 | OB-006, OB-042, OB-044 | **Done on iOS simulator** (2026-10-04): first tap always shows the options, second tap commits, both games; supersedes OB-006 REQ-005 |
-| 2.6 | [OB-010](OB-010-milestone1-size-latency-thermal-validation.md) (Xiangqi pass) | Performance for Xiangqi per tier; asset size; input cycle with snapping; WC slope check | TECHNICAL_TASK | P1 | OB-043–OB-047 | After OB-047 |
+| 2.5c | [OB-049](OB-049-home-game-picker.md) | Home screen with CHESS / XIANGQI buttons → new-game screen per game (level + side, no GAME row, HOME key) | ENHANCEMENT | P1 | OB-011, OB-045, OB-042 | **Done on iOS simulator** (2026-10-04): Home CHESS / XIANGQI keys → new-game screen per game; Home BACK key and HOME row later replaced by OB-050 |
+| 2.5d | [OB-050](OB-050-screen-headers-and-new-game-navigation.md) | Three-slot headers: new-game `[BACK] CHESS [FAIR PLAY]` (bottom HOME row removed); game `[NEW GAME] WIN RATE [UNDO]` (corners swapped); in-game NEW GAME navigation | ENHANCEMENT | P1 | OB-049, OB-011, OB-012, OB-041 | **Done on iOS simulator** (2026-10-04): shared `ScreenHeader`; game discarded on confirming NEW GAME; Home is the root again with no BACK key. Revises OB-049 Design / BR-003 |
+| 2.5e | [OB-051](OB-051-home-settings-and-language.md) | Home header `[SETTINGS] PICK A GAME [LANGUAGE]`: small Settings modal (content later) and Language modal (English only) | NEW_FEATURE | P1 | OB-050 (frees Home's top-left), OB-049, OB-008 | **Done on iOS simulator** (2026-10-04): Settings ships with `NO SETTINGS YET` + release gate (≥ 1 entry or hide the key before submission); fair-play notice keeps device language; ABOUT (OB-033) becomes a Settings row |
+| 2.6 | [OB-010](OB-010-milestone1-size-latency-thermal-validation.md) (Xiangqi pass) | Performance for Xiangqi per tier; asset size; input cycle with snapping; WC slope check | TECHNICAL_TASK | P1 | OB-043–OB-047 | **In progress** (2026-10-04): harness done (9-position set, per-tier latency, input cycle with snapping, frames, WC band check); size ≈ 9.3 MB iOS / 9.4 MB Android arm64 compressed (pass); simulator latency run pending; device numbers in the final device pass |
 
 **Order:** OB-042 ∥ OB-043 → OB-044 → OB-045 → OB-046 → OB-047 → OB-010 Xiangqi pass. OB-045 comes right after the board so Xiangqi is reachable from the UI for simulator testing.
 
@@ -233,7 +236,7 @@ PO requirement 2026-10-02 ("7-Tier Persona Engine", 🥚 Baby → 👑 God). Ful
 ## Memory bank review
 
 ### Gaps (missing requirements)
-1. ~~**Session flow is undefined**~~ → resolved for Chess (OB-001, 2026-10-02) and written to `productContext.md`. Still open: persistence after app kill (OB-001 Q6).
+1. ~~**Session flow is undefined**~~ → resolved for Chess (OB-001, 2026-10-02) and written to `productContext.md`. Persistence after app kill decided 2026-10-04: no resume in M1 (OB-001 Q6).
 2. ~~**Chess promotion** is not covered by the two-tap description~~ → resolved: pictogram chooser (OB-006 REQ-010).
 3. **No navigation/screens beyond the main screen** — game selection is now OB-011; settings/storage-settings screens are still undocumented (ODDAS needs storage settings; the ToS may need to be re-viewable).
 4. **Match history** has no requirements at all (→ OB-013).
@@ -242,7 +245,7 @@ PO requirement 2026-10-02 ("7-Tier Persona Engine", 🥚 Baby → 👑 God). Ful
 7. **Localization/accessibility** are not mentioned.
 8. **Engine strength/time settings** — superseded by the persona tiers (OB-021).
 9. **Download policy** — Wi-Fi-only vs. mobile data, background download on iOS, behavior when storage is full.
-10. **No Settings screen** — the licenses screen (OB-033) is placed behind an ABOUT key on the new-game screen.
+10. **No Settings screen** — the licenses screen (OB-033) is placed behind an ABOUT key on the new-game screen. → PO 2026-10-04: a Settings dialog on Home (OB-051, content later); ABOUT moves there (decided).
 
 ### Contradictions
 Status after the memory-bank update of 2026-10-02: rows marked **fixed** are corrected in the memory bank; the others remain open there too.
@@ -294,7 +297,7 @@ Non-blocking:
 6. **Size budget (OB-010):** If 30 MB is infeasible, what gives?
 7. **Latency target:** confirm 1.2 s (not 1.5 s) as the binding input-cycle target.
 8. ~~**Phase 2 Xiangqi decisions XQ1–XQ11**~~ — **resolved** (PO 2026-10-03, all defaults accepted; includes Xiangqi notation = OB-001 Q10 → XQ4 and the rules module → XQ11).
-9. **App language:** only the fair-play notice is bilingual (EN/VI); is the rest of the app English-only, or should it be localized?
+9. **App language:** only the fair-play notice is bilingual (EN/VI); is the rest of the app English-only, or should it be localized? Partly answered (PO 2026-10-04, OB-051): a Language picker on Home, English only for now; the fair-play notice keeps the device language (OB-051 D2, decided).
 
 **Before store submission (deferred by the PO, not needed for development):**
 10. Counsel assignment for OB-032 and OB-040's legal questions.

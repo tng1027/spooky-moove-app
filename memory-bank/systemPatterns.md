@@ -31,7 +31,7 @@ Data flow: tap on the board → rules module validates and updates the game stat
 ### Engine execution model (open decision — OB-032, counsel deferred)
 - **Current development approach (provisional):** engines compiled **into the app as libraries**, driven over Dart FFI on a background isolate. Their stdin/stdout are replaced by in-process pipes or a small C shim (send/receive lines) (OB-004).
 - **Separate executables over stdin/stdout pipes are infeasible on iOS:** iOS apps cannot spawn child processes, and `Process.start` is unavailable there. This replaces the original SAD's "executables / Standard I/O" description.
-- The PO's compliance document asks for GPL engines to run as separate processes (IPC) for license separation. That is **feasible on Android only**; whether it is legally sufficient is for counsel (OB-032). Until decided, the engine interface stays **transport-agnostic** (OB-005), so an Android process transport could be swapped in.
+- The app is GPLv3 open source (PO 2026-10-04, OB-002), so the earlier IPC process-separation proposal is dropped; engines stay in-process over FFI on both platforms. The engine interface remains transport-agnostic (OB-005).
 
 ### Layer responsibilities
 - **UI layer:** tap board, suggestion card, persona row, status line with UNDO, haptics. Never does heavy work on the UI thread.

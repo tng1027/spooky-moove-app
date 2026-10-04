@@ -58,6 +58,7 @@ Setup:
 Measured (2026-10-03):
 - iOS release, arm64 `fairy_stockfish.framework`: **0.91 MB** uncompressed (913,840 bytes), ~0.39 MB gzip. Whole `Runner.app` 15 MB (Flutter.framework 10 MB, App.framework 3.8 MB).
 - Android per-ABI sizes: **not yet measured**. Deferred to the final device pass (PO 2026-10-03: simulator-only until all tickets are done).
+- OB-010 Xiangqi pass (2026-10-04): budget = store download size (PO). iOS `Runner.app` 18 MB, ≈ 9.3 MB zipped; Android arm64 APK 19.5 MB (native libs stored), ≈ 9.4 MB gzip, `libfairy_stockfish.so` 1.6 MB. Both pass with ~20 MB headroom (estimates until App Store Connect / Play Console report). Benchmark harness: `integration_test/xiangqi_benchmark_test.dart`, `integration_test/xiangqi_input_cycle_test.dart`, `test_driver/perf_driver.dart` (commands in OB-010).
 - iOS simulator: `uci`→`uciok`, `isready`→`readyok`; `go movetime 500` → `bestmove` in 500 ms; `stop` during `go infinite` → `bestmove` immediately; 61 frames during a 1 s search with 0 missed build/raster budgets.
 
 Known limits:

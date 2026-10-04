@@ -3,6 +3,8 @@
 > **Status: RESOLVED for Chess (2026-10-02).** Every Chess question is answered (explicit decisions or accepted assumptions; see "Resolution summary" under Dependencies). Still open, neither blocks the Chess slice: **Q6** (resume after app kill; not in the Chess DoD) and **Q10** (Xiangqi notation; needed for Phase 2).
 >
 > **Q10 — RESOLVED (PO 2026-10-03, XQ4; proposed by BA + Designer):** input needs no notation (intersection tap board, OB-044). Output main line in **absolute coordinates** in Red's frame, files `A`–`I`, ranks `1`–`10`, with the moving piece's disc and `✕` for captures (e.g. `[炮] H3 ➔ E3`). **WXF only in the expert line**, from the mover's side (e.g. `C2.5 · EVAL +0.3 | …`). Recorded as a decision in OB-046. Only Q6 (resume after app kill) remains open.
+>
+> **Status: RESOLVED (PO 2026-10-04).** Q6 → **no resume in M1**: after the app is killed, it always opens at Home. Q3 (standard initial position only) and Q5 (automatic draws, draw hint, no resign / draw-offer buttons) confirmed by the PO as decisions. No open questions remain.
 
 TICKET_TYPE: NEEDS_CLARIFICATION
 CONFIDENCE: HIGH
@@ -90,10 +92,10 @@ Edge cases the decisions must cover:
   |---|---------|------|-------|
   | Q1 | The user picks **exactly one side** per game (White/Black); suggestions only for that side | **Decision** (PO: "ng dùng chỉ chọn 1 phe") | OB-011 |
   | Q2 | ~~The user enters **every** move, including their own~~ → **Option b** (2026-10-03): one-tap "✓ I PLAYED IT" confirms the suggestion; any other move is entered on the board as an override | **Decision** (PO 2026-10-03, replaces the accepted assumption) | OB-041 (revises OB-025 A1) |
-  | Q3 | Standard initial position only | Accepted assumption (PO did not object) | OB-011 A2 |
+  | Q3 | Standard initial position only | **Decision** (PO confirmed 2026-10-04) | OB-011 A2 |
   | Q4 | **One-step undo is in the Chess DoD** (one move per tap) | **Decision** (PO: "đúng") | OB-012 |
-  | Q5 | Automatic FIDE draws, plain-language claimable-draw hint, no resign/draw-offer buttons | Accepted assumption (PO did not object) | OB-024 A1–A3 |
-  | Q6 | Resume after app kill | **Open**, not in the Chess DoD | — |
+  | Q5 | Automatic FIDE draws, plain-language claimable-draw hint, no resign/draw-offer buttons | **Decision** (PO confirmed 2026-10-04) | OB-024 A1–A3 |
+  | Q6 | No resume after app kill in M1; the app always opens at Home | **Decision** (PO 2026-10-04) | — |
   | Q7 | Legal-only tap board, smart 1–2-tap entry; replaces "no on-screen board" | **Decision** (memory bank updated) | OB-006 |
   | Q8 | Pictogram promotion; no-chess-knowledge principle | **Decision** | OB-006 |
   | Q9 | Coordinate notation `E7 ➔ E5` | **Decision** | OB-007 |

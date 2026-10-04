@@ -12,6 +12,10 @@ abstract final class AppDimens {
   static const double topBarHeight = 48;
   static const double minSuggestionCardHeight = 96;
 
+  /// Home game key: `2 × minKeyHeight + spacingLarge`, grows with text scale.
+  static const double gameKeyMinHeight = 112;
+  static const double gamePictogramSize = 56;
+
   static const double spacingSmall = 4;
   static const double spacing = 8;
   static const double spacingLarge = 16;

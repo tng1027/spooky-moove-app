@@ -1,5 +1,7 @@
 # Ticket Analysis
 
+> **Update (PO 2026-10-04, OB-002):** the app goes **GPLv3 open source**. The IPC mandate and the closed-client question are dropped; engines stay in-process over FFI on both platforms. Remaining for counsel (still a release blocker): confirm GPLv3 distribution through the App Store and Google Play, and the compliance checklist (source publication, license text, attributions in OB-033).
+
 TICKET_TYPE: NEEDS_CLARIFICATION
 CONFIDENCE: HIGH
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cataland/app.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_screen.dart';
@@ -40,29 +40,28 @@ Future<SharedPreferences> _pumpApp(
 }
 
 void main() {
-  testWidgets('a fresh install shows the notice, not the new-game screen', (
+  testWidgets('a fresh install shows the notice, not the Home screen', (
     tester,
   ) async {
     await _pumpApp(tester);
 
     expect(find.byType(FairPlayScreen), findsOneWidget);
-    expect(find.byType(NewGameScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsNothing);
     expect(find.byKey(FairPlayScreen.closeKey), findsNothing);
   });
 
-  testWidgets(
-    'acknowledging opens the new-game screen and persists the version',
-    (tester) async {
-      final preferences = await _pumpApp(tester);
+  testWidgets('acknowledging opens the Home screen and persists the version', (
+    tester,
+  ) async {
+    final preferences = await _pumpApp(tester);
 
-      await tester.tap(find.byKey(FairPlayScreen.acknowledgeKey));
-      await tester.pump();
+    await tester.tap(find.byKey(FairPlayScreen.acknowledgeKey));
+    await tester.pump();
 
-      expect(find.byType(FairPlayScreen), findsNothing);
-      expect(find.byType(NewGameScreen), findsOneWidget);
-      expect(preferences.getInt(_key), fairPlayNoticeVersion);
-    },
-  );
+    expect(find.byType(FairPlayScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsOneWidget);
+    expect(preferences.getInt(_key), fairPlayNoticeVersion);
+  });
 
   testWidgets('the current version already acknowledged skips the notice', (
     tester,
@@ -70,7 +69,7 @@ void main() {
     await _pumpApp(tester, acknowledgedVersion: fairPlayNoticeVersion);
 
     expect(find.byType(FairPlayScreen), findsNothing);
-    expect(find.byType(NewGameScreen), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   testWidgets('an older acknowledged version shows the notice again', (
@@ -79,7 +78,7 @@ void main() {
     await _pumpApp(tester, acknowledgedVersion: fairPlayNoticeVersion - 1);
 
     expect(find.byType(FairPlayScreen), findsOneWidget);
-    expect(find.byType(NewGameScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsNothing);
   });
 
   testWidgets('a Vietnamese device shows the Vietnamese text', (tester) async {
@@ -111,7 +110,7 @@ void main() {
 
     await tester.tap(find.byKey(FairPlayScreen.acknowledgeKey));
     await tester.pump();
-    expect(find.byType(NewGameScreen), findsOneWidget);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   testWidgets('read-only mode closes back to the previous screen', (

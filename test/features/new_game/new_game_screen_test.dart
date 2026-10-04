@@ -8,6 +8,7 @@ import 'package:cataland/core/board/tap_board.dart';
 import 'package:cataland/core/theme/app_dimens.dart';
 import 'package:cataland/core/widgets/app_key.dart';
 import 'package:cataland/features/advisor/presentation/advisor_screen.dart';
+import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
 import 'package:cataland/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:cataland/features/chess/domain/chess_models.dart';
 import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
@@ -16,6 +17,7 @@ import 'package:cataland/features/fair_play/presentation/fair_play_controller.da
 import 'package:cataland/features/fair_play/presentation/fair_play_screen.dart';
 import 'package:cataland/features/new_game/domain/game_kind.dart';
 import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
@@ -26,7 +28,6 @@ import 'package:cataland/core/board/intersection_board.dart';
 import 'package:cataland/core/engine/engine_models.dart';
 import 'package:cataland/features/advisor/presentation/suggestion_providers.dart';
 import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/chess/presentation/widgets/chess_board.dart';
 import 'package:cataland/features/new_game/presentation/game_registry.dart';
 import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_board.dart';
@@ -37,6 +38,7 @@ import '../persona/fake_game_engine.dart';
 
 ChessSquare sq(String name) => ChessSquare.parse(name);
 
+/// Pumps the app on the Home screen.
 Future<ProviderContainer> pumpApp(
   WidgetTester tester, {
   Size size = const Size(392, 800),
@@ -65,6 +67,32 @@ Future<ProviderContainer> pumpApp(
   return ProviderScope.containerOf(tester.element(find.byType(CatalandApp)));
 }
 
+/// Taps [game] on the Home screen.
+Future<void> pickGame(WidgetTester tester, GameKind game) async {
+  final gameKey = find.byKey(HomeScreen.gameKey(game));
+  await tester.ensureVisible(gameKey);
+  await tester.tap(gameKey);
+  await tester.pumpAndSettle();
+}
+
+/// Pumps the app and opens the new-game screen for [game] from Home.
+Future<ProviderContainer> pumpNewGame(
+  WidgetTester tester, {
+  GameKind game = GameKind.chess,
+  Size size = const Size(392, 800),
+  double textScale = 1.0,
+  FakeGameEngine? engine,
+}) async {
+  final container = await pumpApp(
+    tester,
+    size: size,
+    textScale: textScale,
+    engine: engine,
+  );
+  await pickGame(tester, game);
+  return container;
+}
+
 Finder square(String name) {
   final s = sq(name);
   return find.byKey(TapBoard.squareKey(s.file, s.rank));
@@ -80,9 +108,9 @@ Future<void> tapSide(WidgetTester tester, PlayerSide side) async {
   await tester.pumpAndSettle();
 }
 
-/// Starts as White, enters 1. e4 and picks the Soft tier.
+/// Starts Chess as White, enters 1. e4 and picks the Soft tier.
 Future<ProviderContainer> pumpGameInProgress(WidgetTester tester) async {
-  final container = await pumpApp(tester);
+  final container = await pumpNewGame(tester);
   await tapSide(tester, PlayerSide.first);
   await tester.tap(square('e2'));
   await tester.pump();
@@ -109,31 +137,57 @@ Future<void> openNewGameConfirm(WidgetTester tester) async {
   expect(find.byType(NewGameConfirmDialog), findsOneWidget);
 }
 
+Future<void> confirmNewGame(WidgetTester tester) async {
+  await openNewGameConfirm(tester);
+  await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapBack(WidgetTester tester) async {
+  await tester.tap(find.byKey(NewGameScreen.backKey));
+  await tester.pumpAndSettle();
+}
+
+/// The game was discarded and Home is the only route, without a BACK key.
+void expectDiscardedOnHome(WidgetTester tester, ProviderContainer container) {
+  expect(container.read(gameSessionProvider), isNull);
+  expect(find.byType(HomeScreen), findsOneWidget);
+  expect(find.byType(NewGameScreen), findsNothing);
+  expect(find.text('BACK'), findsNothing);
+  expect(find.byKey(HomeScreen.settingsKey), findsOneWidget);
+  expect(find.byKey(HomeScreen.languageKey), findsOneWidget);
+  final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+  expect(navigator.canPop(), isFalse);
+}
+
 void main() {
   group('first use', () {
-    testWidgets('lists CHESS then XIANGQI, CHESS preselected, no BACK key', (
+    testWidgets('header: BACK, the game name, FAIR PLAY; no bottom row', (
       tester,
     ) async {
-      await pumpApp(tester);
+      await pumpNewGame(tester);
 
       expect(find.byType(NewGameScreen), findsOneWidget);
-      final chess = find.byKey(NewGameScreen.gameKey(GameKind.chess));
-      final xiangqi = find.byKey(NewGameScreen.gameKey(GameKind.xiangqi));
-      expect(find.text('CHESS'), findsOneWidget);
-      expect(find.text('XIANGQI'), findsOneWidget);
-      expect(
-        tester.getCenter(xiangqi).dy,
-        greaterThan(tester.getCenter(chess).dy),
-      );
-      expect(tester.widget<AppKey>(chess).isSelected, isTrue);
-      expect(tester.widget<AppKey>(xiangqi).isSelected, isFalse);
-      expect(find.byKey(NewGameScreen.backKey), findsNothing);
+      final back = tester.getRect(find.byKey(NewGameScreen.backKey));
+      final name = tester.getRect(find.text('CHESS'));
+      final fairPlay = tester.getRect(find.byKey(NewGameScreen.fairPlayKey));
+      final start = tester.getRect(find.byKey(NewGameScreen.startKey));
+      expect(back.right, lessThanOrEqualTo(name.left));
+      expect(name.right, lessThanOrEqualTo(fairPlay.left));
+      expect(back.center.dy, closeTo(fairPlay.center.dy, 0.5));
+      expect(back.bottom, lessThan(start.top));
+      expect(fairPlay.bottom, lessThan(start.top));
+      expect(name.center.dx, closeTo(392 / 2, 0.5));
+      expect(find.textContaining('NEW GAME'), findsNothing);
+      expect(find.text('HOME'), findsNothing);
+      expect(find.text('GAME'), findsNothing);
+      expect(find.text('XIANGQI'), findsNothing);
     });
 
     testWidgets('defaults: Even and WHITE selected, nothing started yet', (
       tester,
     ) async {
-      final container = await pumpApp(tester);
+      final container = await pumpNewGame(tester);
 
       expect(find.text('LEVEL · EVEN'), findsOneWidget);
       AppKey key(Key k) => tester.widget<AppKey>(find.byKey(k));
@@ -144,7 +198,7 @@ void main() {
     });
 
     testWidgets('tapping a side selects it without starting', (tester) async {
-      final container = await pumpApp(tester);
+      final container = await pumpNewGame(tester);
 
       await tester.tap(find.byKey(NewGameScreen.sideKey(PlayerSide.second)));
       await tester.pump();
@@ -159,12 +213,13 @@ void main() {
     testWidgets('START GAME with the defaults: White below, Even level', (
       tester,
     ) async {
-      final container = await pumpApp(tester);
+      final container = await pumpNewGame(tester);
       await tester.tap(find.byKey(NewGameScreen.startKey));
       await tester.pumpAndSettle();
 
       expect(find.byType(AdvisorScreen), findsOneWidget);
       expect(find.byType(NewGameScreen), findsNothing);
+      expect(find.byType(HomeScreen), findsNothing);
       expect(container.read(personaTierProvider), PersonaTier.even);
       expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
       final board = container.read(chessBoardControllerProvider);
@@ -176,10 +231,21 @@ void main() {
       );
     });
 
+    testWidgets('after START, system back does not return to Home', (
+      tester,
+    ) async {
+      await pumpNewGame(tester);
+      await tester.tap(find.byKey(NewGameScreen.startKey));
+      await tester.pumpAndSettle();
+
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      expect(navigator.canPop(), isFalse);
+    });
+
     testWidgets('BLACK puts Black at the bottom; White moves first', (
       tester,
     ) async {
-      final container = await pumpApp(tester);
+      final container = await pumpNewGame(tester);
       await tapSide(tester, PlayerSide.second);
 
       final board = container.read(chessBoardControllerProvider);
@@ -191,10 +257,31 @@ void main() {
       );
     });
 
+    testWidgets('BACK returns to Home without starting a game', (tester) async {
+      final container = await pumpNewGame(tester);
+      await tapBack(tester);
+
+      expect(find.byType(NewGameScreen), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(container.read(gameSessionProvider), isNull);
+    });
+
+    testWidgets('system back returns to Home without starting a game', (
+      tester,
+    ) async {
+      final container = await pumpNewGame(tester);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(find.byType(NewGameScreen), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+      expect(container.read(gameSessionProvider), isNull);
+    });
+
     testWidgets('FAIR PLAY opens the notice read-only and closes back', (
       tester,
     ) async {
-      await pumpApp(tester);
+      await pumpNewGame(tester);
 
       await tester.tap(find.byKey(NewGameScreen.fairPlayKey));
       await tester.pumpAndSettle();
@@ -210,7 +297,7 @@ void main() {
     testWidgets('no overflow at text scale 2.0 on a small phone', (
       tester,
     ) async {
-      await pumpApp(tester, size: const Size(360, 640), textScale: 2.0);
+      await pumpNewGame(tester, size: const Size(360, 640), textScale: 2.0);
       expect(tester.takeException(), isNull);
 
       await tapSide(tester, PlayerSide.first);
@@ -219,34 +306,64 @@ void main() {
     });
   });
 
-  testWidgets('a rapid double tap on START GAME starts one game', (
-    tester,
-  ) async {
+  group('guard', () {
     final starts = <(GameKind, PlayerSide, PersonaTier?)>[];
-    await tester.pumpWidget(
-      MaterialApp(
-        home: NewGameScreen(
-          onStart: (game, side, tier) => starts.add((game, side, tier)),
+
+    Future<void> pumpScreen(WidgetTester tester) async {
+      starts.clear();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => NewGameScreen(
+                    game: GameKind.chess,
+                    onStart: (game, side, tier) =>
+                        starts.add((game, side, tier)),
+                  ),
+                ),
+              ),
+              child: const Text('open'),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+    }
 
-    final start = find.byKey(NewGameScreen.startKey);
-    await tester.tap(start);
-    await tester.tap(start);
-    await tester.pump();
+    testWidgets('a rapid double tap on START GAME starts one game', (
+      tester,
+    ) async {
+      await pumpScreen(tester);
 
-    expect(starts, [(GameKind.chess, PlayerSide.first, PersonaTier.even)]);
+      final start = find.byKey(NewGameScreen.startKey);
+      await tester.tap(start);
+      await tester.tap(start);
+      await tester.pump();
+
+      expect(starts, [(GameKind.chess, PlayerSide.first, PersonaTier.even)]);
+    });
+
+    testWidgets('BACK then START: only BACK acts', (tester) async {
+      await pumpScreen(tester);
+
+      await tester.tap(find.byKey(NewGameScreen.backKey));
+      await tester.tap(find.byKey(NewGameScreen.startKey));
+      await tester.pumpAndSettle();
+
+      expect(starts, isEmpty);
+      expect(find.byType(NewGameScreen), findsNothing);
+    });
   });
 
   group('LEVEL', () {
     Finder tierKey(PersonaTier tier) => find.byKey(NewGameScreen.tierKey(tier));
 
-    testWidgets('shows the 7 tiers, Even selected, between GAME and SIDE', (
-      tester,
-    ) async {
+    testWidgets('shows the 7 tiers, Even selected, above SIDE', (tester) async {
       final semantics = tester.ensureSemantics();
-      await pumpApp(tester);
+      await pumpNewGame(tester);
 
       expect(find.text('LEVEL · EVEN'), findsOneWidget);
       for (final tier in PersonaTier.values) {
@@ -262,17 +379,8 @@ void main() {
         );
       }
       semantics.dispose();
-      final levelY = tester.getCenter(tierKey(PersonaTier.baby)).dy;
       expect(
-        levelY,
-        greaterThan(
-          tester
-              .getCenter(find.byKey(NewGameScreen.gameKey(GameKind.chess)))
-              .dy,
-        ),
-      );
-      expect(
-        levelY,
+        tester.getCenter(tierKey(PersonaTier.baby)).dy,
         lessThan(
           tester
               .getCenter(find.byKey(NewGameScreen.sideKey(PlayerSide.first)))
@@ -284,7 +392,7 @@ void main() {
     testWidgets('the picked level is named and carried into the game', (
       tester,
     ) async {
-      final container = await pumpApp(tester);
+      final container = await pumpNewGame(tester);
 
       await tester.tap(tierKey(PersonaTier.god));
       await tester.pump();
@@ -303,7 +411,7 @@ void main() {
     testWidgets('keys are at least 44 x 48 dp on a 360 dp screen', (
       tester,
     ) async {
-      await pumpApp(tester, size: const Size(360, 800));
+      await pumpNewGame(tester, size: const Size(360, 800));
 
       for (final tier in PersonaTier.values) {
         final rect = tester.getRect(tierKey(tier));
@@ -316,29 +424,11 @@ void main() {
       }
     });
 
-    testWidgets('picking a level then BACK keeps the game and its tier', (
-      tester,
-    ) async {
-      final container = await pumpGameInProgress(tester);
-      await openNewGameConfirm(tester);
-      await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-      await tester.pumpAndSettle();
-
-      await tester.tap(tierKey(PersonaTier.god));
-      await tester.pump();
-      await tester.tap(find.byKey(NewGameScreen.backKey));
-      await tester.pumpAndSettle();
-
-      expectGameInProgress(container);
-    });
-
     testWidgets('a level picked mid-game starts the new game with it', (
       tester,
     ) async {
       final container = await pumpGameInProgress(tester);
-      await openNewGameConfirm(tester);
-      await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-      await tester.pumpAndSettle();
+      await confirmNewGame(tester);
 
       await tester.tap(tierKey(PersonaTier.master));
       await tester.pump();
@@ -363,37 +453,51 @@ void main() {
       expectGameInProgress(container);
     });
 
-    testWidgets('confirm then BACK returns to the unchanged game', (
+    testWidgets('confirm discards the game and opens the same game', (
       tester,
     ) async {
       final container = await pumpGameInProgress(tester);
-      await openNewGameConfirm(tester);
+      await confirmNewGame(tester);
 
-      await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-      await tester.pumpAndSettle();
+      expect(container.read(gameSessionProvider), isNull);
+      expect(find.byType(AdvisorScreen), findsNothing);
       expect(find.byType(NewGameScreen), findsOneWidget);
-      expect(find.byKey(NewGameScreen.backKey), findsOneWidget);
+      expect(find.text('CHESS'), findsOneWidget);
+      expect(find.text('LEVEL · EVEN'), findsOneWidget);
+    });
 
-      await tester.tap(find.byKey(NewGameScreen.backKey));
+    testWidgets('confirm, BACK: Home with no BACK and no way back', (
+      tester,
+    ) async {
+      final container = await pumpGameInProgress(tester);
+      await confirmNewGame(tester);
+      await tapBack(tester);
+
+      expectDiscardedOnHome(tester, container);
+    });
+
+    testWidgets('confirm, system back: Home with no BACK', (tester) async {
+      final container = await pumpGameInProgress(tester);
+      await confirmNewGame(tester);
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
 
-      expect(find.byType(NewGameScreen), findsNothing);
-      expect(find.byType(AdvisorScreen), findsOneWidget);
-      expectGameInProgress(container);
+      expectDiscardedOnHome(tester, container);
     });
 
     testWidgets(
       'confirm then START discards the game; the default tier applies',
       (tester) async {
         final container = await pumpGameInProgress(tester);
-        await openNewGameConfirm(tester);
-        await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-        await tester.pumpAndSettle();
+        await confirmNewGame(tester);
 
         await tapSide(tester, PlayerSide.second);
 
         expect(find.byType(NewGameScreen), findsNothing);
+        expect(find.byType(HomeScreen), findsNothing);
         expect(find.byType(AdvisorScreen), findsOneWidget);
+        final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+        expect(navigator.canPop(), isFalse);
         final board = container.read(chessBoardControllerProvider);
         expect(board.pieces[sq('e4')], isNull);
         expect(
@@ -412,16 +516,9 @@ void main() {
   });
 
   group('XIANGQI', () {
-    Finder gameKey(GameKind game) => find.byKey(NewGameScreen.gameKey(game));
     AppKey key(WidgetTester tester, Finder finder) =>
         tester.widget<AppKey>(finder);
     Finder sideKey(PlayerSide side) => find.byKey(NewGameScreen.sideKey(side));
-
-    Future<void> selectGame(WidgetTester tester, GameKind game) async {
-      await tester.ensureVisible(gameKey(game));
-      await tester.tap(gameKey(game));
-      await tester.pump();
-    }
 
     List<XiangqiPiece> sideDiscs(WidgetTester tester) => [
       for (final side in PlayerSide.values)
@@ -435,117 +532,95 @@ void main() {
             .piece,
     ];
 
-    testWidgets(
-      'XIANGQI relabels the sides RED / BLACK with general discs, keeps '
-      'side and level, and clicks',
-      (tester) async {
-        final haptics = <String>[];
-        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          SystemChannels.platform,
-          (call) async {
-            if (call.method == 'HapticFeedback.vibrate') {
-              haptics.add(call.arguments as String);
-            }
-            return null;
-          },
-        );
-        addTearDown(
-          () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-            SystemChannels.platform,
-            null,
-          ),
-        );
-        await pumpApp(tester);
-        await tester.tap(find.byKey(NewGameScreen.tierKey(PersonaTier.soft)));
-        await tester.pump();
-        haptics.clear();
-
-        await selectGame(tester, GameKind.xiangqi);
-
-        expect(haptics, ['HapticFeedbackType.selectionClick']);
-        expect(key(tester, gameKey(GameKind.xiangqi)).isSelected, isTrue);
-        expect(key(tester, gameKey(GameKind.chess)).isSelected, isFalse);
-        expect(find.text('RED'), findsOneWidget);
-        expect(find.text('BLACK'), findsOneWidget);
-        expect(find.text('WHITE'), findsNothing);
-        expect(sideDiscs(tester), const [
-          XiangqiPiece(PlayerSide.first, XiangqiPieceKind.general),
-          XiangqiPiece(PlayerSide.second, XiangqiPieceKind.general),
-        ]);
-        expect(key(tester, sideKey(PlayerSide.first)).isSelected, isTrue);
-        expect(find.text('LEVEL · SOFT'), findsOneWidget);
-
-        await selectGame(tester, GameKind.xiangqi);
-        expect(haptics, hasLength(1), reason: 'reselecting is a no-op');
-      },
-    );
-
-    testWidgets('XIANGQI + BLACK, then CHESS keeps BLACK selected', (
+    testWidgets('XIANGQI shows RED / BLACK with general discs, RED selected', (
       tester,
     ) async {
-      await pumpApp(tester);
-      await selectGame(tester, GameKind.xiangqi);
-      await tester.ensureVisible(sideKey(PlayerSide.second));
-      await tester.tap(sideKey(PlayerSide.second));
-      await tester.pump();
+      await pumpNewGame(tester, game: GameKind.xiangqi);
 
-      await selectGame(tester, GameKind.chess);
-
-      expect(find.text('WHITE'), findsOneWidget);
-      expect(find.text('RED'), findsNothing);
-      expect(find.byType(XiangqiPieceDisc), findsNothing);
-      expect(key(tester, sideKey(PlayerSide.second)).isSelected, isTrue);
+      expect(find.text('XIANGQI'), findsOneWidget);
+      expect(find.text('RED'), findsOneWidget);
+      expect(find.text('BLACK'), findsOneWidget);
+      expect(find.text('WHITE'), findsNothing);
+      expect(sideDiscs(tester), const [
+        XiangqiPiece(PlayerSide.first, XiangqiPieceKind.general),
+        XiangqiPiece(PlayerSide.second, XiangqiPieceKind.general),
+      ]);
+      expect(key(tester, sideKey(PlayerSide.first)).isSelected, isTrue);
+      expect(find.text('LEVEL · EVEN'), findsOneWidget);
     });
 
-    testWidgets('initialGame preselects XIANGQI; START passes it on', (
-      tester,
-    ) async {
+    testWidgets('picking a side clicks', (tester) async {
+      final haptics = <String>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'HapticFeedback.vibrate') {
+            haptics.add(call.arguments as String);
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      await pumpNewGame(tester, game: GameKind.xiangqi);
+      haptics.clear();
+
+      await tester.tap(sideKey(PlayerSide.second));
+      await tester.pump();
+      expect(haptics, ['HapticFeedbackType.selectionClick']);
+
+      await tester.tap(sideKey(PlayerSide.second));
+      await tester.pump();
+      expect(haptics, hasLength(1), reason: 'reselecting is a no-op');
+    });
+
+    testWidgets('START passes the game on', (tester) async {
       final starts = <(GameKind, PlayerSide, PersonaTier?)>[];
       await tester.pumpWidget(
         MaterialApp(
           home: NewGameScreen(
-            initialGame: GameKind.xiangqi,
+            game: GameKind.xiangqi,
             onStart: (game, side, tier) => starts.add((game, side, tier)),
           ),
         ),
       );
 
-      expect(key(tester, gameKey(GameKind.xiangqi)).isSelected, isTrue);
-      expect(find.text('RED'), findsOneWidget);
       await tester.tap(find.byKey(NewGameScreen.startKey));
       await tester.pump();
 
       expect(starts, [(GameKind.xiangqi, PlayerSide.first, PersonaTier.even)]);
     });
 
-    testWidgets('game and side keys announce title-case names', (tester) async {
+    testWidgets('title, header and side keys announce title-case names', (
+      tester,
+    ) async {
       final semantics = tester.ensureSemantics();
-      await pumpApp(tester);
-      await selectGame(tester, GameKind.xiangqi);
+      await pumpNewGame(tester, game: GameKind.xiangqi);
 
       expect(
-        tester.getSemantics(gameKey(GameKind.xiangqi)),
-        matchesSemantics(
-          label: 'Xiangqi',
-          isButton: true,
-          hasEnabledState: true,
-          isEnabled: true,
-          hasSelectedState: true,
-          isSelected: true,
-          hasTapAction: true,
-        ),
+        tester.getSemantics(find.bySemanticsLabel('New game, Xiangqi')),
+        matchesSemantics(label: 'New game, Xiangqi', isHeader: true),
       );
-      expect(
-        tester.getSemantics(gameKey(GameKind.chess)),
-        matchesSemantics(
-          label: 'Chess',
-          isButton: true,
-          hasEnabledState: true,
-          isEnabled: true,
-          hasSelectedState: true,
-          hasTapAction: true,
-        ),
-      );
+      for (final (key, label) in const [
+        (NewGameScreen.backKey, 'Back'),
+        (NewGameScreen.fairPlayKey, 'Fair play'),
+      ]) {
+        expect(
+          tester.getSemantics(find.byKey(key)),
+          matchesSemantics(
+            label: label,
+            isButton: true,
+            hasEnabledState: true,
+            isEnabled: true,
+            hasSelectedState: true,
+            hasTapAction: true,
+          ),
+        );
+      }
       expect(
         tester.getSemantics(sideKey(PlayerSide.first)),
         matchesSemantics(
@@ -572,37 +647,60 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('a Chess game: confirm, XIANGQI, BACK keeps the Chess game', (
+    testWidgets('confirm during a search: the old result never shows', (
+      tester,
+    ) async {
+      final engine = FakeGameEngine();
+      final container = await pumpNewGame(
+        tester,
+        game: GameKind.xiangqi,
+        engine: engine,
+      );
+      await tapSide(tester, PlayerSide.first);
+      final search = engine.last;
+      expect(search.isPending, isTrue);
+
+      await confirmNewGame(tester);
+      if (search.isPending) {
+        search.complete([fakeLine(1, 'h3e3', const CentipawnScore(30))]);
+      }
+      await tester.pumpAndSettle();
+
+      expect(container.read(gameSessionProvider), isNull);
+      expect(
+        container.read(suggestionControllerProvider),
+        isNot(isA<SuggestionReady>()),
+      );
+      expect(
+        container.read(xiangqiBoardControllerProvider).suggestedMove,
+        isNull,
+      );
+      expect(find.text('XIANGQI'), findsOneWidget);
+    });
+
+    testWidgets('a Chess game: confirm, BACK, XIANGQI, START switches game', (
       tester,
     ) async {
       final container = await pumpGameInProgress(tester);
-      await openNewGameConfirm(tester);
-      await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-      await tester.pumpAndSettle();
-      expect(key(tester, gameKey(GameKind.chess)).isSelected, isTrue);
+      await confirmNewGame(tester);
+      await tapBack(tester);
+      await pickGame(tester, GameKind.xiangqi);
+      await tapSide(tester, PlayerSide.first);
 
-      await selectGame(tester, GameKind.xiangqi);
-      await tester.tap(find.byKey(NewGameScreen.backKey));
-      await tester.pumpAndSettle();
-
-      expect(container.read(gameSessionProvider)?.game, GameKind.chess);
-      expect(find.byType(ChessBoard), findsOneWidget);
-      expectGameInProgress(container);
+      expect(container.read(gameSessionProvider)?.game, GameKind.xiangqi);
+      expect(find.byType(XiangqiBoard), findsOneWidget);
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      expect(navigator.canPop(), isFalse);
     });
 
-    testWidgets('a Xiangqi game preselects XIANGQI on NEW GAME', (
-      tester,
-    ) async {
-      await pumpApp(tester);
-      await selectGame(tester, GameKind.xiangqi);
+    testWidgets('a Xiangqi game opens XIANGQI on NEW GAME', (tester) async {
+      await pumpNewGame(tester, game: GameKind.xiangqi);
       await tapSide(tester, PlayerSide.first);
       expect(find.byType(XiangqiBoard), findsOneWidget);
 
-      await openNewGameConfirm(tester);
-      await tester.tap(find.byKey(NewGameConfirmDialog.confirmKey));
-      await tester.pumpAndSettle();
+      await confirmNewGame(tester);
 
-      expect(key(tester, gameKey(GameKind.xiangqi)).isSelected, isTrue);
+      expect(find.text('XIANGQI'), findsOneWidget);
       expect(find.text('RED'), findsOneWidget);
     });
 
@@ -610,8 +708,11 @@ void main() {
       tester,
     ) async {
       final engine = FakeGameEngine();
-      final container = await pumpApp(tester, engine: engine);
-      await selectGame(tester, GameKind.xiangqi);
+      final container = await pumpNewGame(
+        tester,
+        game: GameKind.xiangqi,
+        engine: engine,
+      );
       await tester.ensureVisible(
         find.byKey(NewGameScreen.tierKey(PersonaTier.god)),
       );
@@ -640,8 +741,7 @@ void main() {
     testWidgets('START as BLACK: Black at the bottom, waiting for Red', (
       tester,
     ) async {
-      final container = await pumpApp(tester);
-      await selectGame(tester, GameKind.xiangqi);
+      final container = await pumpNewGame(tester, game: GameKind.xiangqi);
       await tapSide(tester, PlayerSide.second);
 
       final board = container.read(xiangqiBoardControllerProvider);
@@ -667,8 +767,12 @@ void main() {
         testWidgets('${size.width.toInt()}x${size.height.toInt()}', (
           tester,
         ) async {
-          await pumpApp(tester, size: size, textScale: 2.0);
-          await selectGame(tester, GameKind.xiangqi);
+          await pumpNewGame(
+            tester,
+            game: GameKind.xiangqi,
+            size: size,
+            textScale: 2.0,
+          );
           expect(tester.takeException(), isNull);
 
           await tapSide(tester, PlayerSide.first);

@@ -15,6 +15,8 @@ import 'package:cataland/core/theme/app_dimens.dart';
 import 'package:cataland/core/theme/app_theme.dart';
 import 'package:cataland/core/theme/app_typography.dart';
 import 'package:cataland/features/chess/presentation/widgets/chess_board.dart';
+import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
@@ -51,6 +53,8 @@ Future<void> pumpApp(
       child: const CatalandApp(),
     ),
   );
+  await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(NewGameScreen.startKey));
   await tester.pump();
 }
@@ -74,7 +78,7 @@ void main() {
     expect(board.bottom, lessThanOrEqualTo(status.top));
   });
 
-  testWidgets('UNDO is top-left, NEW GAME top-right', (tester) async {
+  testWidgets('NEW GAME is top-left, UNDO top-right', (tester) async {
     await pumpApp(tester, size: commonPhone);
 
     final top = tester.getRect(find.byKey(TopBar.regionKey));
@@ -82,8 +86,8 @@ void main() {
     final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
     expect(top.contains(undo.center), isTrue);
     expect(top.contains(newGame.center), isTrue);
-    expect(undo.left, top.left + AppDimens.spacingSmall);
-    expect(newGame.right, top.right - AppDimens.spacingSmall);
+    expect(newGame.left, top.left + AppDimens.spacingSmall);
+    expect(undo.right, top.right - AppDimens.spacingSmall);
   });
 
   testWidgets('fixed rows have their design heights', (tester) async {

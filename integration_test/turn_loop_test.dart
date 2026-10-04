@@ -16,6 +16,8 @@ import 'package:cataland/features/chess/domain/chess_models.dart';
 import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
 import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
@@ -39,6 +41,11 @@ void main() {
     await tester.pumpAndSettle();
     debugPrint('SHOT:$name');
     await tester.runAsync(() => Future<void>.delayed(_hold));
+  }
+
+  Future<void> openChess(WidgetTester tester) async {
+    await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));
+    await tester.pumpAndSettle();
   }
 
   Future<void> tapSquare(WidgetTester tester, ChessSquare square) async {
@@ -94,6 +101,7 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await openChess(tester);
     await tester.tap(find.byKey(NewGameScreen.sideKey(PlayerSide.second)));
     await tester.pump();
     await tester.tap(find.byKey(NewGameScreen.startKey));
@@ -153,6 +161,7 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await openChess(tester);
     final sinceStart = Stopwatch()..start();
     await tester.tap(find.byKey(NewGameScreen.startKey));
     await tester.pump();
@@ -201,6 +210,7 @@ void main() {
           child: const CatalandApp(),
         ),
       );
+      await openChess(tester);
       await tester.tap(find.byKey(NewGameScreen.startKey));
       await tester.pumpAndSettle();
 
@@ -253,6 +263,7 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await openChess(tester);
     await tester.tap(find.byKey(NewGameScreen.tierKey(PersonaTier.baby)));
     await tester.pump();
     final sinceBaby = Stopwatch()..start();

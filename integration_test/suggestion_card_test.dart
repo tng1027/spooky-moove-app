@@ -9,6 +9,8 @@ import 'package:cataland/features/chess/domain/chess_models.dart';
 import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
 import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
@@ -88,6 +90,8 @@ void main() {
         child: const CatalandApp(),
       ),
     );
+    await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(NewGameScreen.tierKey(PersonaTier.solid)));
     await tester.pump();
     final sinceSolid = Stopwatch()..start();

@@ -13,6 +13,7 @@ import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
 import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
 import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:cataland/features/new_game/presentation/home_screen.dart';
 import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
 import 'package:cataland/features/persona/domain/persona_tier.dart';
 import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
@@ -59,8 +60,8 @@ void main() {
         child: const CatalandApp(),
       ),
     );
-    await tester.tap(find.byKey(NewGameScreen.gameKey(GameKind.xiangqi)));
-    await tester.pump();
+    await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.xiangqi)));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(NewGameScreen.sideKey(side)));
     await tester.pump();
     await tester.tap(find.byKey(NewGameScreen.startKey));
