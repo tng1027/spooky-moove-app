@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/theme/app_dimens.dart';
-import 'package:cataland/core/widgets/app_key.dart';
-import 'package:cataland/features/settings/domain/app_language.dart';
-import 'package:cataland/features/settings/presentation/language_dialog.dart';
-import 'package:cataland/features/settings/presentation/settings_dialog.dart';
+import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_key.dart';
+import 'package:spookymoove/features/settings/domain/app_language.dart';
+import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
+import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
 
 void main() {
   /// Opens [dialog] over a page; returns a getter for the popped result.

@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/domain/tier_selection.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/domain/tier_selection.dart';
 
 List<MoveCandidate> _candidates(Map<String, double> winChances) => [
   for (final MapEntry(:key, :value) in winChances.entries)

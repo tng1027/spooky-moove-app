@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/core/engine/fairy_stockfish/fairy_stockfish_engine.dart';
+import 'package:spookymoove/core/engine/fairy_stockfish/fairy_stockfish_engine.dart';
 
 final _bestMovePattern = RegExp(r'^bestmove [a-h][1-8][a-h][1-8][qrbn]?( |$)');
 

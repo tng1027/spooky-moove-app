@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/features/chess/data/chess_package_rules.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/domain/chess_move_format.dart';
+import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/domain/chess_move_format.dart';
 
 /// Real moves (with rules-module flags) for [uci] in [fen].
 ChessMove moveIn(String fen, String uci) {

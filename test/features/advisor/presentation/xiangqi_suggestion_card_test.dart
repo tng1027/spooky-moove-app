@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/widgets/suggestion_card.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/game_registry.dart';
-import 'package:cataland/features/persona/application/persona_suggester.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
-import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
-import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_suggested_move.dart';
-import 'package:cataland/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
+import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
+import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
+import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_suggested_move.dart';
+import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 
 import 'suggestion_card_test.dart' show FixedSuggestionController;
 

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 
 void main() {
   test('Chess labels its sides WHITE and BLACK, never RED', () {

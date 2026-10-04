@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_grid_painter.dart';
-import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_grid_painter.dart';
+import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
 
 double contrast(Color a, Color b) {
   final la = a.computeLuminance();

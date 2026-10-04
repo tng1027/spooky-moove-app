@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/features/persona/application/persona_suggester.dart';
-import 'package:cataland/features/persona/domain/persona_config.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/features/persona/domain/persona_config.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 
 import '../fake_game_engine.dart';
 

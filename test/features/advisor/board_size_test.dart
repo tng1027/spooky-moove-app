@@ -1,6 +1,6 @@
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/features/advisor/presentation/advisor_screen.dart';
+import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
 
 void main() {
   Size sizeFor(double width, double height, int files, int ranks) =>

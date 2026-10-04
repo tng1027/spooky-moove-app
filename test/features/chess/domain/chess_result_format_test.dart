@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/game_result.dart';
-import 'package:cataland/features/chess/domain/chess_game_status.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/domain/chess_result_format.dart';
+import 'package:spookymoove/core/game/game_result.dart';
+import 'package:spookymoove/features/chess/domain/chess_game_status.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/domain/chess_result_format.dart';
 
 void main() {
   test('in progress: no headline', () {

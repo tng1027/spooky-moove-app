@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/advisor/presentation/turn_status.dart';
-import 'package:cataland/features/chess/data/chess_package_rules.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/advisor/presentation/turn_status.dart';
+import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

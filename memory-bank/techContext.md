@@ -44,7 +44,7 @@
 ### Fairy-Stockfish native build (OB-004, 2026-10-03)
 **Decision: Dart build hooks / native assets** (`hook/build.dart` + `native_toolchain_c` `CBuilder`), not hand-written Gradle CMake + Xcode targets.
 - One Dart build script for Android and iOS; no Gradle/Xcode project edits; CMake not required on the dev machine.
-- Bindings use `@Native` with `@DefaultAsset('package:cataland/fairy_stockfish')`, so no hard-coded `.so`/framework paths.
+- Bindings use `@Native` with `@DefaultAsset('package:spookymoove/fairy_stockfish')`, so no hard-coded `.so`/framework paths.
 - iOS: bundled automatically as `fairy_stockfish.framework`. Android: `c++_static` so the `.so` is self-contained.
 - Host builds (`flutter test` on macOS) skip the engine. Targets: Android arm64-v8a + x86_64, iOS arm64 (device + simulator). 32-bit Android is not built.
 - `native_toolchain_c` is a labs.dart.dev (experimental) package; pin versions and expect API churn.
@@ -58,7 +58,7 @@ Setup:
 Measured (2026-10-03):
 - iOS release, arm64 `fairy_stockfish.framework`: **0.91 MB** uncompressed (913,840 bytes), ~0.39 MB gzip. Whole `Runner.app` 15 MB (Flutter.framework 10 MB, App.framework 3.8 MB).
 - Android per-ABI sizes: **not yet measured**. Deferred to the final device pass (PO 2026-10-03: simulator-only until all tickets are done).
-- OB-010 Xiangqi pass (2026-10-04): budget = store download size (PO). iOS `Runner.app` 18 MB, ≈ 9.3 MB zipped; Android arm64 APK 19.5 MB (native libs stored), ≈ 9.4 MB gzip, `libfairy_stockfish.so` 1.6 MB. Both pass with ~20 MB headroom (estimates until App Store Connect / Play Console report). Benchmark harness: `integration_test/xiangqi_benchmark_test.dart`, `integration_test/xiangqi_input_cycle_test.dart`, `test_driver/perf_driver.dart` (commands in OB-010).
+- OB-010 Xiangqi pass (2026-10-04): budget = store download size (PO). iOS `Runner.app` 19.5 MB, ≈ 9.7 MB zipped; Android arm64 APK 19.5 MB (native libs stored), ≈ 9.5 MB gzip (with the ghost app icon), `libfairy_stockfish.so` 1.6 MB. Both pass with ~20 MB headroom (estimates until App Store Connect / Play Console report). Benchmark harness: `integration_test/xiangqi_benchmark_test.dart`, `integration_test/xiangqi_input_cycle_test.dart`, `test_driver/perf_driver.dart` (commands in OB-010).
 - iOS simulator: `uci`→`uciok`, `isready`→`readyok`; `go movetime 500` → `bestmove` in 500 ms; `stop` during `go infinite` → `bestmove` immediately; 61 frames during a 1 s search with 0 missed build/raster budgets.
 
 Known limits:
@@ -101,7 +101,7 @@ Alternatives found while checking:
 Dev machine (2026-10-03): Flutter 3.47.6 stable, Dart 3.13.5, Android SDK 37, NDK 30.0.16248370, CMake 4.1.2, Xcode 27.0.
 
 ### Starter `pubspec.yaml` (reference)
-The real `pubspec.yaml` was created in OB-003 (package `omni_board`, bundle/application ID `com.thuannguyen.omniboard`; renamed 2026-10-04 to package `cataland`, ID `com.cataland.app`) with only `flutter_riverpod` + `flutter_lints`; add the packages below when their ticket starts. `google_fonts` is not used. Chess rules: `chess: ^0.8.1` (decided; the `dartchess` alternative in the comment is no longer considered for Chess).
+The real `pubspec.yaml` was created in OB-003 (package `omni_board`, bundle/application ID `com.thuannguyen.omniboard`; renamed 2026-10-04 to package `cataland` / `com.cataland.app`, then to `ghost64` / `com.ghost64.app`, then to package `spookymoove`, ID `com.spookymoove.app`) with only `flutter_riverpod` + `flutter_lints`; add the packages below when their ticket starts. `google_fonts` is not used. Chess rules: `chess: ^0.8.1` (decided; the `dartchess` alternative in the comment is no longer considered for Chess).
 ```yaml
 name: omnichess_advisor
 description: Multi-board headless tactical game advisor.

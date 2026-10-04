@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/core/theme/app_dimens.dart';
-import 'package:cataland/core/widgets/app_key.dart';
-import 'package:cataland/features/advisor/presentation/status_line_content.dart';
-import 'package:cataland/features/advisor/presentation/widgets/confirm_played_key.dart';
-import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_key.dart';
+import 'package:spookymoove/features/advisor/presentation/status_line_content.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
 
 class FixedContent extends Notifier<StatusLineContent> {
   FixedContent(this.initial);

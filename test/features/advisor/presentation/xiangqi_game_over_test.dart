@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/game/game_result.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_providers.dart';
-import 'package:cataland/features/advisor/presentation/widgets/confirm_played_key.dart';
-import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/advisor/presentation/widgets/top_bar.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/game_registry.dart';
-import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/game/game_result.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
+import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../persona/fake_game_engine.dart';
@@ -191,7 +191,7 @@ void main() {
             gameEngineProvider.overrideWithValue(engine),
             xiangqiRulesProvider.overrideWithValue(DartXiangqiRules(fen: fen)),
           ],
-          child: const CatalandApp(),
+          child: const SpookyMooveApp(),
         ),
       );
       await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.xiangqi)));
@@ -233,7 +233,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final container = ProviderScope.containerOf(
-        tester.element(find.byType(CatalandApp)),
+        tester.element(find.byType(SpookyMooveApp)),
       );
       expect(container.read(gameSessionProvider), isNull);
       final screen = tester.widget<NewGameScreen>(find.byType(NewGameScreen));

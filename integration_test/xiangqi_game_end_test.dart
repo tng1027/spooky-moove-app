@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/core/board/intersection_board.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/widgets/confirm_played_key.dart';
-import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/advisor/presentation/widgets/top_bar.dart';
-import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
-import 'package:cataland/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/board/intersection_board.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
+import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Xiangqi game end on the real app and engine (OB-047), started from
@@ -59,7 +59,7 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const CatalandApp(),
+        child: const SpookyMooveApp(),
       ),
     );
     await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.xiangqi)));

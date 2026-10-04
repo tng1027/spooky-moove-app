@@ -2,28 +2,28 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/core/board/tap_board.dart';
-import 'package:cataland/features/advisor/presentation/advisor_screen.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/settings/presentation/language_dialog.dart';
-import 'package:cataland/features/settings/presentation/settings_dialog.dart';
-import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
-import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
-import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/xiangqi/presentation/widgets/xiangqi_board.dart';
-import 'package:cataland/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/board/tap_board.dart';
+import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
+import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
+import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_board.dart';
+import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Real app on the simulator. `SHOT:<name>` lines mark states that stay on
@@ -64,7 +64,7 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const CatalandApp(),
+        child: const SpookyMooveApp(),
       ),
     );
     expect(find.byType(HomeScreen), findsOneWidget);
@@ -141,7 +141,7 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const CatalandApp(),
+        child: const SpookyMooveApp(),
       ),
     );
 

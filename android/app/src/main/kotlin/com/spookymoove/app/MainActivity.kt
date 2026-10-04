@@ -1,4 +1,4 @@
-package com.cataland.app
+package com.spookymoove.app
 
 import io.flutter.embedding.android.FlutterActivity
 

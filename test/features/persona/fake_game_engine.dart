@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/engine/game_engine.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/engine/game_engine.dart';
 
 class FakeSearch implements SearchHandle {
   FakeSearch(this.position, this.limits) {

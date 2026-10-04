@@ -2,17 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/core/board/tap_board.dart';
-import 'package:cataland/features/chess/data/chess_package_rules.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/chess/presentation/widgets/promotion_chooser.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/board/tap_board.dart';
+import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/chess/presentation/widgets/promotion_chooser.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Real app on the simulator. `SHOT:<name>` lines mark states that stay on
@@ -52,7 +52,7 @@ void main() {
           chessRulesProvider.overrideWithValue(rules),
           sharedPreferencesProvider.overrideWithValue(preferences),
         ],
-        child: const CatalandApp(),
+        child: const SpookyMooveApp(),
       ),
     );
     await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));

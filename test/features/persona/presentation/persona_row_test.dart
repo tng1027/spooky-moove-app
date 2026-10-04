@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/core/theme/app_dimens.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 
 Future<void> pumpRow(
   WidgetTester tester, {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/features/persona/domain/win_chance.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/features/persona/domain/win_chance.dart';
 
 void main() {
   test('converts centipawns with the Lichess slope', () {

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 
 import 'xiangqi_perft_positions.dart';
 

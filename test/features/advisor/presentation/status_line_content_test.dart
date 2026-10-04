@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/game/game_result.dart';
-import 'package:cataland/features/advisor/presentation/status_line_content.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/turn_status.dart';
-import 'package:cataland/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/game/game_result.dart';
+import 'package:spookymoove/features/advisor/presentation/status_line_content.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/turn_status.dart';
+import 'package:spookymoove/features/persona/application/persona_suggester.dart';
 
 void main() {
   const ready = SuggestionReady(

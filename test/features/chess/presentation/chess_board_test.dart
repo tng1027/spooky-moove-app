@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/core/board/tap_board.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/features/chess/data/chess_package_rules.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/chess/presentation/widgets/chess_board.dart';
-import 'package:cataland/features/chess/presentation/widgets/promotion_chooser.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/board/tap_board.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/chess/presentation/widgets/chess_board.dart';
+import 'package:spookymoove/features/chess/presentation/widgets/promotion_chooser.dart';
 
 const double boardSize = 360;
 

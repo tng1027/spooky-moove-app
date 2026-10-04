@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 
 import 'xiangqi_perft_positions.dart';
 

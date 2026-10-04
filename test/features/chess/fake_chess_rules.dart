@@ -1,6 +1,6 @@
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/domain/chess_rules.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/domain/chess_rules.dart';
 
 /// Scripted [ChessRules]: a fixed piece placement and legal-move list that
 /// records applied moves without changing the position.

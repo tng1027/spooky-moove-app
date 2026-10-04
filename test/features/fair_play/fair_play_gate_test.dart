@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_screen.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_providers.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
 
 import '../persona/fake_game_engine.dart';
 
@@ -33,7 +33,7 @@ Future<SharedPreferences> _pumpApp(
         sharedPreferencesProvider.overrideWithValue(preferences),
         gameEngineProvider.overrideWithValue(FakeGameEngine()),
       ],
-      child: const CatalandApp(),
+      child: const SpookyMooveApp(),
     ),
   );
   return preferences;

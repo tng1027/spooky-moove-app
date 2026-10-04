@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/game_result.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_game_status.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_result_format.dart';
+import 'package:spookymoove/core/game/game_result.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_game_status.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_result_format.dart';
 
 void main() {
   const redMates = XiangqiLoss(

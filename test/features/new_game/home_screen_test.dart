@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/core/theme/app_dimens.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/settings/domain/app_language.dart';
-import 'package:cataland/features/settings/presentation/language_dialog.dart';
-import 'package:cataland/features/settings/presentation/settings_dialog.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/settings/domain/app_language.dart';
+import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
+import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
 
 void main() {
   final starts = <(GameKind, PlayerSide, PersonaTier?)>[];

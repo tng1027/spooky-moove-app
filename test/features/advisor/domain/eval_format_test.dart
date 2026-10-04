@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/features/advisor/domain/eval_format.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/features/advisor/domain/eval_format.dart';
 
 void main() {
   group('headline', () {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/core/widgets/app_key.dart';
-import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
-import 'package:cataland/features/chess/data/chess_package_rules.dart';
-import 'package:cataland/features/chess/domain/chess_models.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/core/widgets/app_key.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
+import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 
 void main() {
   late ProviderContainer container;

@@ -30,7 +30,7 @@ On first launch, show a full-screen fair-play notice in plain language (English 
 **English**
 > **FAIR PLAY**
 >
-> OmniChess Advisor is for training, casual study, handicap games and friendly offline play.
+> SpookyMoove is for training, casual study, handicap games and friendly offline play.
 >
 > Do NOT use it during rated, sanctioned or tournament games (FIDE, EGF, Nihon Ki-in or any other organisation) unless the arbiter has allowed it.
 >
@@ -41,7 +41,7 @@ On first launch, show a full-screen fair-play notice in plain language (English 
 **Tiếng Việt**
 > **CHƠI CỜ CÔNG BẰNG**
 >
-> OmniChess Advisor dành cho luyện tập, học cờ, chơi chấp quân và các ván giao hữu ngoài đời.
+> SpookyMoove dành cho luyện tập, học cờ, chơi chấp quân và các ván giao hữu ngoài đời.
 >
 > KHÔNG sử dụng trong các ván đấu tính điểm, giải đấu chính thức hoặc thi đấu (FIDE, EGF, Nihon Ki-in hay bất kỳ tổ chức nào khác) nếu chưa được trọng tài cho phép.
 >

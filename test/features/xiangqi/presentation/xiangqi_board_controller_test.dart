@@ -1,14 +1,14 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/board/board_clock.dart';
-import 'package:cataland/core/board/smart_entry.dart';
-import 'package:cataland/core/game/game_result.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_game_status.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
-import 'package:cataland/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/board/board_clock.dart';
+import 'package:spookymoove/core/board/smart_entry.dart';
+import 'package:spookymoove/core/game/game_result.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_game_status.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
+import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 
 XiangqiPoint pt(String name) => XiangqiPoint.parse(name);
 

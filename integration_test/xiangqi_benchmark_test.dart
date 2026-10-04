@@ -3,14 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/engine/fairy_stockfish/fairy_stockfish_engine.dart';
-import 'package:cataland/core/engine/uci/uci_engine.dart';
-import 'package:cataland/features/persona/application/persona_suggester.dart';
-import 'package:cataland/features/persona/domain/persona_config.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/domain/win_chance.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/engine/fairy_stockfish/fairy_stockfish_engine.dart';
+import 'package:spookymoove/core/engine/uci/uci_engine.dart';
+import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/features/persona/domain/persona_config.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/domain/win_chance.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 
 import 'benchmark/xiangqi_bench_positions.dart';
 

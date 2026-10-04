@@ -8,13 +8,13 @@ import 'features/fair_play/presentation/fair_play_screen.dart';
 import 'features/new_game/presentation/game_session_controller.dart';
 import 'features/new_game/presentation/home_screen.dart';
 
-class CatalandApp extends StatelessWidget {
-  const CatalandApp({super.key});
+class SpookyMooveApp extends StatelessWidget {
+  const SpookyMooveApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cataland',
+      title: 'SpookyMoove',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark(),
       darkTheme: AppTheme.dark(),

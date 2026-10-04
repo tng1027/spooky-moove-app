@@ -14,15 +14,15 @@
 >
 > | Item | Measured | NFR | Result |
 > |------|----------|-----|--------|
-> | iOS arm64 `Runner.app` | 18 MB uncompressed, **≈ 9.3 MB zipped** (estimate of the download; Flutter 10 MB, App 5.3 MB, engine 0.9 MB, Assets.car 1.9 MB) | ≤ 30 MB download | Pass (estimate; confirm thinned size on the next TestFlight upload) |
-> | Android arm64 APK | 19.5 MB file (native libs stored uncompressed), **≈ 9.4 MB gzip** (estimate of the Play download; `libflutter` 11.7 MB, `libapp` 4.3 MB, `libfairy_stockfish` 1.6 MB) | ≤ 30 MB download | Pass (estimate; confirm in Play Console) |
+> | iOS arm64 `Runner.app` | 19.5 MB uncompressed, **≈ 9.7 MB zipped** (estimate of the download; Flutter 10 MB, App 5.3 MB, engine 0.9 MB, Assets.car 2.3 MB with the new app icon, 2026-10-04) | ≤ 30 MB download | Pass (estimate; confirm thinned size on the next TestFlight upload) |
+> | Android arm64 APK | 19.5 MB file (native libs stored uncompressed), **≈ 9.5 MB gzip** (with the new app icon) (estimate of the Play download; `libflutter` 11.7 MB, `libapp` 4.3 MB, `libfairy_stockfish` 1.6 MB) | ≤ 30 MB download | Pass (estimate; confirm in Play Console) |
 > | Xiangqi glyph assets (item a) | 64 KB (`assets/pieces/xiangqi`) | < 100 KB | Pass |
 > | Per-tier latency, simulator | Pending: simulator run | ≤ 1000 ms | — |
 > | Input cycle with snapping (item b), simulator | Pending: simulator run | < 1.2 s | — |
 > | Win-chance band check (item c) | Pending: simulator run | Bands reachable | — |
 > | Frames during search, thermal 30 min, tap accuracy at 360×640 (item d) | Device pass | 60 FPS, no throttling | — |
 >
-> Size notes: both platforms have ~20 MB headroom, so arm64-only Android and NNUE stay optional. The 1.9 MB `Assets.car` (iOS) and a 553 KB PNG in the APK resources are probably the app icon / launch images; worth a look before release, not blocking.
+> Size notes: both platforms have ~20 MB headroom, so arm64-only Android and NNUE stay optional. The app icon is the largest asset: `Assets.car` 2.3 MB on iOS (1024 px marketing icon included) and an 830 KB adaptive-icon foreground on Android; could be recompressed before release, not blocking.
 
 TICKET_TYPE: TECHNICAL_TASK
 CONFIDENCE: HIGH

@@ -18,7 +18,7 @@ Future<void> main() async {
   runApp(
     ProviderScope(
       overrides: [sharedPreferencesProvider.overrideWithValue(preferences)],
-      child: const CatalandApp(),
+      child: const SpookyMooveApp(),
     ),
   );
 }

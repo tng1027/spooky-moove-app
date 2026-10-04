@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cataland/app.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/features/advisor/presentation/widgets/suggestion_card.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
-import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Real app on the simulator. `SHOT:<name>` lines mark states that stay on
@@ -50,7 +50,7 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const CatalandApp(),
+        child: const SpookyMooveApp(),
       ),
     );
     await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));

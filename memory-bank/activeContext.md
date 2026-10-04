@@ -8,6 +8,8 @@
 - 2026-10-02: Package versions verified on pub.dev; a starter `pubspec.yaml` snippet is in `techContext.md`.
 - 2026-10-03: Flutter 3.47.6 / Dart 3.13.5 installed. OB-003 done: git repo, app shell `omni_board` (`com.thuannguyen.omniboard`), dark theme tokens, bundled JetBrains Mono, revised placeholder layout, widget tests. iOS minimum is 15.0 (Flutter requirement).
 - 2026-10-04: App renamed to **Cataland**: Dart package `cataland`, bundle/application ID `com.cataland.app`, display name "Cataland", root widget `CatalandApp`. Repo folder is still `omni-board`.
+- 2026-10-04 (later): App renamed to **Ghost64** (PO): Dart package `ghost64`, bundle/application ID `com.ghost64.app`, display name "Ghost64", root widget `Ghost64App`, Kotlin package `com.ghost64.app`. Fair-play notice now names Ghost64 (version 2, re-acknowledged). New ghost app icon.
+- 2026-10-04 (latest): App renamed to **SpookyMoove** (PO): Dart package `spookymoove`, bundle/application ID `com.spookymoove.app`, display name "SpookyMoove", root widget `SpookyMooveApp`, Kotlin package `com.spookymoove.app`. Fair-play notice names SpookyMoove (version 3). Project folder renamed `omni-board` → `spooky-moove`.
 
 - 2026-10-02: Backlog created in `tickets/` (index and per-game plan: `tickets/README.md`). PO decisions recorded:
   - Tap board replaces the keypad (OB-006).

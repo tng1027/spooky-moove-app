@@ -1,15 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/game/active_game.dart';
-import 'package:cataland/core/game/player_side.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_controller.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_providers.dart';
-import 'package:cataland/features/chess/presentation/chess_board_controller.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/game_registry.dart';
-import 'package:cataland/features/new_game/presentation/game_session_controller.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/game/active_game.dart';
+import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
+import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
+import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 
 import '../../persona/fake_game_engine.dart';
 

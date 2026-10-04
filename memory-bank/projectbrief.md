@@ -1,4 +1,4 @@
-# Project Brief — OmniChess Advisor (working title)
+# Project Brief — SpookyMoove (formerly OmniChess Advisor)
 
 Source: BRD + SAD v1 (provided 2026-10-02), updated with PO decisions of 2026-10-02 (tickets in `tickets/`, index `tickets/README.md`). This file is the foundation; all other memory-bank files derive from it.
 

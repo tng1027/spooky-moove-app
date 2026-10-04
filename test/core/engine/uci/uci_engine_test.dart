@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/engine/engine_models.dart';
-import 'package:cataland/core/engine/engine_transport.dart';
-import 'package:cataland/core/engine/uci/uci_engine.dart';
+import 'package:spookymoove/core/engine/engine_models.dart';
+import 'package:spookymoove/core/engine/engine_transport.dart';
+import 'package:spookymoove/core/engine/uci/uci_engine.dart';
 
 /// Answers the UCI handshake automatically and lets tests emit engine output.
 class FakeTransport implements EngineTransport {

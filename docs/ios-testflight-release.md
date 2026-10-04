@@ -1,11 +1,11 @@
-# Publishing Cataland to TestFlight
+# Publishing SpookyMoove to TestFlight
 
-Step-by-step guide for uploading the iOS build of Cataland to TestFlight.
+Step-by-step guide for uploading the iOS build of SpookyMoove to TestFlight.
 
 | Item | Value |
 |---|---|
-| App name (display) | Cataland |
-| Bundle ID | `com.cataland.app` |
+| App name (display) | SpookyMoove |
+| Bundle ID | `com.spookymoove.app` |
 | Apple Team ID | `Z9ZLKTXDX5` |
 | Minimum iOS | 15.0 |
 | Signing | Automatic (Xcode-managed) |
@@ -43,7 +43,7 @@ TestFlight distribution goes through Apple's App Store terms too.
 
 1. Go to <https://developer.apple.com/account/resources/identifiers/list>.
 2. `+` → **App IDs** → **App** → Continue.
-3. Description: `Cataland`. Bundle ID: **Explicit** → `com.cataland.app`.
+3. Description: `SpookyMoove`. Bundle ID: **Explicit** → `com.spookymoove.app`.
 4. Capabilities: leave everything off (the app is offline, with no push, iCloud, or IAP yet).
 5. Register.
 
@@ -56,10 +56,10 @@ TestFlight distribution goes through Apple's App Store terms too.
 1. Go to <https://appstoreconnect.apple.com> → **Apps** → `+` → **New App**.
 2. Fill in:
    - Platform: **iOS**
-   - Name: `Cataland` (must be unique on the App Store; if taken, use e.g. `Cataland – Board Game Advisor`)
+   - Name: `SpookyMoove` (must be unique on the App Store; if taken, use e.g. `SpookyMoove – Board Game Advisor`)
    - Primary language: English (or your choice)
-   - Bundle ID: `com.cataland.app`
-   - SKU: `cataland-ios` (any internal unique string)
+   - Bundle ID: `com.spookymoove.app`
+   - SKU: `spookymoove-ios` (any internal unique string)
    - User access: Full Access
 3. Create.
 
@@ -111,7 +111,7 @@ open ios/Runner.xcworkspace
 Runner target → **Signing & Capabilities** (for both Debug and Release):
 - ✅ Automatically manage signing
 - Team: `Z9ZLKTXDX5`
-- Bundle Identifier: `com.cataland.app`
+- Bundle Identifier: `com.spookymoove.app`
 - There should be no red errors. Xcode creates the Apple Distribution certificate and provisioning profile when you archive.
 
 ---
@@ -182,7 +182,7 @@ xcrun altool --upload-app --type ios \
 
 ## 8. Wait for processing
 
-- App Store Connect → Apps → Cataland → **TestFlight** tab.
+- App Store Connect → Apps → SpookyMoove → **TestFlight** tab.
 - The build shows **Processing** for about 5–30 minutes. Apple emails you if processing fails (for example, an icon with alpha or a missing privacy declaration).
 - If you skipped step 4.2, answer the **Export Compliance** prompt: "None of the algorithms mentioned above" / no encryption.
 

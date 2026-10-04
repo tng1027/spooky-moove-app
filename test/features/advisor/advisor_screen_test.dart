@@ -4,30 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cataland/features/advisor/presentation/suggestion_providers.dart';
+import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
 
 import '../persona/fake_game_engine.dart';
 
-import 'package:cataland/app.dart';
-import 'package:cataland/core/board/tap_board.dart';
-import 'package:cataland/core/theme/app_colors.dart';
-import 'package:cataland/core/theme/app_dimens.dart';
-import 'package:cataland/core/theme/app_theme.dart';
-import 'package:cataland/core/theme/app_typography.dart';
-import 'package:cataland/features/chess/presentation/widgets/chess_board.dart';
-import 'package:cataland/features/new_game/domain/game_kind.dart';
-import 'package:cataland/features/new_game/presentation/home_screen.dart';
-import 'package:cataland/features/new_game/presentation/new_game_screen.dart';
-import 'package:cataland/features/fair_play/domain/fair_play_notice.dart';
-import 'package:cataland/features/fair_play/presentation/fair_play_controller.dart';
-import 'package:cataland/features/persona/domain/persona_tier.dart';
-import 'package:cataland/features/persona/presentation/persona_tier_controller.dart';
-import 'package:cataland/features/persona/presentation/widgets/persona_row.dart';
-import 'package:cataland/features/advisor/presentation/widgets/status_line.dart';
-import 'package:cataland/features/advisor/presentation/widgets/suggestion_card.dart';
-import 'package:cataland/features/advisor/presentation/widgets/top_bar.dart';
-import 'package:cataland/features/advisor/presentation/widgets/undo_key.dart';
-import 'package:cataland/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:spookymoove/app.dart';
+import 'package:spookymoove/core/board/tap_board.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/theme/app_theme.dart';
+import 'package:spookymoove/core/theme/app_typography.dart';
+import 'package:spookymoove/features/chess/presentation/widgets/chess_board.dart';
+import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
+import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
+import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
 
 Future<void> pumpApp(
   WidgetTester tester, {
@@ -50,7 +50,7 @@ Future<void> pumpApp(
         sharedPreferencesProvider.overrideWithValue(preferences),
         gameEngineProvider.overrideWithValue(FakeGameEngine()),
       ],
-      child: const CatalandApp(),
+      child: const SpookyMooveApp(),
     ),
   );
   await tester.tap(find.byKey(HomeScreen.gameKey(GameKind.chess)));

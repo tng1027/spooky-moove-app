@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/features/xiangqi/data/dart_xiangqi_rules.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_models.dart';
-import 'package:cataland/features/xiangqi/domain/xiangqi_wxf.dart';
+import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
+import 'package:spookymoove/features/xiangqi/domain/xiangqi_wxf.dart';
 
 String wxf(String fen, String uci) {
   final rules = DartXiangqiRules(fen: fen);

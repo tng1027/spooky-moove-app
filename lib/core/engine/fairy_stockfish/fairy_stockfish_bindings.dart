@@ -1,7 +1,7 @@
 /// FFI bindings for `native/fairy_stockfish_shim/fairy_stockfish_shim.h`.
 ///
 /// The library is compiled and bundled by `hook/build.dart`.
-@DefaultAsset('package:cataland/fairy_stockfish')
+@DefaultAsset('package:spookymoove/fairy_stockfish')
 library;
 
 import 'dart:ffi';

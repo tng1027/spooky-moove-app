@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:cataland/core/board/snap.dart';
+import 'package:spookymoove/core/board/snap.dart';
 
 void main() {
   const cell = 40.0;

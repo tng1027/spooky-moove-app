@@ -1,6 +1,6 @@
 /// Wording version of the fair-play notice (OB-008). Bump it whenever the
 /// text changes so every user acknowledges the new wording.
-const int fairPlayNoticeVersion = 1;
+const int fairPlayNoticeVersion = 3;
 
 /// Bundled fair-play notice text for one language.
 class FairPlayNoticeText {
@@ -19,7 +19,7 @@ class FairPlayNoticeText {
   static const FairPlayNoticeText english = FairPlayNoticeText(
     title: 'FAIR PLAY',
     paragraphs: [
-      'OmniChess Advisor is for training, casual study, handicap games and '
+      'SpookyMoove is for training, casual study, handicap games and '
           'friendly offline play.',
       'Do NOT use it during rated, sanctioned or tournament games (FIDE, EGF, '
           'Nihon Ki-in or any other organisation) unless the arbiter has '
@@ -34,7 +34,7 @@ class FairPlayNoticeText {
   static const FairPlayNoticeText vietnamese = FairPlayNoticeText(
     title: 'CHƠI CỜ CÔNG BẰNG',
     paragraphs: [
-      'OmniChess Advisor dành cho luyện tập, học cờ, chơi chấp quân và các ván '
+      'SpookyMoove dành cho luyện tập, học cờ, chơi chấp quân và các ván '
           'giao hữu ngoài đời.',
       'KHÔNG sử dụng trong các ván đấu tính điểm, giải đấu chính thức hoặc thi '
           'đấu (FIDE, EGF, Nihon Ki-in hay bất kỳ tổ chức nào khác) nếu chưa '

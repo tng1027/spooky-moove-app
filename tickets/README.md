@@ -2,7 +2,7 @@
 
 Source: `memory-bank/` (all 7 files) reviewed on 2026-10-02, plus PO decisions recorded in OB-021.
 Codebase status (2026-10-03): Flutter 3.47.6 / Dart 3.13.5 installed; git repository initialized; app shell scaffolded by OB-003 (originally `omni_board`, `com.thuannguyen.omniboard`); Fairy-Stockfish FFI bridge by OB-004. No feature logic yet.
-App renamed 2026-10-04: **Cataland** — package `cataland`, bundle ID `com.cataland.app`.
+App renamed 2026-10-04: **SpookyMoove** — package `spookymoove`, bundle ID `com.spookymoove.app` (earlier the same day: Cataland / `com.cataland.app`, then Ghost64 / `com.ghost64.app`).
 
 Testing policy (PO 2026-10-03, revised 2026-10-04): every ticket is implemented and verified on the iOS simulator. The developer agent runs `flutter analyze` and `flutter test` and keeps the integration tests up to date, but does not run them; the PO runs the integration tests on the simulator. Physical-device testing (iPhone and Android) and all Android verification happen in one pass after all tickets are finished.
 
@@ -86,7 +86,7 @@ Not in the Chess DoD: custom start positions, resuming after app kill, match his
 
 **Still to apply once decided:**
 1. License boundary / engine architecture final decision (OB-032, OB-002; counsel) → `systemPatterns.md`, `techContext.md`, `projectbrief.md`.
-2. App display name and tier-7 label (OB-034) → `projectbrief.md` title. Bundle ID decided 2026-10-03: `com.thuannguyen.omniboard`; changed 2026-10-04 to `com.cataland.app` (app name Cataland).
+2. App display name and tier-7 label (OB-034) → `projectbrief.md` title. Bundle ID decided 2026-10-03: `com.thuannguyen.omniboard`; changed 2026-10-04 to `com.cataland.app`, then `com.ghost64.app`, then `com.spookymoove.app` (app name **SpookyMoove**, PO 2026-10-04).
 3. Final color tokens `keyDisabled` / `bgDark` (provisional `#1A1B20` / `#0F1015`, OB-003 Q1); light theme in or out (OB-003 Q2) → `designSystem.md`.
 4. Input-cycle target 1.2 s vs. 1.5 s (PO sign-off) → `techContext.md`, `activeContext.md`.
 5. ~~Resume after app kill (OB-001 Q6)~~ → decided 2026-10-04 (no resume in M1), applied to `productContext.md`. Intersection board, character discs and `pieceRed` token (XQ1–XQ3, decided) → `designSystem.md` (done with OB-044). (Xiangqi decisions XQ1–XQ11 applied to `productContext.md` on 2026-10-03.)
@@ -113,7 +113,7 @@ PO request (2026-10-03): "For chess, it is all good now. I would like to move al
 | 2.5c | [OB-049](OB-049-home-game-picker.md) | Home screen with CHESS / XIANGQI buttons → new-game screen per game (level + side, no GAME row, HOME key) | ENHANCEMENT | P1 | OB-011, OB-045, OB-042 | **Done on iOS simulator** (2026-10-04): Home CHESS / XIANGQI keys → new-game screen per game; Home BACK key and HOME row later replaced by OB-050 |
 | 2.5d | [OB-050](OB-050-screen-headers-and-new-game-navigation.md) | Three-slot headers: new-game `[BACK] CHESS [FAIR PLAY]` (bottom HOME row removed); game `[NEW GAME] WIN RATE [UNDO]` (corners swapped); in-game NEW GAME navigation | ENHANCEMENT | P1 | OB-049, OB-011, OB-012, OB-041 | **Done on iOS simulator** (2026-10-04): shared `ScreenHeader`; game discarded on confirming NEW GAME; Home is the root again with no BACK key. Revises OB-049 Design / BR-003 |
 | 2.5e | [OB-051](OB-051-home-settings-and-language.md) | Home header `[SETTINGS] PICK A GAME [LANGUAGE]`: small Settings modal (content later) and Language modal (English only) | NEW_FEATURE | P1 | OB-050 (frees Home's top-left), OB-049, OB-008 | **Done on iOS simulator** (2026-10-04): Settings ships with `NO SETTINGS YET` + release gate (≥ 1 entry or hide the key before submission); fair-play notice keeps device language; ABOUT (OB-033) becomes a Settings row |
-| 2.6 | [OB-010](OB-010-milestone1-size-latency-thermal-validation.md) (Xiangqi pass) | Performance for Xiangqi per tier; asset size; input cycle with snapping; WC slope check | TECHNICAL_TASK | P1 | OB-043–OB-047 | **In progress** (2026-10-04): harness done (9-position set, per-tier latency, input cycle with snapping, frames, WC band check); size ≈ 9.3 MB iOS / 9.4 MB Android arm64 compressed (pass); simulator latency run pending; device numbers in the final device pass |
+| 2.6 | [OB-010](OB-010-milestone1-size-latency-thermal-validation.md) (Xiangqi pass) | Performance for Xiangqi per tier; asset size; input cycle with snapping; WC slope check | TECHNICAL_TASK | P1 | OB-043–OB-047 | **In progress** (2026-10-04): harness done (9-position set, per-tier latency, input cycle with snapping, frames, WC band check); size ≈ 9.7 MB iOS / 9.5 MB Android arm64 compressed (pass); simulator latency run pending; device numbers in the final device pass |
 
 **Order:** OB-042 ∥ OB-043 → OB-044 → OB-045 → OB-046 → OB-047 → OB-010 Xiangqi pass. OB-045 comes right after the board so Xiangqi is reachable from the UI for simulator testing.
 

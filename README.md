@@ -1,4 +1,4 @@
-# cataland
+# spookymoove
 
 Offline multi-board game advisor (Flutter).
 
