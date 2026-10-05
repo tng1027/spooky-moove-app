@@ -1,0 +1,24 @@
+---
+alwaysApply: true
+---
+# Token Efficiency & Economy Rule
+
+To optimize latency, reduce context window bloat, and minimize token usage (both input and output), follow these strict operational guidelines:
+
+## 1. Input Context Optimization (Minimize Input Tokens)
+- **Targeted Reading:** Never request or scan entire large files if only a specific function, class, or widget is relevant. Read only targeted line ranges or relevant blocks.
+- **Selective References:** Avoid referencing large documentation, mock files, generated code (`*.g.dart`, `*.freezed.dart`), or dependency trees unless strictly required.
+- **Incremental Steps:** For large multi-file tasks, process one module or layer at a time rather than pulling the whole repository context into a single prompt.
+
+## 2. Output Conciseness (Minimize Output Tokens)
+- **Snippet-First Responses:** Do NOT print full source code files unless explicitly instructed. Provide only the modified functions, classes, or concise diffs showing exact line insertions/replacements.
+- **Use Ellipses for Unchanged Code:** Use comments like `// ... existing code ...` or `// ... rest of class remains unchanged ...` to omit unchanged logic.
+- **Direct & Zero Fluff:**
+  - Avoid conversational intros ("Sure, I can help with that...", "Here is the code:").
+  - Skip boilerplate conclusions ("Hope this helps!", "Let me know if you need more adjustments").
+  - Go directly to the solution, code snippet, or explanation.
+- **Brevity in Explanations:** Keep explanations bulleted, technical, and under 3-5 sentences unless an in-depth root-cause analysis is explicitly requested.
+
+## 3. Tool & Search Discipline
+- When using search/grep tools, construct narrow and specific search queries instead of returning hundreds of lines of fuzzy matches.
+- Stop reading or retrieving additional files as soon as sufficient context to solve the problem is obtained.

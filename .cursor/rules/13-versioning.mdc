@@ -1,0 +1,43 @@
+---
+description: App version/build number bumps, CHANGELOG.md, and store release versioning for the Flutter app
+globs: pubspec.yaml, CHANGELOG.md, android/app/build.gradle.kts, ios/Runner/Info.plist
+alwaysApply: false
+---
+
+# App Versioning
+
+## Format
+`pubspec.yaml` is the single source of truth: `version: x.y.z+b`.
+
+- `x` MAJOR: redesigns, breaking data migrations, architectural overhauls.
+- `y` MINOR: new user-facing features.
+- `z` PATCH: bug fixes, hotfixes, small performance tweaks.
+- `b` BUILD: integer, +1 for every build uploaded to TestFlight, Play internal track, or production. Never reuse or decrease — App Store Connect and Play Console reject duplicates.
+
+`x.y.z` must stay numeric only. Do NOT use pre-release suffixes (`-beta.1`, `-rc.1`): iOS `CFBundleShortVersionString` rejects them. Ship betas as new build numbers via TestFlight / Play testing tracks.
+
+## Platform files
+Never hardcode versions; they must come from `pubspec.yaml`:
+- Android (`android/app/build.gradle.kts`): `versionCode = flutter.versionCode`, `versionName = flutter.versionName`.
+- iOS (`ios/Runner/Info.plist`): `CFBundleShortVersionString` = `$(FLUTTER_BUILD_NAME)`, `CFBundleVersion` = `$(FLUTTER_BUILD_NUMBER)`.
+
+## Bumping (only when explicitly asked)
+1. Read the current `version:` in `pubspec.yaml`.
+2. Apply the requested bump; always increment `b`:
+   - Patch `1.2.3+45` → `1.2.4+46`
+   - Minor `1.2.3+45` → `1.3.0+46`
+   - Major `1.2.3+45` → `2.0.0+46`
+   - Build-only (QA/TestFlight retry) `1.2.3+45` → `1.2.3+46`
+3. Update `CHANGELOG.md` (create it if missing) using [Keep a Changelog](https://keepachangelog.com/), newest entry on top, omitting empty sections:
+
+```markdown
+## [x.y.z+b] - YYYY-MM-DD
+### Added
+### Changed
+### Fixed
+### Removed
+```
+
+4. Leave changes uncommitted; never create git tags (see `11-no-git-commits`).
+
+Don't bump versions during regular feature or refactor work. Don't confuse dependency constraints in `pubspec.yaml` with the app version.
