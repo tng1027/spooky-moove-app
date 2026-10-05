@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// OB-010 Xiangqi pass: input cycle on the real app, playing BLACK at the
 /// default level. Each cycle enters Red's move like a user (first tap on the
 /// piece, second tap off the destination so it has to snap, OB-044 XQ3) and
-/// ends when the suggestion is on screen; then ✓ I PLAYED IT. Frame timings
+/// ends when the suggestion is on screen; then I PLAYED IT. Frame timings
 /// of the whole loop are summarised by `watchPerformance`.
 ///
 /// ```

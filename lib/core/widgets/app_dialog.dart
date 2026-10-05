@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_typography.dart';
+import 'app_block.dart';
 
-/// Small centred dialog: flat `surfaceDark` card with a header title above
-/// [children]. The content scrolls, so large text scales never overflow.
+/// Small centred dialog: a neutral `surfaceDark` isometric block with a
+/// header title above [children]. The content scrolls, so large text scales
+/// never overflow.
 class AppDialog extends StatelessWidget {
   const AppDialog({
     required this.title,
@@ -23,26 +25,28 @@ class AppDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.surfaceDark,
+      backgroundColor: Colors.transparent,
       elevation: 0,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(AppDimens.radius)),
-      ),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppDimens.spacingLarge),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppDimens.spacingLarge,
-          children: [
-            Semantics(
-              header: true,
-              label: spokenTitle,
-              excludeSemantics: true,
-              child: Text(title, style: AppTypography.primary),
-            ),
-            ...children,
-          ],
+      child: AppBlock(
+        face: AppColors.surfaceDark,
+        side: AppColors.surfaceSide,
+        hasHighlight: true,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppDimens.spacingLarge),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: AppDimens.spacingLarge,
+            children: [
+              Semantics(
+                header: true,
+                label: spokenTitle,
+                excludeSemantics: true,
+                child: Text(title, style: AppTypography.primary),
+              ),
+              ...children,
+            ],
+          ),
         ),
       ),
     );

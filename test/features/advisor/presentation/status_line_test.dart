@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/core/widgets/app_key.dart';
 import 'package:spookymoove/features/advisor/presentation/status_line_content.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
@@ -100,10 +101,11 @@ void main() {
 
     final key = find.byKey(ConfirmPlayedKey.regionKey);
     expect(appKeyIn(tester, key).onTap, isNotNull);
-    final box = tester.widget<Container>(
-      find.descendant(of: key, matching: find.byType(Container)),
+    final block = tester.widget<AppBlock>(
+      find.descendant(of: key, matching: find.byType(AppBlock)),
     );
-    expect((box.decoration! as BoxDecoration).color, AppColors.accentGreen);
+    expect(block.face, AppColors.accentGreen);
+    expect(block.side, AppColors.accentGreenSide);
     expect(
       tester.widget<Text>(find.text(ConfirmPlayedKey.label)).style?.color,
       AppColors.bgDark,
@@ -114,7 +116,7 @@ void main() {
     await pumpStatusLine(tester, StatusLineContent.confirmEnabled);
 
     final line = tester.getRect(find.byKey(StatusLine.regionKey));
-    expect(buttonRect(tester).top, line.top + AppDimens.spacing);
+    expect(buttonRect(tester).top, line.top + AppDimens.spacingSmall);
     expect(buttonRect(tester).height, AppDimens.minKeyHeight);
   });
 

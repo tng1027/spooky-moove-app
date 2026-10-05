@@ -13,8 +13,9 @@ import '../turn_status.dart';
 import 'undo_key.dart';
 
 /// Top bar: NEW GAME (OB-011) in the top-left corner, the suggested move's
-/// win rate (OB-041 revision 3) or GAME OVER (OB-024) in the center, UNDO
-/// (OB-012) in the top-right corner (OB-050).
+/// win rate (OB-041 revision 3) as caption over value (OB-052 DS-7) or
+/// GAME OVER (OB-024) in the center, UNDO (OB-012) in the top-right corner
+/// (OB-050).
 class TopBar extends ConsumerWidget {
   const TopBar({super.key = regionKey});
 
@@ -43,33 +44,71 @@ class TopBar extends ConsumerWidget {
   }
 
   /// The suggested move's win rate (or mate distance), green when favorable;
-  /// `WIN RATE --` while there is no suggestion to evaluate.
+  /// `WIN RATE` / `--` while there is no suggestion to evaluate.
   static Widget _winRateLabel(SuggestionState suggestion) {
     if (suggestion is! SuggestionReady) {
-      return const _Label(EvalFormat.unknownWinRate);
+      return const _Headline(
+        EvalHeadline(
+          EvalFormat.winRateCaption,
+          EvalFormat.unknownValue,
+          isFavorable: false,
+        ),
+        color: AppColors.textSecondary,
+      );
     }
     final headline = EvalFormat.headline(
       suggestion.suggestion.score,
       suggestion.suggestion.winChance,
     );
-    return _Label(
-      headline.text,
+    return _Headline(
+      headline,
       color: headline.isFavorable ? AppColors.accentGreen : AppColors.accentRed,
     );
   }
 }
 
+/// Caption over value, scaled down as one block at large text scales.
+class _Headline extends StatelessWidget {
+  const _Headline(this.headline, {required this.color});
+
+  final EvalHeadline headline;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: headline.spoken,
+      excludeSemantics: true,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(headline.caption, style: AppTypography.secondary),
+            Text(
+              headline.value,
+              style: AppTypography.winRate.copyWith(color: color, height: 1.2),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _Label extends StatelessWidget {
-  const _Label(this.text, {this.color = AppColors.textSecondary});
+  const _Label(this.text);
 
   final String text;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return FittedBox(
       fit: BoxFit.scaleDown,
-      child: Text(text, style: AppTypography.primary.copyWith(color: color)),
+      child: Text(
+        text,
+        style: AppTypography.primary.copyWith(color: AppColors.textSecondary),
+      ),
     );
   }
 }

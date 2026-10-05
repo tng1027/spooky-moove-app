@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 
@@ -29,16 +31,10 @@ Future<void> pumpRow(
 
 Finder _key(PersonaTier tier) => find.byKey(PersonaRow.tierKey(tier));
 
-BoxDecoration _decoration(WidgetTester tester, PersonaTier tier) =>
-    tester
-            .widget<DecoratedBox>(
-              find.descendant(
-                of: _key(tier),
-                matching: find.byType(DecoratedBox),
-              ),
-            )
-            .decoration
-        as BoxDecoration;
+AppBlock _block(WidgetTester tester, PersonaTier tier) =>
+    tester.widget<AppBlock>(
+      find.descendant(of: _key(tier), matching: find.byType(AppBlock)),
+    );
 
 void main() {
   setUp(() {
@@ -55,10 +51,16 @@ void main() {
     expect(lefts, [...lefts]..sort());
     for (final tier in PersonaTier.values) {
       expect(
-        find.descendant(of: _key(tier), matching: find.text(tier.emoji)),
+        find.descendant(of: _key(tier), matching: find.text('${tier.level}')),
         findsOneWidget,
       );
-      expect(_decoration(tester, tier).color, AppColors.keyNormal);
+      expect(
+        find.descendant(of: _key(tier), matching: find.byType(SvgPicture)),
+        tier == PersonaTier.baby ? findsNothing : findsOneWidget,
+        reason: tier.label,
+      );
+      expect(_block(tester, tier).face, AppColors.keyNormal);
+      expect(_block(tester, tier).side, AppColors.keyNormalSide);
     }
   });
 
@@ -72,24 +74,38 @@ void main() {
 
     for (final tier in PersonaTier.values) {
       expect(
-        _decoration(tester, tier).color,
+        _block(tester, tier).face,
         tier == PersonaTier.baby ? AppColors.accentActive : AppColors.keyNormal,
         reason: tier.label,
       );
     }
+    expect(_block(tester, PersonaTier.baby).side, AppColors.accentActiveSide);
   });
 
-  testWidgets('keys use only flat design tokens', (tester) async {
+  testWidgets('keys are solid blocks: no shadow, gradient or ripple', (
+    tester,
+  ) async {
     await pumpRow(tester);
 
     for (final tier in PersonaTier.values) {
-      final decoration = _decoration(tester, tier);
-      expect(decoration.boxShadow, isNull);
-      expect(decoration.gradient, isNull);
-      expect(
-        decoration.borderRadius,
-        const BorderRadius.all(Radius.circular(AppDimens.radius)),
-      );
+      final decorations = tester
+          .widgetList<DecoratedBox>(
+            find.descendant(
+              of: _key(tier),
+              matching: find.byType(DecoratedBox),
+            ),
+          )
+          .map((box) => box.decoration as BoxDecoration);
+      for (final decoration in decorations) {
+        expect(decoration.boxShadow, isNull);
+        expect(decoration.gradient, isNull);
+        if (decoration.shape == BoxShape.rectangle) {
+          expect(
+            decoration.borderRadius,
+            const BorderRadius.all(Radius.circular(AppDimens.radius)),
+          );
+        }
+      }
     }
     expect(find.byType(InkWell), findsNothing);
     expect(find.byType(AnimatedContainer), findsNothing);

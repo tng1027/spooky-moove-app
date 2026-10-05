@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/game/player_side.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_typography.dart';
-import '../../../core/widgets/app_key.dart';
+import '../../../core/widgets/app_block.dart';
 import '../../../core/widgets/screen_header.dart';
 import '../../settings/domain/app_language.dart';
 import '../../settings/presentation/language_dialog.dart';
@@ -12,9 +13,10 @@ import '../domain/game_kind.dart';
 import 'game_registry.dart';
 import 'new_game_screen.dart';
 
-/// Home screen (OB-049): one big key per [GameKind]; tapping one opens the
+/// Home screen (OB-049): one row per [GameKind]; tapping one opens the
 /// new-game screen for that game. Header (OB-051): SETTINGS, the title,
-/// LANGUAGE. Always the root: no game is ever beneath it (OB-050 D1).
+/// LANGUAGE. Layout per OB-052 DS-9: the rows, top-aligned and scrolling. Always the root: no game is ever beneath it
+/// (OB-050 D1).
 class HomeScreen extends StatefulWidget {
   const HomeScreen({required this.onStart, super.key});
 
@@ -50,6 +52,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  /// Game row face padding and gaps (DS-9).
+  static const double _rowPaddingH = 12;
+  static const double _rowPaddingV = 10;
+  static const double _nameTaglineGap = 2;
+  static const double _chevronSize = 24;
+
   /// A rapid double tap on any Home key must open only one screen or dialog.
   bool _isNavigating = false;
 
@@ -78,23 +86,18 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _header(),
+              const SizedBox(height: AppDimens.spacingLarge),
               Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) => SingleChildScrollView(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        minHeight: constraints.maxHeight,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        spacing: AppDimens.spacingLarge,
-                        children: [
-                          const SizedBox(height: AppDimens.spacingLarge),
-                          for (final game in GameKind.values) _gameKey(game),
-                        ],
-                      ),
-                    ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      for (final (index, game) in GameKind.values.indexed) ...[
+                        if (index > 0)
+                          const SizedBox(height: AppDimens.spacing),
+                        _gameRow(game),
+                      ],
+                    ],
                   ),
                 ),
               ),
@@ -141,29 +144,89 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _gameKey(GameKind game) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: AppDimens.gameKeyMinHeight),
-      child: AppKey(
-        key: HomeScreen.gameKey(game),
-        onTap: () => _open(game),
-        child: Semantics(
-          label: NewGameScreen.spoken(game.label),
-          excludeSemantics: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: AppDimens.spacing,
-            children: [
-              SizedBox.square(
-                dimension: AppDimens.gamePictogramSize,
-                child: GameWidgets.sidePictogram(game, PlayerSide.first),
+  /// A neutral row (OB-052 DS-9): `surfaceDark` keeps the tagline legible;
+  /// only the icon block carries the game accent.
+  Widget _gameRow(GameKind game) {
+    return Semantics(
+      key: HomeScreen.gameKey(game),
+      button: true,
+      enabled: true,
+      label: '${NewGameScreen.spoken(game.label)}, ${game.spokenTagline}',
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: AppDimens.gameRowMinHeight,
+        ),
+        child: AppBlock(
+          face: AppColors.surfaceDark,
+          side: AppColors.surfaceSide,
+          hasHighlight: true,
+          onTap: () => _open(game),
+          child: ExcludeSemantics(
+            child: Container(
+              constraints: const BoxConstraints(
+                minHeight: AppDimens.gameRowMinHeight - AppDimens.blockDepth,
               ),
-              Text(
-                game.label,
-                style: AppTypography.primary,
-                textAlign: TextAlign.center,
+              padding: const EdgeInsets.symmetric(
+                horizontal: _rowPaddingH,
+                vertical: _rowPaddingV,
               ),
-            ],
+              child: Row(
+                children: [
+                  _GameIconBlock(game: game),
+                  const SizedBox(width: _rowPaddingH),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: _nameTaglineGap,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text(game.label, style: AppTypography.primary),
+                        ),
+                        Text(
+                          game.tagline,
+                          style: AppTypography.secondary,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppDimens.spacing),
+                  const Icon(
+                    Icons.chevron_right,
+                    size: _chevronSize,
+                    color: AppColors.textSecondary,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The row's fixed-size accent block holding the game's first-side piece.
+class _GameIconBlock extends StatelessWidget {
+  const _GameIconBlock({required this.game});
+
+  final GameKind game;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: AppDimens.gameIconBlockSize,
+      child: AppBlock(
+        face: game.accent,
+        side: game.accentSide,
+        child: Center(
+          child: SizedBox.square(
+            dimension: AppDimens.gameIconPictogramSize,
+            child: GameWidgets.sidePictogram(game, PlayerSide.first),
           ),
         ),
       ),

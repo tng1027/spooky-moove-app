@@ -21,7 +21,6 @@ String _pick(List<MoveCandidate> candidates, PersonaTier tier) =>
 void main() {
   test('the 7 tiers are ordered by level', () {
     expect(PersonaTier.values.map((t) => t.level), [1, 2, 3, 4, 5, 6, 7]);
-    expect(PersonaTier.values.map((t) => t.emoji).join(), '🥚🐣🐥🥉🥈🥇👑');
   });
 
   test('an empty candidate list is rejected', () {

@@ -82,6 +82,25 @@ void main() {
     expect(board.sideToMove, PieceColor.black);
   });
 
+  testWidgets('a dark check chip before the label, no ✓ in the text', (
+    tester,
+  ) async {
+    await pumpKey(tester, isEnabled: true, suggestion: ready);
+
+    final check = tester.widget<Icon>(find.byIcon(Icons.check));
+    expect(check.color, AppColors.textPrimary);
+    expect(find.text(ConfirmPlayedKey.label), findsOneWidget);
+    expect(find.textContaining('✓'), findsNothing);
+    expect(
+      tester.getCenter(find.byIcon(Icons.check)).dx,
+      lessThan(tester.getRect(find.text(ConfirmPlayedKey.label)).left),
+    );
+    expect(
+      tester.getSize(find.byKey(ConfirmPlayedKey.regionKey)).height,
+      greaterThanOrEqualTo(48),
+    );
+  });
+
   testWidgets('disabled: no tap handler, secondary label', (tester) async {
     await pumpKey(tester, isEnabled: false, suggestion: ready);
     expect(appKey(tester).onTap, isNull);

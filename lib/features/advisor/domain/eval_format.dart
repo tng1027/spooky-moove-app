@@ -3,35 +3,43 @@ import '../../../core/engine/engine_models.dart';
 /// Evaluation text for the advisor screen (OB-007, OB-041). Scores are from
 /// the user's side and describe the suggested move (OB-021 D12).
 abstract final class EvalFormat {
-  /// Shown while there is no suggestion to evaluate.
-  static const String unknownWinRate = 'WIN RATE --';
+  static const String winRateCaption = 'WIN RATE';
 
-  /// `WIN RATE 62%`, `YOU MATE IN 4` or `OPPONENT MATES IN 4`.
-  /// [EvalHeadline.isFavorable] picks green (true) or red.
+  /// The value shown under [winRateCaption] while there is no suggestion.
+  static const String unknownValue = '--';
+
+  /// `WIN RATE` / `62%`, `YOU MATE IN` / `4` or `OPPONENT MATES IN` / `4`
+  /// (OB-052 DS-7: caption above value). [EvalHeadline.isFavorable] picks
+  /// green (true) or red.
   static EvalHeadline headline(EngineScore score, double winChance) {
     return switch (score) {
       MateScore(:final moves) when moves > 0 => EvalHeadline(
-        'YOU MATE IN $moves',
+        'YOU MATE IN',
+        '$moves',
         isFavorable: true,
       ),
       MateScore(:final moves) => EvalHeadline(
-        'OPPONENT MATES IN ${moves.abs()}',
+        'OPPONENT MATES IN',
+        '${moves.abs()}',
         isFavorable: false,
       ),
       CentipawnScore() => EvalHeadline(
-        'WIN RATE ${winChance.round()}%',
+        winRateCaption,
+        '${winChance.round()}%',
         isFavorable: winChance.round() >= 50,
       ),
     };
   }
 
-  /// `EVAL +1.4 | DEPTH 16 | 850k nps`; missing parts are left out.
+  static const String expertSeparator = ' • ';
+
+  /// `EVAL +1.4 • DEPTH 16 • 850k nps`; missing parts are left out.
   static String expertLine(EngineScore score, {int? depth, int? nps}) {
     return [
       'EVAL ${_eval(score)}',
       if (depth != null) 'DEPTH $depth',
       if (nps != null) '${_abbreviate(nps)} nps',
-    ].join(' | ');
+    ].join(expertSeparator);
   }
 
   static String _eval(EngineScore score) => switch (score) {
@@ -53,20 +61,28 @@ abstract final class EvalFormat {
 }
 
 final class EvalHeadline {
-  const EvalHeadline(this.text, {required this.isFavorable});
+  const EvalHeadline(this.caption, this.value, {required this.isFavorable});
 
-  final String text;
+  final String caption;
+  final String value;
   final bool isFavorable;
+
+  /// One label for screen readers, e.g. `Win rate 62 percent`.
+  String get spoken {
+    final text = '$caption $value'.replaceAll('%', ' percent');
+    return text[0] + text.substring(1).toLowerCase();
+  }
 
   @override
   bool operator ==(Object other) =>
       other is EvalHeadline &&
-      other.text == text &&
+      other.caption == caption &&
+      other.value == value &&
       other.isFavorable == isFavorable;
 
   @override
-  int get hashCode => Object.hash(text, isFavorable);
+  int get hashCode => Object.hash(caption, value, isFavorable);
 
   @override
-  String toString() => 'EvalHeadline($text, favorable: $isFavorable)';
+  String toString() => 'EvalHeadline($caption $value, favorable: $isFavorable)';
 }

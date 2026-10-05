@@ -113,7 +113,7 @@ void main() {
     await shot(tester, 'new_game_after_discard');
     await tap(tester, NewGameScreen.backKey);
     expect(find.byType(HomeScreen), findsOneWidget);
-    expect(find.text('BACK'), findsNothing);
+    expect(find.text('‹ BACK'), findsNothing);
     await shot(tester, 'home_after_discard');
 
     await tap(tester, HomeScreen.gameKey(GameKind.chess));

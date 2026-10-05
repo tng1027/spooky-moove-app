@@ -1,6 +1,9 @@
+import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
 
 void main() {
   test('Chess labels its sides WHITE and BLACK, never RED', () {
@@ -32,5 +35,25 @@ void main() {
   test('Xiangqi runs in the xiangqi engine variant on a 9 x 10 grid', () {
     expect(GameKind.xiangqi.engineVariant, 'xiangqi');
     expect((GameKind.xiangqi.files, GameKind.xiangqi.ranks), (9, 10));
+  });
+
+  test('each game has its identity accent: Chess pink, Xiangqi blue', () {
+    expect(GameKind.chess.accent, AppColors.accentChess);
+    expect(GameKind.chess.accentSide, AppColors.accentChessSide);
+    expect(GameKind.xiangqi.accent, AppColors.accentXiangqi);
+    expect(GameKind.xiangqi.accentSide, AppColors.accentXiangqiSide);
+    expect(AppColors.accentChess, const Color(0xFFED96D7));
+    expect(AppColors.accentXiangqi, const Color(0xFF578EF5));
+  });
+
+  test('game accents never reuse a status colour', () {
+    final status = {
+      AppColors.accentGreen,
+      AppColors.accentRed,
+      AppColors.accentActive,
+    };
+    for (final game in GameKind.values) {
+      expect(status, isNot(contains(game.accent)), reason: game.label);
+    }
   });
 }

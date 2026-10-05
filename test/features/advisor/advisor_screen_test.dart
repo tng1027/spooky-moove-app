@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +12,8 @@ import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
 import 'package:spookymoove/core/theme/app_theme.dart';
 import 'package:spookymoove/core/theme/app_typography.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
+import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
 import 'package:spookymoove/features/chess/presentation/widgets/chess_board.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
@@ -132,6 +132,40 @@ void main() {
     });
   }
 
+  for (final (size, cell) in [
+    (smallPhone, 44.0),
+    (const Size(360, 600), 43.5),
+    (commonPhone, 48.0),
+  ]) {
+    testWidgets('chess board in a raised tray: $cell dp cells at $size', (
+      tester,
+    ) async {
+      await pumpApp(tester, size: size);
+
+      final board = find.byKey(ChessBoard.regionKey);
+      expect(tester.getSize(board), Size(cell * 8, cell * 8));
+      expect(
+        tester.getSize(board),
+        AdvisorScreen.boardSizeFor(size, files: 8, ranks: 8),
+      );
+
+      final tray = tester.widget<AppBlock>(
+        find.ancestor(of: board, matching: find.byType(AppBlock)),
+      );
+      expect(tray.face, AppColors.surfaceDark);
+      expect(tray.side, AppColors.surfaceSide);
+      expect(tray.onTap, isNull);
+      final trayRect = tester.getRect(
+        find.ancestor(of: board, matching: find.byType(AppBlock)),
+      );
+      expect(trayRect.width, cell * 8 + 2 * AppDimens.boardTrayPadding);
+      expect(
+        trayRect.height,
+        cell * 8 + 2 * AppDimens.boardTrayPadding + AppDimens.blockDepth,
+      );
+    });
+  }
+
   testWidgets('suggestion card keeps its minimum height on a small phone', (
     tester,
   ) async {
@@ -155,11 +189,13 @@ void main() {
     expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
   });
 
-  testWidgets('no overflow at text scale 2.0 on a small phone', (tester) async {
-    await pumpApp(tester, size: smallPhone, textScale: 2.0);
+  for (final size in [smallPhone, const Size(360, 600)]) {
+    testWidgets('no overflow at text scale 2.0 at $size', (tester) async {
+      await pumpApp(tester, size: size, textScale: 2.0);
 
-    expect(tester.takeException(), isNull);
-  });
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   test('theme is dark with the bundled font and tabular figures', () {
     final theme = AppTheme.dark();

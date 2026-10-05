@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 
 import '../../../core/game/active_game.dart';
 import '../../../core/game/player_side.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../chess/domain/chess_models.dart';
 import '../../chess/presentation/chess_board_controller.dart';
@@ -22,6 +23,7 @@ import '../../xiangqi/presentation/widgets/xiangqi_suggested_move.dart';
 import '../../xiangqi/presentation/xiangqi_board_controller.dart';
 import '../domain/game_kind.dart';
 import 'game_session_controller.dart';
+import 'widgets/new_game_hero.dart';
 
 /// The current game; Chess until a session starts.
 final activeGameKindProvider = Provider<GameKind>((ref) {
@@ -61,6 +63,32 @@ final activeEngineVariantProvider = Provider<String>(
   (ref) => ref.watch(activeGameKindProvider).engineVariant,
 );
 
+/// Game identity accents (OB-052 BR-004): name a game, never a status.
+extension GameAccent on GameKind {
+  Color get accent => switch (this) {
+    GameKind.chess => AppColors.accentChess,
+    GameKind.xiangqi => AppColors.accentXiangqi,
+  };
+
+  /// The isometric side face under [accent].
+  Color get accentSide => switch (this) {
+    GameKind.chess => AppColors.accentChessSide,
+    GameKind.xiangqi => AppColors.accentXiangqiSide,
+  };
+}
+
+/// Per-game copy next to [GameKind.label] (OB-052 DS-9).
+extension GameCopy on GameKind {
+  /// What a screen reader says for the Home row's tagline.
+  String get spokenTagline => switch (this) {
+    GameKind.chess => 'classic strategy',
+    GameKind.xiangqi => 'Chinese chess',
+  };
+
+  /// Home row tagline, e.g. `CLASSIC STRATEGY`.
+  String get tagline => spokenTagline.toUpperCase();
+}
+
 /// Per-game widgets placed by shared screens.
 abstract final class GameWidgets {
   /// The tap board, sized by `AdvisorScreen.boardSizeFor`.
@@ -77,7 +105,7 @@ abstract final class GameWidgets {
       };
 
   /// The card's expert line for [engineMove]; [evalLine] is the shared
-  /// `EVAL … | DEPTH … | … nps` text.
+  /// `EVAL … • DEPTH … • … nps` text.
   static Widget expertLine(GameKind game, String engineMove, String evalLine) =>
       switch (game) {
         GameKind.chess => Text(evalLine, style: AppTypography.secondary),
@@ -87,7 +115,13 @@ abstract final class GameWidgets {
         ),
       };
 
-  /// The pictogram on the new-game side key.
+  /// The top-face pattern of the new-game hero slab (OB-052 DS-8).
+  static HeroPattern heroPattern(GameKind game) => switch (game) {
+    GameKind.chess => HeroPattern.checker,
+    GameKind.xiangqi => HeroPattern.intersectionGrid,
+  };
+
+  /// The pictogram on the new-game side key and hero.
   static Widget sidePictogram(GameKind game, PlayerSide side) => switch (game) {
     GameKind.chess => ChessPiecePictogram(
       ChessPiece(PieceColor.of(side), PieceKind.king),

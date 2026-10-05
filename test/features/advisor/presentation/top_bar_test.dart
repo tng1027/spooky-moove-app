@@ -58,15 +58,31 @@ void main() {
   Color? colorOf(WidgetTester tester, String text) =>
       tester.widget<Text>(find.text(text)).style?.color;
 
-  testWidgets('a favorable suggestion: green WIN RATE, centered', (
+  testWidgets('a favorable suggestion: WIN RATE over a green value', (
     tester,
   ) async {
     await pumpTopBar(tester, suggestion: ready());
 
-    final label = find.text('WIN RATE 62%');
-    expect(colorOf(tester, 'WIN RATE 62%'), AppColors.accentGreen);
+    final caption = find.text('WIN RATE');
+    final value = find.text('62%');
+    expect(colorOf(tester, 'WIN RATE'), AppColors.textSecondary);
+    expect(colorOf(tester, '62%'), AppColors.accentGreen);
+    expect(tester.widget<Text>(value).style?.fontSize, 24);
+    expect(
+      tester.getRect(caption).bottom,
+      lessThanOrEqualTo(tester.getRect(value).top),
+    );
     final bar = tester.getRect(find.byKey(TopBar.regionKey));
-    expect(tester.getCenter(label).dx, closeTo(bar.center.dx, 0.5));
+    expect(tester.getCenter(value).dx, closeTo(bar.center.dx, 0.5));
+    expect(tester.getRect(value).bottom, lessThanOrEqualTo(bar.bottom));
+  });
+
+  testWidgets('the win rate is spoken as one label', (tester) async {
+    final semantics = tester.ensureSemantics();
+    await pumpTopBar(tester, suggestion: ready());
+
+    expect(find.bySemanticsLabel('Win rate 62 percent'), findsOneWidget);
+    semantics.dispose();
   });
 
   testWidgets('below 50 % the win rate is red', (tester) async {
@@ -74,7 +90,7 @@ void main() {
       tester,
       suggestion: ready(score: const CentipawnScore(-130), winChance: 38),
     );
-    expect(colorOf(tester, 'WIN RATE 38%'), AppColors.accentRed);
+    expect(colorOf(tester, '38%'), AppColors.accentRed);
   });
 
   testWidgets('a forced mate is spelled out', (tester) async {
@@ -82,10 +98,11 @@ void main() {
       tester,
       suggestion: ready(score: const MateScore(-4), winChance: 0),
     );
-    expect(colorOf(tester, 'OPPONENT MATES IN 4'), AppColors.accentRed);
+    expect(find.text('OPPONENT MATES IN'), findsOneWidget);
+    expect(colorOf(tester, '4'), AppColors.accentRed);
   });
 
-  testWidgets('no suggestion yet: WIN RATE -- in textSecondary', (
+  testWidgets('no suggestion yet: WIN RATE / -- in textSecondary', (
     tester,
   ) async {
     for (final (turn, state) in [
@@ -95,8 +112,9 @@ void main() {
       (TurnStatus.yourMove, const SuggestionFailed()),
     ]) {
       await pumpTopBar(tester, turn: turn, suggestion: state);
+      expect(find.text(EvalFormat.winRateCaption), findsOneWidget);
       expect(
-        colorOf(tester, EvalFormat.unknownWinRate),
+        colorOf(tester, EvalFormat.unknownValue),
         AppColors.textSecondary,
         reason: '$state',
       );
@@ -107,13 +125,13 @@ void main() {
     await pumpTopBar(tester, turn: null, fen: '8/8/8/4k3/8/8/8/4KN2 w - - 0 1');
 
     expect(find.text(TopBar.gameOverLabel), findsOneWidget);
-    expect(find.text(EvalFormat.unknownWinRate), findsNothing);
+    expect(find.text(EvalFormat.unknownValue), findsNothing);
   });
 
   testWidgets('no game: no label', (tester) async {
     await pumpTopBar(tester, turn: null);
 
-    expect(find.text(EvalFormat.unknownWinRate), findsNothing);
+    expect(find.text(EvalFormat.unknownValue), findsNothing);
     expect(find.text(TopBar.gameOverLabel), findsNothing);
   });
 
@@ -140,7 +158,7 @@ void main() {
         suggestion: ready(score: const MateScore(-4), winChance: 0),
       );
       expect(tester.takeException(), isNull);
-      final label = tester.getRect(find.text('OPPONENT MATES IN 4'));
+      final label = tester.getRect(find.text('OPPONENT MATES IN'));
       final undo = tester.getRect(find.byKey(UndoKey.regionKey));
       final newGame = tester.getRect(find.byKey(NewGameKey.regionKey));
       expect(label.left, greaterThanOrEqualTo(newGame.right));

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:spookymoove/app.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
@@ -28,15 +29,14 @@ void main() {
     await tester.runAsync(() => Future<void>.delayed(_hold));
   }
 
-  Color keyColor(WidgetTester tester, PersonaTier tier) {
-    final box = tester.widget<DecoratedBox>(
-      find.descendant(
-        of: find.byKey(PersonaRow.tierKey(tier)),
-        matching: find.byType(DecoratedBox),
-      ),
-    );
-    return (box.decoration as BoxDecoration).color!;
-  }
+  Color keyColor(WidgetTester tester, PersonaTier tier) => tester
+      .widget<AppBlock>(
+        find.descendant(
+          of: find.byKey(PersonaRow.tierKey(tier)),
+          matching: find.byType(AppBlock),
+        ),
+      )
+      .face;
 
   testWidgets('choose and change the persona tier', (tester) async {
     SharedPreferences.setMockInitialValues({

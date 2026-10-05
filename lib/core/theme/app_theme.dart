@@ -4,7 +4,8 @@ import 'app_colors.dart';
 import 'app_dimens.dart';
 import 'app_typography.dart';
 
-/// The only theme of the app: dark, flat, no shadows/gradients/blur.
+/// The only theme of the app: dark, no Material elevation shadows, gradients
+/// or blur. Depth comes only from solid isometric blocks (`AppBlock`).
 abstract final class AppTheme {
   static ThemeData dark() {
     const colorScheme = ColorScheme.dark(

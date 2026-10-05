@@ -60,7 +60,7 @@ class _StatusLineState extends ConsumerState<StatusLine> {
       height: AppDimens.statusLineHeight,
       child: Padding(
         padding: const EdgeInsets.only(
-          top: AppDimens.spacing,
+          top: AppDimens.spacingSmall,
           left: AppDimens.spacingSmall,
           right: AppDimens.spacingSmall,
         ),

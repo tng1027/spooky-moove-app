@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/game/player_side.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
+import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
 import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
@@ -51,15 +54,72 @@ void main() {
     expect(find.byType(NewGameScreen), findsNothing);
   });
 
-  testWidgets('game keys are big', (tester) async {
+  testWidgets('each row: neutral block, accent icon, name, tagline, chevron', (
+    tester,
+  ) async {
     await pumpHome(tester);
 
-    for (final game in GameKind.values) {
+    for (final (game, tagline) in const [
+      (GameKind.chess, 'CLASSIC STRATEGY'),
+      (GameKind.xiangqi, 'CHINESE CHESS'),
+    ]) {
+      final blocks = tester
+          .widgetList<AppBlock>(
+            find.descendant(of: gameKey(game), matching: find.byType(AppBlock)),
+          )
+          .toList();
+      expect(blocks, hasLength(2), reason: game.label);
+      final (row, icon) = (blocks.first, blocks.last);
+      expect(row.face, AppColors.surfaceDark);
+      expect(row.side, AppColors.surfaceSide);
+      expect(row.onTap, isNotNull);
+      expect(icon.face, game.accent);
+      expect(icon.side, game.accentSide);
+      expect(icon.onTap, isNull);
+
+      Finder inRow(Finder finder) =>
+          find.descendant(of: gameKey(game), matching: finder);
+      expect(tester.getSize(inRow(find.byWidget(icon))), const Size(48, 48));
+      final pictogram = GameWidgets.sidePictogram(game, PlayerSide.first);
       expect(
-        tester.getSize(gameKey(game)).height,
-        greaterThanOrEqualTo(AppDimens.gameKeyMinHeight),
+        tester.getSize(inRow(find.byType(pictogram.runtimeType))),
+        const Size.square(AppDimens.gameIconPictogramSize),
+      );
+      expect(
+        tester.widget<Text>(inRow(find.text(game.label))).style?.color,
+        AppColors.textPrimary,
+      );
+      expect(game.tagline, tagline);
+      expect(
+        tester.widget<Text>(inRow(find.text(tagline))).style?.color,
+        AppColors.textSecondary,
+      );
+      expect(
+        tester.widget<Icon>(inRow(find.byIcon(Icons.chevron_right))).color,
+        AppColors.textSecondary,
       );
     }
+    for (final key in [HomeScreen.settingsKey, HomeScreen.languageKey]) {
+      final block = tester.widget<AppBlock>(
+        find.descendant(of: find.byKey(key), matching: find.byType(AppBlock)),
+      );
+      expect(block.face, AppColors.keyNormal);
+    }
+    expect(find.textContaining('GAMES'), findsNothing);
+  });
+
+  testWidgets('rows are ≥ 72 dp, 8 dp apart and top-aligned', (tester) async {
+    await pumpHome(tester, size: const Size(360, 640));
+
+    final chess = tester.getRect(gameKey(GameKind.chess));
+    final xiangqi = tester.getRect(gameKey(GameKind.xiangqi));
+    final header = tester.getRect(find.byKey(HomeScreen.settingsKey));
+    for (final row in [chess, xiangqi]) {
+      expect(row.height, greaterThanOrEqualTo(AppDimens.gameRowMinHeight));
+      expect(row.width, 360 - 2 * AppDimens.spacingLarge);
+    }
+    expect(xiangqi.top - chess.bottom, AppDimens.spacing);
+    expect(chess.top - header.bottom, AppDimens.spacingLarge);
   });
 
   for (final game in GameKind.values) {
@@ -140,15 +200,15 @@ void main() {
     expect(find.text('BACK'), findsNothing);
   });
 
-  testWidgets('keys announce title-case names; the title is a header', (
+  testWidgets('rows announce name and tagline; the title is a header', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
     await pumpHome(tester);
 
     for (final (game, label) in const [
-      (GameKind.chess, 'Chess'),
-      (GameKind.xiangqi, 'Xiangqi'),
+      (GameKind.chess, 'Chess, classic strategy'),
+      (GameKind.xiangqi, 'Xiangqi, Chinese chess'),
     ]) {
       expect(
         tester.getSemantics(gameKey(game)),
@@ -157,7 +217,6 @@ void main() {
           isButton: true,
           hasEnabledState: true,
           isEnabled: true,
-          hasSelectedState: true,
           hasTapAction: true,
         ),
       );
@@ -303,23 +362,33 @@ void main() {
   });
 
   for (final size in const [Size(360, 640), Size(360, 600)]) {
-    testWidgets('no overflow at text scale 2.0 on '
-        '${size.width.toInt()}x${size.height.toInt()}', (tester) async {
-      await pumpHome(tester, size: size, textScale: 2.0);
+    for (final textScale in const [1.0, 2.0]) {
+      testWidgets('no overflow at text scale $textScale on '
+          '${size.width.toInt()}x${size.height.toInt()}', (tester) async {
+        await pumpHome(tester, size: size, textScale: textScale);
 
-      expect(tester.takeException(), isNull);
-      for (final key in [HomeScreen.settingsKey, HomeScreen.languageKey]) {
-        expect(
-          tester.getSize(find.byKey(key)).height,
-          greaterThanOrEqualTo(AppDimens.minKeyHeight),
-        );
-      }
-      for (final game in GameKind.values) {
-        expect(
-          tester.getSize(gameKey(game)).height,
-          greaterThanOrEqualTo(AppDimens.gameKeyMinHeight),
-        );
-      }
-    });
+        expect(tester.takeException(), isNull);
+        for (final key in [HomeScreen.settingsKey, HomeScreen.languageKey]) {
+          expect(
+            tester.getSize(find.byKey(key)).height,
+            greaterThanOrEqualTo(AppDimens.minKeyHeight),
+          );
+        }
+        for (final game in GameKind.values) {
+          final row = tester.getRect(gameKey(game));
+          expect(row.height, greaterThanOrEqualTo(AppDimens.gameRowMinHeight));
+          expect(row.bottom, lessThanOrEqualTo(size.height));
+          expect(
+            tester.getSize(
+              find.descendant(
+                of: gameKey(game),
+                matching: find.byIcon(Icons.chevron_right),
+              ),
+            ),
+            const Size.square(24),
+          );
+        }
+      });
+    }
   }
 }

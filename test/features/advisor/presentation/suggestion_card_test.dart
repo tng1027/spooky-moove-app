@@ -87,7 +87,7 @@ void main() {
     expect(find.text('E2 ➔ E4'), findsOneWidget);
     expect(colorOf(tester, 'E2 ➔ E4'), AppColors.accentGreen);
     expect(find.text('WIN RATE 62%'), findsNothing, reason: 'in the top bar');
-    expect(find.text('EVAL +1.4 | DEPTH 16 | 850k nps'), findsOneWidget);
+    expect(find.text('EVAL +1.4 • DEPTH 16 • 850k nps'), findsOneWidget);
     expect(pictograms(tester), isEmpty);
   });
 
@@ -101,7 +101,7 @@ void main() {
       ),
     );
     expect(find.text('OPPONENT MATES IN 4'), findsNothing);
-    expect(find.text('EVAL -M4 | DEPTH 16 | 850k nps'), findsOneWidget);
+    expect(find.text('EVAL -M4 • DEPTH 16 • 850k nps'), findsOneWidget);
   });
 
   testWidgets('castling shows the rook pictogram and its move', (tester) async {
@@ -159,6 +159,24 @@ void main() {
     await pumpCard(tester, const SuggestionWaiting());
     expect(find.text(SuggestionCard.emptyLine), findsOneWidget);
     expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
+  });
+
+  testWidgets('BEST MOVE caption only while ready or thinking', (tester) async {
+    for (final (state, isShown) in [
+      (ready(moveIn(_startFen, 'e2e4')), true),
+      (const SuggestionThinking(), true),
+      (const SuggestionNoTier(), false),
+      (const SuggestionWaiting(), false),
+      (const SuggestionFailed(), false),
+    ]) {
+      await tester.pumpWidget(const SizedBox());
+      await pumpCard(tester, state);
+      expect(
+        find.text(SuggestionCard.bestMoveLabel),
+        isShown ? findsOneWidget : findsNothing,
+        reason: '$state',
+      );
+    }
   });
 
   testWidgets('an error offers Retry', (tester) async {

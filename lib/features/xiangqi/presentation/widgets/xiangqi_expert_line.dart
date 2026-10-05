@@ -7,7 +7,7 @@ import '../xiangqi_board_controller.dart';
 
 /// The expert line for Xiangqi (OB-046 REQ-005, XQ4): WXF from the mover's
 /// side, then the shared evaluation text
-/// (`C2.5 · EVAL +0.3 | DEPTH 16 | 850k nps`).
+/// (`C2.5 · EVAL +0.3 • DEPTH 16 • 850k nps`).
 class XiangqiExpertLine extends ConsumerWidget {
   const XiangqiExpertLine({
     required this.engineMove,

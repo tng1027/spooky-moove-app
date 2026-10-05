@@ -75,7 +75,7 @@ void main() {
       const XiangqiPiece(PlayerSide.first, XiangqiPieceKind.cannon),
     );
     expect(find.text('H3 ➔ E3'), findsOneWidget);
-    expect(find.text('C2.5 · EVAL +0.3 | DEPTH 16 | 850k nps'), findsOneWidget);
+    expect(find.text('C2.5 · EVAL +0.3 • DEPTH 16 • 850k nps'), findsOneWidget);
   });
 
   testWidgets('Black cannon: WXF from Black, line still in Red frame', (
@@ -109,7 +109,7 @@ void main() {
 
     expect(find.byType(XiangqiPieceDisc), findsNothing);
     expect(find.text(SuggestionCard.emptyLine), findsOneWidget);
-    expect(find.text('EVAL +0.3 | DEPTH 16 | 850k nps'), findsOneWidget);
+    expect(find.text('EVAL +0.3 • DEPTH 16 • 850k nps'), findsOneWidget);
   });
 
   testWidgets('no overflow at text scale 2.0', (tester) async {

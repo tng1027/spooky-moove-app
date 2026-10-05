@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_dimens.dart';
 import '../theme/app_typography.dart';
+import 'app_block.dart';
 
-/// Design-system key: flat block, small radius, ≥ 48 dp high, amber when
-/// selected, green when it is the primary action, `keyDisabled` when [onTap]
-/// is null (designSystem.md). Shows [label], or [child] when given.
+/// Design-system key: an isometric [AppBlock] ≥ 48 dp high (side included)
+/// that sinks while pressed. `keyNormal` by default, amber when selected,
+/// green when it is the primary action, the game accent when [accentColor]
+/// is given, and lowered `keyDisabled` when [onTap] is null
+/// (designSystem.md). Shows [label], or [child] when given.
 class AppKey extends StatelessWidget {
   const AppKey({
     required this.onTap,
@@ -14,9 +17,15 @@ class AppKey extends StatelessWidget {
     this.child,
     this.isSelected = false,
     this.isPrimary = false,
+    this.accentColor,
+    this.accentSideColor,
     this.semanticsLabel,
     super.key,
-  }) : assert((label == null) != (child == null), 'Pass label or child');
+  }) : assert((label == null) != (child == null), 'Pass label or child'),
+       assert(
+         (accentColor == null) == (accentSideColor == null),
+         'Pass both accent colors or neither',
+       );
 
   /// Null disables the key.
   final VoidCallback? onTap;
@@ -30,40 +39,48 @@ class AppKey extends StatelessWidget {
   /// The screen's main action (OB-041): `accentGreen` with dark text.
   final bool isPrimary;
 
+  /// A game identity face and its side (OB-052), with dark text. Selected
+  /// still wins with amber.
+  final Color? accentColor;
+  final Color? accentSideColor;
+
   bool get isEnabled => onTap != null;
 
   @override
   Widget build(BuildContext context) {
     final label = this.label;
-    final background = !isEnabled
-        ? AppColors.keyDisabled
+    final accentColor = this.accentColor;
+    final accentSideColor = this.accentSideColor;
+    final (face, side) = !isEnabled
+        ? (AppColors.keyDisabled, null)
         : isSelected
-        ? AppColors.accentActive
+        ? (AppColors.accentActive, AppColors.accentActiveSide)
         : isPrimary
-        ? AppColors.accentGreen
-        : AppColors.keyNormal;
+        ? (AppColors.accentGreen, AppColors.accentGreenSide)
+        : accentColor != null && accentSideColor != null
+        ? (accentColor, accentSideColor)
+        : (AppColors.keyNormal, AppColors.keyNormalSide);
+    final isNeutral = face == AppColors.keyNormal;
     final foreground = !isEnabled
         ? AppColors.textSecondary
-        : isSelected || isPrimary
-        ? AppColors.bgDark
-        : AppColors.textPrimary;
+        : isNeutral
+        ? AppColors.textPrimary
+        : AppColors.bgDark;
     return Semantics(
       button: true,
       enabled: isEnabled,
       selected: isSelected,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: AppBlock(
+        face: face,
+        side: side,
+        hasHighlight: isNeutral,
         onTap: onTap,
         child: Container(
-          constraints: const BoxConstraints(minHeight: AppDimens.minKeyHeight),
+          constraints: const BoxConstraints(
+            minHeight: AppDimens.minKeyHeight - AppDimens.blockDepth,
+          ),
           alignment: Alignment.center,
           padding: const EdgeInsets.all(AppDimens.spacing),
-          decoration: BoxDecoration(
-            color: background,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(AppDimens.radius),
-            ),
-          ),
           child: label == null
               ? child
               : Text(

@@ -5,7 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/app.dart';
 import 'package:spookymoove/core/board/tap_board.dart';
+import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
+import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/core/widgets/app_key.dart';
 import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
@@ -15,10 +17,12 @@ import 'package:spookymoove/features/chess/presentation/chess_board_controller.d
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_screen.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_sheet.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
 import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
+import 'package:spookymoove/features/new_game/presentation/widgets/new_game_hero.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
@@ -162,7 +166,7 @@ void expectDiscardedOnHome(WidgetTester tester, ProviderContainer container) {
 
 void main() {
   group('first use', () {
-    testWidgets('header: BACK, the game name, FAIR PLAY; no bottom row', (
+    testWidgets('header: ‹ BACK and FAIR PLAY; the title sits below', (
       tester,
     ) async {
       await pumpNewGame(tester);
@@ -172,15 +176,15 @@ void main() {
       final name = tester.getRect(find.text('CHESS'));
       final fairPlay = tester.getRect(find.byKey(NewGameScreen.fairPlayKey));
       final start = tester.getRect(find.byKey(NewGameScreen.startKey));
-      expect(back.right, lessThanOrEqualTo(name.left));
-      expect(name.right, lessThanOrEqualTo(fairPlay.left));
+      expect(find.text('‹ BACK'), findsOneWidget);
       expect(back.center.dy, closeTo(fairPlay.center.dy, 0.5));
-      expect(back.bottom, lessThan(start.top));
-      expect(fairPlay.bottom, lessThan(start.top));
-      expect(name.center.dx, closeTo(392 / 2, 0.5));
+      expect(back.right, lessThan(fairPlay.left));
+      expect(name.top, greaterThanOrEqualTo(back.bottom));
+      expect(name.bottom, lessThan(start.top));
+      expect(find.text(NewGameScreen.playingLabel), findsOneWidget);
+      expect(find.text(NewGameScreen.helperLabel), findsOneWidget);
       expect(find.textContaining('NEW GAME'), findsNothing);
       expect(find.text('HOME'), findsNothing);
-      expect(find.text('GAME'), findsNothing);
       expect(find.text('XIANGQI'), findsNothing);
     });
 
@@ -193,8 +197,32 @@ void main() {
       AppKey key(Key k) => tester.widget<AppKey>(find.byKey(k));
       expect(key(NewGameScreen.sideKey(PlayerSide.first)).isSelected, isTrue);
       expect(key(NewGameScreen.sideKey(PlayerSide.second)).isSelected, isFalse);
-      expect(key(NewGameScreen.startKey).isPrimary, isTrue);
+      expect(key(NewGameScreen.startKey).isPrimary, isFalse);
+      expect(key(NewGameScreen.startKey).accentColor, AppColors.accentChess);
       expect(container.read(gameSessionProvider), isNull);
+    });
+
+    testWidgets('game accent: title, START GAME block with dark text', (
+      tester,
+    ) async {
+      await pumpNewGame(tester);
+
+      expect(
+        tester.widget<Text>(find.text('CHESS')).style?.color,
+        AppColors.accentChess,
+      );
+      final start = tester.widget<AppBlock>(
+        find.descendant(
+          of: find.byKey(NewGameScreen.startKey),
+          matching: find.byType(AppBlock),
+        ),
+      );
+      expect(start.face, AppColors.accentChess);
+      expect(start.side, AppColors.accentChessSide);
+      expect(
+        tester.widget<Text>(find.text('START GAME')).style?.color,
+        AppColors.bgDark,
+      );
     });
 
     testWidgets('tapping a side selects it without starting', (tester) async {
@@ -278,20 +306,33 @@ void main() {
       expect(container.read(gameSessionProvider), isNull);
     });
 
-    testWidgets('FAIR PLAY opens the notice read-only and closes back', (
+    testWidgets('FAIR PLAY opens the notice in a bottom sheet and closes', (
       tester,
     ) async {
       await pumpNewGame(tester);
 
       await tester.tap(find.byKey(NewGameScreen.fairPlayKey));
       await tester.pumpAndSettle();
-      expect(find.byKey(FairPlayScreen.closeKey), findsOneWidget);
+      expect(find.byType(BottomSheet), findsOneWidget);
+      expect(find.byType(FairPlaySheet), findsOneWidget);
+      expect(find.byType(FairPlayScreen), findsNothing);
       expect(find.byKey(FairPlayScreen.acknowledgeKey), findsNothing);
 
-      await tester.tap(find.byKey(FairPlayScreen.closeKey));
+      await tester.tap(find.byKey(FairPlaySheet.closeKey));
       await tester.pumpAndSettle();
-      expect(find.byType(FairPlayScreen), findsNothing);
+      expect(find.byType(FairPlaySheet), findsNothing);
       expect(find.byType(NewGameScreen), findsOneWidget);
+    });
+
+    testWidgets('FAIR PLAY sheet fits at text scale 2.0 on a small phone', (
+      tester,
+    ) async {
+      await pumpNewGame(tester, size: const Size(360, 640), textScale: 2.0);
+
+      await tester.tap(find.byKey(NewGameScreen.fairPlayKey));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      expect(find.byKey(FairPlaySheet.closeKey).hitTestable(), findsOneWidget);
     });
 
     testWidgets('no overflow at text scale 2.0 on a small phone', (
@@ -303,6 +344,160 @@ void main() {
       await tapSide(tester, PlayerSide.first);
       expect(tester.takeException(), isNull);
       expect(find.byType(AdvisorScreen), findsOneWidget);
+    });
+  });
+
+  group('layout (OB-052 DS-8)', () {
+    Finder hero() => find.byType(NewGameHero);
+
+    for (final game in GameKind.values) {
+      testWidgets('${game.label}: hero on a tall phone, accent slab', (
+        tester,
+      ) async {
+        await pumpNewGame(tester, game: game, size: const Size(393, 852));
+
+        expect(hero(), findsOneWidget);
+        final height = tester.getSize(hero()).height;
+        expect(height, NewGameScreen.heroMaxHeight);
+        expect(
+          find.descendant(of: hero(), matching: find.byType(CustomPaint)),
+          findsWidgets,
+        );
+        expect(find.byType(BackdropFilter), findsNothing);
+        expect(tester.takeException(), isNull);
+      });
+
+      for (final size in const [Size(360, 640), Size(360, 600)]) {
+        for (final textScale in const [1.0, 2.0]) {
+          testWidgets(
+            '${game.label}: no hero, no overflow at $size x$textScale',
+            (tester) async {
+              await pumpNewGame(
+                tester,
+                game: game,
+                size: size,
+                textScale: textScale,
+              );
+
+              expect(tester.takeException(), isNull);
+              expect(hero(), findsNothing);
+              final start = tester.getRect(find.byKey(NewGameScreen.startKey));
+              expect(start.bottom, lessThanOrEqualTo(size.height));
+              expect(
+                start.height,
+                greaterThanOrEqualTo(AppDimens.minKeyHeight),
+              );
+            },
+          );
+        }
+      }
+
+      testWidgets(
+        '${game.label}: START GAME in the accent with an arrow chip',
+        (tester) async {
+          await pumpNewGame(tester, game: game);
+
+          final start = tester.widget<AppBlock>(
+            find.descendant(
+              of: find.byKey(NewGameScreen.startKey),
+              matching: find.byType(AppBlock),
+            ),
+          );
+          expect(start.face, game.accent);
+          expect(start.side, game.accentSide);
+          expect(
+            tester
+                .widget<Text>(find.text(NewGameScreen.startLabel))
+                .style
+                ?.color,
+            AppColors.bgDark,
+          );
+          expect(
+            find.descendant(
+              of: find.byKey(NewGameScreen.startKey),
+              matching: find.byIcon(Icons.chevron_right),
+            ),
+            findsOneWidget,
+          );
+          expect(
+            tester.widget<Text>(find.text(game.label)).style?.color,
+            game.accent,
+          );
+        },
+      );
+    }
+
+    testWidgets('large text hides the hero even on a tall phone', (
+      tester,
+    ) async {
+      await pumpNewGame(tester, size: const Size(393, 852), textScale: 2.0);
+
+      expect(find.byType(NewGameHero), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('side cards: amber selection, sub-labels, radio dot', (
+      tester,
+    ) async {
+      await pumpNewGame(tester);
+
+      Finder inCard(PlayerSide side, Finder finder) => find.descendant(
+        of: find.byKey(NewGameScreen.sideKey(side)),
+        matching: finder,
+      );
+      AppBlock block(PlayerSide side) =>
+          tester.widget<AppBlock>(inCard(side, find.byType(AppBlock)));
+
+      expect(block(PlayerSide.first).face, AppColors.accentActive);
+      expect(block(PlayerSide.second).face, AppColors.keyNormal);
+      expect(inCard(PlayerSide.first, find.text('FIRST MOVE')), findsOneWidget);
+      expect(
+        inCard(PlayerSide.second, find.text('SECOND MOVE')),
+        findsOneWidget,
+      );
+      expect(
+        tester.widget<Text>(find.text('FIRST MOVE')).style?.color,
+        AppColors.bgDark,
+      );
+      expect(
+        tester.widget<Text>(find.text('SECOND MOVE')).style?.color,
+        AppColors.textPrimary,
+      );
+      expect(
+        tester
+            .getSize(find.byKey(NewGameScreen.sideKey(PlayerSide.first)))
+            .height,
+        greaterThanOrEqualTo(60),
+      );
+
+      await tester.tap(find.byKey(NewGameScreen.sideKey(PlayerSide.second)));
+      await tester.pump();
+      expect(block(PlayerSide.second).face, AppColors.accentActive);
+      expect(block(PlayerSide.first).face, AppColors.keyNormal);
+    });
+
+    testWidgets('the panel is a 6 dp surface block holding level and side', (
+      tester,
+    ) async {
+      await pumpNewGame(tester);
+
+      final panel = find.ancestor(
+        of: find.byKey(NewGameScreen.tierKey(PersonaTier.even)),
+        matching: find.byWidgetPredicate(
+          (w) => w is AppBlock && w.radius == AppDimens.radiusLarge,
+        ),
+      );
+      expect(panel, findsOneWidget);
+      expect(tester.widget<AppBlock>(panel).face, AppColors.surfaceDark);
+      expect(
+        find.descendant(
+          of: panel,
+          matching: find.byKey(NewGameScreen.sideKey(PlayerSide.first)),
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('01'), findsOneWidget);
+      expect(find.text('02'), findsOneWidget);
     });
   });
 
@@ -624,7 +819,7 @@ void main() {
       expect(
         tester.getSemantics(sideKey(PlayerSide.first)),
         matchesSemantics(
-          label: 'Red',
+          label: 'Red, first move',
           isButton: true,
           hasEnabledState: true,
           isEnabled: true,
@@ -636,13 +831,21 @@ void main() {
       expect(
         tester.getSemantics(sideKey(PlayerSide.second)),
         matchesSemantics(
-          label: 'Black',
+          label: 'Black, second move',
           isButton: true,
           hasEnabledState: true,
           isEnabled: true,
           hasSelectedState: true,
           hasTapAction: true,
         ),
+      );
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Level, Even')),
+        matchesSemantics(label: 'Level, Even', isHeader: true),
+      );
+      expect(
+        tester.getSemantics(find.bySemanticsLabel('Your side')),
+        matchesSemantics(label: 'Your side', isHeader: true),
       );
       semantics.dispose();
     });

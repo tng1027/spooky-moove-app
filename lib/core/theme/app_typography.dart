@@ -33,8 +33,24 @@ abstract final class AppTypography {
     fontFeatures: _tabular,
   );
 
-  /// Persona tier emoji (OB-023 BR-004: 20–22 sp).
-  static const TextStyle tierEmoji = TextStyle(fontSize: 21, height: 1);
+  /// New-game title (OB-052 DS-8); the colour is the game accent.
+  static const TextStyle display = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    height: 1.25,
+    color: AppColors.textPrimary,
+    fontFeatures: _tabular,
+  );
+
+  /// Top-bar win rate value (OB-052 DS-7); the colour is set per state.
+  static const TextStyle winRate = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textSecondary,
+    fontFeatures: _tabular,
+  );
 
   static const TextStyle boardLabel = TextStyle(
     fontFamily: fontFamily,

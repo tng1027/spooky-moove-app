@@ -6,38 +6,18 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_key.dart';
 import '../domain/fair_play_notice.dart';
 
-/// Full-screen fair-play notice (OB-008), in Vietnamese on a Vietnamese
-/// device and English otherwise.
-///
-/// The default constructor is the first-launch gate with an acknowledge key;
-/// [FairPlayScreen.readOnly] is the re-view from the new-game screen with a
-/// close key instead.
+/// Full-screen first-launch fair-play gate (OB-008) with an acknowledge key.
+/// The re-view from the new-game screen is `FairPlaySheet`.
 class FairPlayScreen extends StatelessWidget {
-  const FairPlayScreen({required VoidCallback this.onAcknowledge, super.key});
-
-  const FairPlayScreen.readOnly({super.key}) : onAcknowledge = null;
+  const FairPlayScreen({required this.onAcknowledge, super.key});
 
   static const Key acknowledgeKey = Key('fairPlay.acknowledge');
-  static const Key closeKey = Key('fairPlay.close');
 
-  static const TextStyle _bodyStyle = TextStyle(
-    fontFamily: AppTypography.fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
-    color: AppColors.textPrimary,
-    height: 1.5,
-  );
-
-  final VoidCallback? onAcknowledge;
+  final VoidCallback onAcknowledge;
 
   @override
   Widget build(BuildContext context) {
-    final languageCode = View.of(context)
-        .platformDispatcher
-        .locale
-        .languageCode;
-    final text = FairPlayNoticeText.forLanguage(languageCode);
-    final acknowledge = onAcknowledge;
+    final text = FairPlayNoticeBody.textOf(context);
 
     return Scaffold(
       backgroundColor: AppColors.bgDark,
@@ -48,38 +28,55 @@ class FairPlayScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: AppDimens.spacingLarge,
-                    children: [
-                      Semantics(
-                        header: true,
-                        child: Text(text.title, style: AppTypography.primary),
-                      ),
-                      for (final paragraph in text.paragraphs)
-                        Text(paragraph, style: _bodyStyle),
-                    ],
-                  ),
-                ),
+                child: SingleChildScrollView(child: FairPlayNoticeBody(text)),
               ),
               const SizedBox(height: AppDimens.spacingLarge),
-              if (acknowledge != null)
-                AppKey(
-                  key: acknowledgeKey,
-                  label: text.acknowledgeLabel,
-                  onTap: acknowledge,
-                )
-              else
-                AppKey(
-                  key: closeKey,
-                  label: text.closeLabel,
-                  onTap: () => Navigator.of(context).pop(),
-                ),
+              AppKey(
+                key: acknowledgeKey,
+                label: text.acknowledgeLabel,
+                onTap: onAcknowledge,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Title and paragraphs of the fair-play notice, in Vietnamese on a
+/// Vietnamese device and English otherwise.
+class FairPlayNoticeBody extends StatelessWidget {
+  const FairPlayNoticeBody(this.text, {super.key});
+
+  static FairPlayNoticeText textOf(BuildContext context) =>
+      FairPlayNoticeText.forLanguage(
+        View.of(context).platformDispatcher.locale.languageCode,
+      );
+
+  static const TextStyle _bodyStyle = TextStyle(
+    fontFamily: AppTypography.fontFamily,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
+
+  final FairPlayNoticeText text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppDimens.spacingLarge,
+      children: [
+        Semantics(
+          header: true,
+          child: Text(text.title, style: AppTypography.primary),
+        ),
+        for (final paragraph in text.paragraphs)
+          Text(paragraph, style: _bodyStyle),
+      ],
     );
   }
 }

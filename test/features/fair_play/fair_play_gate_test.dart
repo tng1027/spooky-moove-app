@@ -6,6 +6,7 @@ import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_screen.dart';
+import 'package:spookymoove/features/fair_play/presentation/fair_play_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
 
@@ -47,7 +48,7 @@ void main() {
 
     expect(find.byType(FairPlayScreen), findsOneWidget);
     expect(find.byType(HomeScreen), findsNothing);
-    expect(find.byKey(FairPlayScreen.closeKey), findsNothing);
+    expect(find.byKey(FairPlaySheet.closeKey), findsNothing);
   });
 
   testWidgets('acknowledging opens the Home screen and persists the version', (
@@ -113,19 +114,17 @@ void main() {
     expect(find.byType(HomeScreen), findsOneWidget);
   });
 
-  testWidgets('read-only mode closes back to the previous screen', (
+  testWidgets('read-only sheet closes back to the previous screen', (
     tester,
   ) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: Builder(
-          builder: (context) => TextButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const FairPlayScreen.readOnly(),
-              ),
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => FairPlaySheet.show(context),
+              child: const Text('open'),
             ),
-            child: const Text('open'),
           ),
         ),
       ),
@@ -136,9 +135,9 @@ void main() {
     expect(find.byKey(FairPlayScreen.acknowledgeKey), findsNothing);
     expect(find.text(FairPlayNoticeText.english.closeLabel), findsOneWidget);
 
-    await tester.tap(find.byKey(FairPlayScreen.closeKey));
+    await tester.tap(find.byKey(FairPlaySheet.closeKey));
     await tester.pumpAndSettle();
-    expect(find.byType(FairPlayScreen), findsNothing);
+    expect(find.byType(FairPlaySheet), findsNothing);
     expect(find.text('open'), findsOneWidget);
   });
 }

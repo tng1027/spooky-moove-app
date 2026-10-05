@@ -224,7 +224,7 @@ void main() {
       expect(board.activeSquares, isEmpty);
       expect(find.text('CHECKMATE'), findsOneWidget);
       expect(find.text('YOU LOSE'), findsOneWidget);
-      expect(find.text(EvalFormat.unknownWinRate), findsNothing);
+      expect(find.text(EvalFormat.unknownValue), findsNothing);
       expect(find.text(StatusLine.waitingLabel), findsNothing);
       expect(find.text(TopBar.gameOverLabel), findsOneWidget);
       expect(find.byKey(StatusLine.newGameKey), findsOneWidget);

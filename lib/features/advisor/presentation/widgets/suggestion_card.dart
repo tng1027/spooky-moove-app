@@ -6,6 +6,7 @@ import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/game/game_result.dart';
 import '../../../../core/game/move_text.dart';
+import '../../../../core/widgets/app_block.dart';
 import '../../../../core/widgets/app_key.dart';
 import '../../../new_game/domain/game_kind.dart';
 import '../../../new_game/presentation/game_registry.dart';
@@ -22,6 +23,7 @@ class SuggestionCard extends ConsumerWidget {
   static const Key retryKey = Key('suggestionCard.retry');
   static const String pickTierPrompt = 'PICK A LEVEL';
   static const String thinkingLabel = 'THINKING...';
+  static const String bestMoveLabel = 'BEST MOVE';
   static const String errorLabel = 'ENGINE ERROR';
   static const String emptyLine = MoveText.emptyLine;
 
@@ -32,9 +34,16 @@ class SuggestionCard extends ConsumerWidget {
     final hint = ref.watch(
       ref.watch(activeGameStateSourceProvider).select((g) => g.hint),
     );
+    final hasCaption = state is SuggestionReady || state is SuggestionThinking;
     return Padding(
-      padding: const EdgeInsets.all(AppDimens.spacing),
-      child: Card(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimens.spacing,
+        vertical: AppDimens.spacingSmall,
+      ),
+      child: AppBlock(
+        face: AppColors.surfaceDark,
+        side: AppColors.surfaceSide,
+        hasHighlight: true,
         child: SizedBox.expand(
           child: Padding(
             padding: const EdgeInsets.all(AppDimens.spacing),
@@ -44,7 +53,14 @@ class SuggestionCard extends ConsumerWidget {
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: _content(state, game, ref),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: AppDimens.spacingSmall,
+                      children: [
+                        if (hasCaption) const _BestMoveCaption(),
+                        _content(state, game, ref),
+                      ],
+                    ),
                   ),
                 ),
                 if (hint != null)
@@ -85,6 +101,36 @@ class SuggestionCard extends ConsumerWidget {
       SuggestionGameOver(:final headline) => _GameOver(headline: headline),
       SuggestionWaiting() => const _Empty(),
     };
+  }
+}
+
+/// `• BEST MOVE` above the suggestion; the dot is green because it labels
+/// the suggestion, never the game accent (OB-052 DS-7).
+class _BestMoveCaption extends StatelessWidget {
+  const _BestMoveCaption();
+
+  static const double _dotSize = 8;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: AppDimens.spacingSmall,
+      children: [
+        Container(
+          width: _dotSize,
+          height: _dotSize,
+          decoration: const BoxDecoration(
+            color: AppColors.accentGreen,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const Text(
+          SuggestionCard.bestMoveLabel,
+          style: AppTypography.secondary,
+        ),
+      ],
+    );
   }
 }
 
