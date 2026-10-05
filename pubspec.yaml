@@ -32,6 +32,7 @@ flutter:
 
   assets:
     - assets/fonts/OFL.txt
+    - assets/licenses/
     - assets/pieces/cburnett/
     - assets/pieces/xiangqi/
 

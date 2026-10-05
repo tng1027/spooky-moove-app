@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 SpookyMoove authors. Part of SpookyMoove; derived from
+// Fairy-Stockfish (see NOTICE.md).
+
 #ifndef FAIRY_STOCKFISH_SHIM_H
 #define FAIRY_STOCKFISH_SHIM_H
 

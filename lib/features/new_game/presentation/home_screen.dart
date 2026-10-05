@@ -7,6 +7,7 @@ import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_block.dart';
 import '../../../core/widgets/screen_header.dart';
 import '../../settings/domain/app_language.dart';
+import '../../settings/presentation/about_licenses_dialog.dart';
 import '../../settings/presentation/language_dialog.dart';
 import '../../settings/presentation/settings_dialog.dart';
 import '../domain/game_kind.dart';
@@ -117,7 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () => _guarded(
           () => showDialog<void>(
             context: context,
-            builder: (_) => const SettingsDialog(),
+            builder: (_) =>
+                const SettingsDialog(entries: [AboutLicensesKey()]),
           ),
         ),
       ),

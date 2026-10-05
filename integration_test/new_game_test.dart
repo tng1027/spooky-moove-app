@@ -13,6 +13,7 @@ import 'package:spookymoove/features/fair_play/presentation/fair_play_controller
 import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/settings/presentation/about_licenses_dialog.dart';
 import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
 import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
@@ -71,8 +72,12 @@ void main() {
     await shot(tester, 'home_root');
 
     await tap(tester, HomeScreen.settingsKey);
-    expect(find.text(SettingsDialog.emptyLabel), findsOneWidget);
+    expect(find.byKey(AboutLicensesKey.openKey), findsOneWidget);
     await shot(tester, 'settings_dialog');
+    await tap(tester, AboutLicensesKey.openKey);
+    expect(find.byType(AboutLicensesDialog), findsOneWidget);
+    await shot(tester, 'about_licenses_dialog');
+    await tap(tester, AboutLicensesDialog.closeKey);
     await tap(tester, SettingsDialog.closeKey);
 
     await tap(tester, HomeScreen.languageKey);

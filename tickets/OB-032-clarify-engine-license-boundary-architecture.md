@@ -84,6 +84,10 @@ Not user-facing.
 4. **(PO)** iOS strategy given F1: O2, O3 or O4?
 5. **(PO)** If the client must be GPL, is that acceptable for the business (monetization still allowed, code public)?
 6. **(PO)** Correct the requirement: KataGo is MIT. Is the Gomoku engine choice (Yixin permission vs. open engine) part of this decision (OB-017)?
+7. **(Counsel, added 2026-10-05)** The app ships as GPL-3.0-or-later with the engine in-process (FFI). Do the App Store Usage Rules and FairPlay encryption count as "further restrictions" under GPLv3 §10, given that the upstream Fairy-Stockfish/Stockfish authors can't be asked for a §7 exception?
+8. **(Counsel, added 2026-10-05)** Should App Store Connect use a custom EULA stating the app is GPLv3 and that Apple's terms add no restrictions on GPL rights, instead of the Apple Standard EULA?
+9. **(Counsel, added 2026-10-05)** Is the current notice enough: `LICENSE`, `NOTICE.md` (dated modification notice), `BUILDING.md` (toolchain and self-install via Xcode for §6), and Settings → About & Licenses with the GPLv3 text and a copyable source URL? Or is a written source offer also required?
+10. **(PO, added 2026-10-05)** Accept the risk of removal if a copyright holder complains (VLC 2011 precedent)? Keep TestFlight internal-only until questions 7–9 are answered.
 
 ## Developer Handoff
 - Until decided: continue OB-004 as a **spike**, and keep OB-005's engine interface **transport-agnostic** (text-protocol adapter over an abstract line transport: in-process pipe or child process). Then either architecture can be plugged in without touching the protocol adapters or the UI.

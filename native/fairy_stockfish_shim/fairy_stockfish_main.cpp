@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 SpookyMoove authors. Part of SpookyMoove; derived from
+// Fairy-Stockfish (see NOTICE.md).
+
 // Compiles upstream main.cpp with its entry point renamed to fs_main. Every
 // header main.cpp uses is included first, so the rename only touches main().
 

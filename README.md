@@ -20,3 +20,8 @@ Host builds such as `flutter test` skip the engine.
 - Widget tests: `flutter test`
 - Engine integration test (device or simulator only):
   `flutter test integration_test/fairy_stockfish_engine_test.dart -d <device>`
+
+## License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE), [NOTICE.md](NOTICE.md) and
+[BUILDING.md](BUILDING.md).
