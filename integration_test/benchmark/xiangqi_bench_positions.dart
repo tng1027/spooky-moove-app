@@ -16,13 +16,11 @@ const List<XiangqiBenchPosition> xiangqiBenchPositions = [
   ),
   (
     name: 'central cannon',
-    fen:
-        'rnbakab1r/9/1c4nc1/p1p1p1p1p/9/9/P1P1P1P1P/1C2C4/9/RNBAKABNR w - - 2 2',
+    fen: 'rnbakab1r/9/1c4nc1/p1p1p1p1p/9/9/P1P1P1P1P/1C2C4/9/RNBAKABNR w - - 2 2',
   ),
   (
     name: 'developed, rooks out',
-    fen:
-        'r1bakab1r/9/1cn3nc1/p1p1p1p1p/9/9/P1P1P1P1P/1CN3NC1/R7R/2BAKAB2 w - - 6 4',
+    fen: 'r1bakab1r/9/1cn3nc1/p1p1p1p1p/9/9/P1P1P1P1P/1CN3NC1/R7R/2BAKAB2 w - - 6 4',
   ),
   (
     name: 'midgame',
@@ -36,16 +34,7 @@ const List<XiangqiBenchPosition> xiangqiBenchPositions = [
     name: 'horse and elephant endgame',
     fen: '2bakab2/9/2n1c1n2/2p6/9/2B1P4/3N5/4N4/9/3KA1B2 w - - 0 1',
   ),
-  (
-    name: 'crossed soldiers',
-    fen: 'P3k4/3P5/4P4/9/9/9/2r6/6p2/9/3K5 w - - 0 1',
-  ),
-  (
-    name: 'mate in one',
-    fen: '3k5/R8/8r/9/9/9/9/9/1R7/4K4 w - - 0 1',
-  ),
-  (
-    name: 'in check',
-    fen: '4k4/9/9/4r4/9/9/9/R1N6/9/3AK4 w - - 0 1',
-  ),
+  (name: 'crossed soldiers', fen: 'P3k4/3P5/4P4/9/9/9/2r6/6p2/9/3K5 w - - 0 1'),
+  (name: 'mate in one', fen: '3k5/R8/8r/9/9/9/9/9/1R7/4K4 w - - 0 1'),
+  (name: 'in check', fen: '4k4/9/9/4r4/9/9/9/R1N6/9/3AK4 w - - 0 1'),
 ];

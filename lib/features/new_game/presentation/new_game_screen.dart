@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/game/player_side.dart';
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_typography.dart';
@@ -12,9 +13,12 @@ import '../../../core/widgets/app_key.dart';
 import '../../../core/widgets/screen_header.dart';
 import '../../fair_play/presentation/fair_play_sheet.dart';
 import '../../persona/domain/persona_tier.dart';
+import '../../persona/domain/persona_tier_copy.dart';
 import '../../persona/presentation/widgets/persona_tier_keys.dart';
+import '../../settings/domain/app_language.dart';
 import '../domain/game_kind.dart';
 import 'game_registry.dart';
+import 'widgets/level_card.dart';
 import 'widgets/new_game_hero.dart';
 
 /// [tier] is null when the user starts without picking a level.
@@ -44,13 +48,7 @@ class NewGameScreen extends StatefulWidget {
 
   static Key sideKey(PlayerSide side) => Key('newGame.side.${side.name}');
 
-  /// Upper-case key labels would be spelled out by screen readers.
-  static String spoken(String label) =>
-      label.isEmpty ? label : label[0] + label.substring(1).toLowerCase();
-
-  static const String playingLabel = 'PLAYING';
-  static const String startLabel = 'START GAME';
-  static const String helperLabel = 'LEVEL CAN BE CHANGED DURING THE GAME';
+  static const Key levelCardKey = Key('newGame.levelCard');
 
   /// Hero size (OB-052 DS-8); visibility is [NewGameHero.isShown].
   static const double heroHeightFraction = 0.25;
@@ -101,6 +99,8 @@ class _NewGameScreenState extends State<NewGameScreen> {
     if (!didPop) _isLeaving = false;
   }
 
+  AppStrings get _strings => AppStrings.of(context);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,10 +145,10 @@ class _NewGameScreenState extends State<NewGameScreen> {
                 const SizedBox(height: AppDimens.spacingLarge),
                 _startKey(),
                 const SizedBox(height: AppDimens.spacingSmall),
-                const FittedBox(
+                FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    NewGameScreen.helperLabel,
+                    _strings.levelHelper,
                     style: AppTypography.secondary,
                     textAlign: TextAlign.center,
                   ),
@@ -165,14 +165,14 @@ class _NewGameScreenState extends State<NewGameScreen> {
     return ScreenHeader(
       leading: HeaderKey(
         key: NewGameScreen.backKey,
-        label: '‹ BACK',
-        semanticsLabel: 'Back',
+        label: _strings.back,
+        semanticsLabel: _strings.backSpoken,
         onTap: _goHome,
       ),
       trailing: HeaderKey(
         key: NewGameScreen.fairPlayKey,
-        label: 'FAIR PLAY',
-        semanticsLabel: 'Fair play',
+        label: _strings.fairPlay,
+        semanticsLabel: _strings.fairPlaySpoken,
         onTap: () => FairPlaySheet.show(context),
       ),
     );
@@ -183,7 +183,9 @@ class _NewGameScreenState extends State<NewGameScreen> {
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacing),
       child: Semantics(
         header: true,
-        label: 'New game, ${NewGameScreen.spoken(widget.game.label)}',
+        label:
+            '${_strings.newGameTitleSpokenPrefix}, '
+            '${_strings.gameNameSpoken(widget.game)}',
         excludeSemantics: true,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,7 +194,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
               child: Text(
-                NewGameScreen.playingLabel,
+                _strings.playing,
                 style: AppTypography.secondary.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -202,7 +204,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
               fit: BoxFit.scaleDown,
               alignment: Alignment.centerLeft,
               child: Text(
-                widget.game.label.toUpperCase(),
+                _strings.gameName(widget.game),
                 style: AppTypography.display.copyWith(
                   color: widget.game.accent,
                 ),
@@ -227,8 +229,8 @@ class _NewGameScreenState extends State<NewGameScreen> {
           children: [
             _SectionHeader(
               number: '01',
-              title: _levelHeading,
-              spoken: 'Level, ${_selectedTier.label}',
+              title: PersonaTierCopy.levelHeading(_language),
+              spoken: PersonaTierCopy.spokenHeading(_selectedTier, _language),
             ),
             const SizedBox(height: AppDimens.spacing),
             SizedBox(
@@ -237,14 +239,22 @@ class _NewGameScreenState extends State<NewGameScreen> {
                 selected: _selectedTier,
                 onSelected: _selectTier,
                 tierKey: NewGameScreen.tierKey,
+                hintOf: (tier) =>
+                    PersonaTierCopy.of(tier, _language).description,
                 spacing: AppDimens.spacingSmall / 2,
               ),
             ),
+            const SizedBox(height: AppDimens.spacing),
+            LevelCard(
+              key: NewGameScreen.levelCardKey,
+              tier: _selectedTier,
+              copy: PersonaTierCopy.forLanguage(_language),
+            ),
             const SizedBox(height: AppDimens.spacingLarge),
-            const _SectionHeader(
+            _SectionHeader(
               number: '02',
-              title: 'YOUR SIDE',
-              spoken: 'Your side',
+              title: _strings.yourSide,
+              spoken: _strings.yourSideSpoken,
             ),
             const SizedBox(height: AppDimens.spacing),
             Row(
@@ -273,7 +283,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
           spacing: AppDimens.spacing,
           children: [
             Text(
-              NewGameScreen.startLabel,
+              _strings.startGame,
               style: AppTypography.primary.copyWith(color: AppColors.bgDark),
             ),
             const ExcludeSemantics(child: _ArrowChip()),
@@ -283,15 +293,11 @@ class _NewGameScreenState extends State<NewGameScreen> {
     );
   }
 
-  /// The pictogram keys have no visible text, so the heading names the pick.
-  String get _levelHeading => 'LEVEL · ${_selectedTier.label.toUpperCase()}';
+  AppLanguage get _language => _strings.language;
 
   Widget _sideKey(PlayerSide side) {
-    final label = widget.game.sideLabel(side);
-    final subLabel = switch (side) {
-      PlayerSide.first => 'FIRST MOVE',
-      PlayerSide.second => 'SECOND MOVE',
-    };
+    final label = _strings.sideName(widget.game, side);
+    final subLabel = _strings.moveOrder(side);
     final isSelected = side == _selectedSide;
     final color = isSelected ? AppColors.bgDark : AppColors.textPrimary;
     return AppKey(
@@ -300,8 +306,8 @@ class _NewGameScreenState extends State<NewGameScreen> {
       onTap: () => _selectSide(side),
       child: Semantics(
         label:
-            '${NewGameScreen.spoken(label)}, '
-            '${NewGameScreen.spoken(subLabel).toLowerCase()}',
+            '${_strings.sideNameSpoken(widget.game, side)}, '
+            '${_strings.moveOrderSpoken(side)}',
         excludeSemantics: true,
         child: SizedBox(
           width: double.infinity,
@@ -364,7 +370,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
   }
 }
 
-/// `01  LEVEL · EVEN`: a muted number, then the section title.
+/// `01  LEVEL`: a muted number, then the section title.
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({
     required this.number,

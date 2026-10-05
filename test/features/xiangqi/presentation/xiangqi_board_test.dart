@@ -13,6 +13,8 @@ import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controll
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_board.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_grid_painter.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 const double cell = 40;
 const Size boardSize = Size(9 * cell, 10 * cell);
@@ -109,6 +111,7 @@ Future<BoardHarness> pumpBoard(
   late BoardHarness harness;
   final container = ProviderContainer(
     overrides: [
+      appStringsProvider.overrideWithValue(AppStrings.english),
       xiangqiRulesProvider.overrideWithValue(rules),
       boardClockProvider.overrideWithValue(() => harness.clock),
     ],

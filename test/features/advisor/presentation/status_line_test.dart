@@ -11,6 +11,8 @@ import 'package:spookymoove/features/advisor/presentation/widgets/status_line.da
 import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
 import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 class FixedContent extends Notifier<StatusLineContent> {
   FixedContent(this.initial);
@@ -36,6 +38,7 @@ void main() {
   ) async {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         _contentProvider.overrideWith(() => FixedContent(content)),
         statusLineContentProvider.overrideWith(
           (ref) => ref.watch(_contentProvider),
@@ -68,14 +71,14 @@ void main() {
   testWidgets("opponent's turn: disabled WAITING FOR OPPONENT", (tester) async {
     await pumpStatusLine(tester, StatusLineContent.waitingForOpponent);
 
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(appKeyIn(tester, find.byKey(StatusLine.regionKey)).onTap, isNull);
   });
 
   testWidgets('no tier: disabled PICK A LEVEL ABOVE', (tester) async {
     await pumpStatusLine(tester, StatusLineContent.pickLevel);
 
-    expect(find.text(StatusLine.pickLevelLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.pickLevelAbove), findsOneWidget);
     expect(appKeyIn(tester, find.byKey(StatusLine.regionKey)).onTap, isNull);
   });
 
@@ -107,7 +110,10 @@ void main() {
     expect(block.face, AppColors.accentGreen);
     expect(block.side, AppColors.accentGreenSide);
     expect(
-      tester.widget<Text>(find.text(ConfirmPlayedKey.label)).style?.color,
+      tester
+          .widget<Text>(find.text(AppStrings.english.confirmPlayed))
+          .style
+          ?.color,
       AppColors.bgDark,
     );
   });
@@ -154,7 +160,7 @@ void main() {
       tester,
     ) async {
       await pumpStatusLine(tester, StatusLineContent.newGame);
-      final label = tester.widget<Text>(find.text(StatusLine.newGameLabel));
+      final label = tester.widget<Text>(find.text(AppStrings.english.newGame));
       expect(label.style?.color, AppColors.textPrimary);
 
       await tester.tap(find.byKey(StatusLine.newGameKey));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -13,7 +14,6 @@ class UndoKey extends ConsumerWidget {
   const UndoKey({super.key = regionKey});
 
   static const Key regionKey = Key('advisor.undo');
-  static const String label = 'UNDO';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,7 +34,10 @@ class UndoKey extends ConsumerWidget {
               size: AppTypography.primary.fontSize,
               color: color,
             ),
-            Text(label, style: AppTypography.primary.copyWith(color: color)),
+            Text(
+              AppStrings.of(context).undo,
+              style: AppTypography.primary.copyWith(color: color),
+            ),
           ],
         ),
       ),

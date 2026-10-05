@@ -12,6 +12,8 @@ import 'package:spookymoove/features/chess/domain/chess_result_format.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/chess/presentation/widgets/chess_piece_pictogram.dart';
 import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 class FixedSuggestionController extends SuggestionController {
   FixedSuggestionController(this._state);
@@ -59,6 +61,7 @@ Future<FixedSuggestionController> pumpCard(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         suggestionControllerProvider.overrideWith(() => controller),
         chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
       ],
@@ -146,19 +149,19 @@ void main() {
 
   testWidgets('thinking: dimmed line and caption', (tester) async {
     await pumpCard(tester, const SuggestionThinking());
-    expect(find.text(SuggestionCard.thinkingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.thinking), findsOneWidget);
     expect(colorOf(tester, SuggestionCard.emptyLine), AppColors.textSecondary);
   });
 
   testWidgets('no tier: the card prompts for one', (tester) async {
     await pumpCard(tester, const SuggestionNoTier());
-    expect(find.text(SuggestionCard.pickTierPrompt), findsOneWidget);
+    expect(find.text(AppStrings.english.pickLevel), findsOneWidget);
   });
 
   testWidgets("opponent's turn: an empty line only", (tester) async {
     await pumpCard(tester, const SuggestionWaiting());
     expect(find.text(SuggestionCard.emptyLine), findsOneWidget);
-    expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
+    expect(find.text(AppStrings.english.pickLevel), findsNothing);
   });
 
   testWidgets('BEST MOVE caption only while ready or thinking', (tester) async {
@@ -172,7 +175,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await pumpCard(tester, state);
       expect(
-        find.text(SuggestionCard.bestMoveLabel),
+        find.text(AppStrings.english.bestMove),
         isShown ? findsOneWidget : findsNothing,
         reason: '$state',
       );
@@ -181,7 +184,7 @@ void main() {
 
   testWidgets('an error offers Retry', (tester) async {
     final controller = await pumpCard(tester, const SuggestionFailed());
-    expect(find.text(SuggestionCard.errorLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.engineError), findsOneWidget);
 
     await tester.tap(find.byKey(SuggestionCard.retryKey));
     expect(controller.retries, 1);
@@ -205,6 +208,7 @@ void main() {
           headline: ChessResultFormat.headline(
             const ChessCheckmate(winner: PieceColor.white),
             PieceColor.white,
+            AppStrings.english,
           )!,
         ),
       );
@@ -219,6 +223,7 @@ void main() {
           headline: ChessResultFormat.headline(
             const ChessCheckmate(winner: PieceColor.black),
             PieceColor.white,
+            AppStrings.english,
           )!,
         ),
       );
@@ -233,6 +238,7 @@ void main() {
           headline: ChessResultFormat.headline(
             const ChessDraw(reason: DrawReason.insufficientMaterial),
             PieceColor.white,
+            AppStrings.english,
           )!,
         ),
       );
@@ -253,6 +259,7 @@ void main() {
           headline: ChessResultFormat.headline(
             const ChessDraw(reason: DrawReason.seventyFiveMoveRule),
             PieceColor.white,
+            AppStrings.english,
           )!,
         ),
         textScale: 2.0,

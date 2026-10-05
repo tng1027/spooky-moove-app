@@ -7,6 +7,8 @@ import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,7 @@ void main() {
     var now = Duration.zero;
     final c = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
         boardClockProvider.overrideWithValue(
           () => now += ChessBoardController.commitGuard,

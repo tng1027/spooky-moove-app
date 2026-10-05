@@ -10,7 +10,6 @@ import 'package:spookymoove/features/advisor/presentation/suggestion_controller.
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
@@ -23,6 +22,8 @@ import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Real app and engine on the simulator (OB-025). `SHOT:<name>` lines mark
 /// states that stay on screen for [_hold] so an external script can capture
@@ -88,6 +89,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -107,7 +109,7 @@ void main() {
     await tester.tap(find.byKey(NewGameScreen.startKey));
     await tester.pumpAndSettle();
     expect(container.read(personaTierProvider), PersonaTier.even);
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(find.text(SuggestionCard.emptyLine), findsOneWidget);
     expect(
       container.read(suggestionControllerProvider),
@@ -132,7 +134,7 @@ void main() {
     final ownMove = suggestion.engineMove == 'd7d5' ? 'e7e5' : 'd7d5';
     await play(tester, ownMove);
     await tester.pumpAndSettle();
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(find.text(SuggestionCard.emptyLine), findsOneWidget);
     expect(container.read(chessBoardControllerProvider).suggestedMove, isNull);
     await shot(tester, 'turn_after_own_move');
@@ -148,6 +150,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -182,7 +185,7 @@ void main() {
       isNull,
     );
     expect(board.sideToMove, PieceColor.black);
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(find.byKey(ConfirmPlayedKey.regionKey), findsNothing);
     await shot(tester, 'confirm_committed');
 
@@ -197,6 +200,7 @@ void main() {
     'the opponent checkmates the user: result, board off, no search',
     (tester) async {
       SharedPreferences.setMockInitialValues({
+        AppLanguageController.languageKey: 'en',
         FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
       });
       final preferences = await SharedPreferences.getInstance();
@@ -225,8 +229,8 @@ void main() {
       expect(find.text('CHECKMATE'), findsOneWidget);
       expect(find.text('YOU LOSE'), findsOneWidget);
       expect(find.text(EvalFormat.unknownValue), findsNothing);
-      expect(find.text(StatusLine.waitingLabel), findsNothing);
-      expect(find.text(TopBar.gameOverLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.waitingForOpponent), findsNothing);
+      expect(find.text(AppStrings.english.gameOver), findsOneWidget);
       expect(find.byKey(StatusLine.newGameKey), findsOneWidget);
 
       await tester.tap(find.byKey(PersonaRow.tierKey(PersonaTier.god)));
@@ -240,7 +244,7 @@ void main() {
       await tester.tap(find.byKey(UndoKey.regionKey));
       await tester.pumpAndSettle();
       expect(find.text('CHECKMATE'), findsNothing);
-      expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
       expect(
         container.read(chessBoardControllerProvider).activeSquares,
         isNotEmpty,
@@ -250,6 +254,7 @@ void main() {
 
   testWidgets('undo brings back the same Baby suggestion', (tester) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -274,7 +279,7 @@ void main() {
     final other = baby.engineMove == 'e2e4' ? 'd2d4' : 'e2e4';
     await play(tester, other);
     await tester.pumpAndSettle();
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
 
     await tester.tap(find.byKey(UndoKey.regionKey));
     await tester.pumpAndSettle();

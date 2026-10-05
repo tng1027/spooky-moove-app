@@ -15,6 +15,7 @@ import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart'
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Real app and engine on the simulator. `SHOT:<name>` lines mark states
 /// that stay on screen for [_hold] so an external script can capture them.
@@ -77,6 +78,7 @@ void main() {
 
   testWidgets('tier-based suggestions on the user\'s turn', (tester) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();

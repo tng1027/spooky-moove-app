@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_key.dart';
@@ -19,9 +20,10 @@ class LanguageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return AppDialog(
-      title: 'LANGUAGE',
-      spokenTitle: 'Language',
+      title: strings.languageTitle,
+      spokenTitle: strings.languageTitleSpoken,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -39,8 +41,8 @@ class LanguageDialog extends StatelessWidget {
         ),
         AppKey(
           key: closeKey,
-          label: 'CLOSE',
-          semanticsLabel: 'Close',
+          label: strings.close,
+          semanticsLabel: strings.closeSpoken,
           onTap: () => Navigator.of(context).maybePop(),
         ),
       ],

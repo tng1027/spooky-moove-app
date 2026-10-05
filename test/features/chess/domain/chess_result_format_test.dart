@@ -3,11 +3,16 @@ import 'package:spookymoove/core/game/game_result.dart';
 import 'package:spookymoove/features/chess/domain/chess_game_status.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/domain/chess_result_format.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   test('in progress: no headline', () {
     expect(
-      ChessResultFormat.headline(const ChessInProgress(), PieceColor.white),
+      ChessResultFormat.headline(
+        const ChessInProgress(),
+        PieceColor.white,
+        AppStrings.english,
+      ),
       isNull,
     );
   });
@@ -15,11 +20,19 @@ void main() {
   test('checkmate reads from the user\'s side', () {
     const whiteWins = ChessCheckmate(winner: PieceColor.white);
     expect(
-      ChessResultFormat.headline(whiteWins, PieceColor.white),
+      ChessResultFormat.headline(
+        whiteWins,
+        PieceColor.white,
+        AppStrings.english,
+      ),
       const GameResultHeadline('CHECKMATE — YOU WIN', ResultTone.win),
     );
     expect(
-      ChessResultFormat.headline(whiteWins, PieceColor.black),
+      ChessResultFormat.headline(
+        whiteWins,
+        PieceColor.black,
+        AppStrings.english,
+      ),
       const GameResultHeadline('CHECKMATE — YOU LOSE', ResultTone.loss),
     );
   });
@@ -34,7 +47,11 @@ void main() {
     };
     for (final reason in DrawReason.values) {
       expect(
-        ChessResultFormat.headline(ChessDraw(reason: reason), PieceColor.white),
+        ChessResultFormat.headline(
+          ChessDraw(reason: reason),
+          PieceColor.white,
+          AppStrings.english,
+        ),
         GameResultHeadline(expected[reason]!, ResultTone.draw),
       );
     }
@@ -51,18 +68,26 @@ void main() {
     expect(
       ChessResultFormat.hint(
         const ChessInProgress(claimableDraw: ClaimableDraw.threefoldRepetition),
+        AppStrings.english,
       ),
       'DRAW POSSIBLE — SAME POSITION 3 TIMES',
     );
     expect(
       ChessResultFormat.hint(
         const ChessInProgress(claimableDraw: ClaimableDraw.fiftyMoveRule),
+        AppStrings.english,
       ),
       'DRAW POSSIBLE — 50 MOVES WITHOUT CAPTURE OR PAWN MOVE',
     );
-    expect(ChessResultFormat.hint(const ChessInProgress()), isNull);
     expect(
-      ChessResultFormat.hint(const ChessDraw(reason: DrawReason.stalemate)),
+      ChessResultFormat.hint(const ChessInProgress(), AppStrings.english),
+      isNull,
+    );
+    expect(
+      ChessResultFormat.hint(
+        const ChessDraw(reason: DrawReason.stalemate),
+        AppStrings.english,
+      ),
       isNull,
     );
   });

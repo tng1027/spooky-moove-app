@@ -7,7 +7,6 @@ import 'package:spookymoove/core/board/intersection_board.dart';
 import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
@@ -23,6 +22,8 @@ import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_expert
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Xiangqi turn loop on the real app and engine (OB-046). `SHOT:<name>`
 /// lines mark states that stay on screen for [_hold] so an external script
@@ -47,6 +48,7 @@ void main() {
 
   Future<void> launch(WidgetTester tester, PlayerSide side) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -144,7 +146,7 @@ void main() {
       [first.engineMove],
     );
     expect(board().sideToMove, PlayerSide.second);
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     await shot(tester, 'xq_loop_confirmed');
 
     await play(tester, board().legalMoves.first);
@@ -165,7 +167,7 @@ void main() {
       override.uci,
     );
     expect(board().suggestedMove, isNull);
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     await shot(tester, 'xq_loop_override');
 
     await tester.tap(find.byKey(UndoKey.regionKey));
@@ -189,7 +191,7 @@ void main() {
   testWidgets('Black: no suggestion until Red moves', (tester) async {
     await launch(tester, PlayerSide.second);
     expect(suggestion(), isA<SuggestionWaiting>());
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(
       find.descendant(
         of: find.byKey(SuggestionCard.regionKey),

@@ -66,15 +66,15 @@ void main() {
         );
         stopwatch.stop();
         debugPrint(
-          '${tier.label}: ${suggestion!.move} WC '
+          '${tier.name}: ${suggestion!.move} WC '
           '${suggestion.winChance.toStringAsFixed(1)}% ${suggestion.score} '
           'depth ${suggestion.depth} in ${stopwatch.elapsedMilliseconds} ms',
         );
-        expect(legal, contains(suggestion.move), reason: tier.label);
+        expect(legal, contains(suggestion.move), reason: tier.name);
         expect(
           stopwatch.elapsedMilliseconds,
           lessThan(1000),
-          reason: tier.label,
+          reason: tier.name,
         );
       }
       await engine.dispose();
@@ -140,15 +140,15 @@ void main() {
         );
         stopwatch.stop();
         debugPrint(
-          'Xiangqi ${tier.label}: ${suggestion!.move} WC '
+          'Xiangqi ${tier.name}: ${suggestion!.move} WC '
           '${suggestion.winChance.toStringAsFixed(1)}% depth '
           '${suggestion.depth} in ${stopwatch.elapsedMilliseconds} ms',
         );
-        expect(legal, contains(suggestion.move), reason: tier.label);
+        expect(legal, contains(suggestion.move), reason: tier.name);
         expect(
           stopwatch.elapsedMilliseconds,
           lessThan(1000),
-          reason: tier.label,
+          reason: tier.name,
         );
       }
       await engine.dispose();

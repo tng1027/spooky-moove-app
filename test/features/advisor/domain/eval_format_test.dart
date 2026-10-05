@@ -1,42 +1,88 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/engine/engine_models.dart';
 import 'package:spookymoove/features/advisor/domain/eval_format.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   group('headline', () {
     test('win chance is a whole percent, green from 50 %', () {
       const score = CentipawnScore(0);
       expect(
-        EvalFormat.headline(score, 61.6),
-        const EvalHeadline('WIN RATE', '62%', isFavorable: true),
+        EvalFormat.headline(score, 61.6, AppStrings.english),
+        const EvalHeadline(
+          'WIN RATE',
+          '62%',
+          spoken: 'Win rate 62 percent',
+          isFavorable: true,
+        ),
       );
       expect(
-        EvalFormat.headline(score, 38.2),
-        const EvalHeadline('WIN RATE', '38%', isFavorable: false),
+        EvalFormat.headline(score, 38.2, AppStrings.english),
+        const EvalHeadline(
+          'WIN RATE',
+          '38%',
+          spoken: 'Win rate 38 percent',
+          isFavorable: false,
+        ),
       );
-      expect(EvalFormat.headline(score, 49.5).isFavorable, isTrue);
-      expect(EvalFormat.headline(score, 49.4).isFavorable, isFalse);
+      expect(
+        EvalFormat.headline(score, 49.5, AppStrings.english).isFavorable,
+        isTrue,
+      );
+      expect(
+        EvalFormat.headline(score, 49.4, AppStrings.english).isFavorable,
+        isFalse,
+      );
     });
 
     test('forced mates use plain words', () {
       expect(
-        EvalFormat.headline(const MateScore(4), 100),
-        const EvalHeadline('YOU MATE IN', '4', isFavorable: true),
+        EvalFormat.headline(const MateScore(4), 100, AppStrings.english),
+        const EvalHeadline(
+          'YOU MATE IN',
+          '4',
+          spoken: 'You mate in 4',
+          isFavorable: true,
+        ),
       );
       expect(
-        EvalFormat.headline(const MateScore(-4), 0),
-        const EvalHeadline('OPPONENT MATES IN', '4', isFavorable: false),
+        EvalFormat.headline(const MateScore(-4), 0, AppStrings.english),
+        const EvalHeadline(
+          'OPPONENT MATES IN',
+          '4',
+          spoken: 'Opponent mates in 4',
+          isFavorable: false,
+        ),
       );
     });
 
     test('is spoken as one plain label', () {
       expect(
-        EvalFormat.headline(const CentipawnScore(0), 62).spoken,
+        EvalFormat.headline(
+          const CentipawnScore(0),
+          62,
+          AppStrings.english,
+        ).spoken,
         'Win rate 62 percent',
       );
       expect(
-        EvalFormat.headline(const MateScore(4), 100).spoken,
+        EvalFormat.headline(const MateScore(4), 100, AppStrings.english).spoken,
         'You mate in 4',
+      );
+    });
+
+    test('Vietnamese captions keep the number format', () {
+      final headline = EvalFormat.headline(
+        const CentipawnScore(0),
+        61.6,
+        AppStrings.vietnamese,
+      );
+      expect(headline.caption, 'TỶ LỆ THẮNG');
+      expect(headline.value, '62%');
+      expect(headline.spoken, 'Tỷ lệ thắng 62 phần trăm');
+      expect(
+        EvalFormat.unknown(AppStrings.vietnamese).value,
+        EvalFormat.unknownValue,
       );
     });
   });

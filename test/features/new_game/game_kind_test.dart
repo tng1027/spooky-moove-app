@@ -4,13 +4,23 @@ import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   test('Chess labels its sides WHITE and BLACK, never RED', () {
-    expect(GameKind.chess.sideLabel(PlayerSide.first), 'WHITE');
-    expect(GameKind.chess.sideLabel(PlayerSide.second), 'BLACK');
+    expect(
+      AppStrings.english.sideName(GameKind.chess, PlayerSide.first),
+      'WHITE',
+    );
+    expect(
+      AppStrings.english.sideName(GameKind.chess, PlayerSide.second),
+      'BLACK',
+    );
     for (final side in PlayerSide.values) {
-      expect(GameKind.chess.sideLabel(side), isNot(contains('RED')));
+      expect(
+        AppStrings.english.sideName(GameKind.chess, side),
+        isNot(contains('RED')),
+      );
     }
   });
 
@@ -21,14 +31,23 @@ void main() {
 
   test('games are offered as CHESS then XIANGQI', () {
     expect(GameKind.values, [GameKind.chess, GameKind.xiangqi]);
-    expect(GameKind.xiangqi.label, 'XIANGQI');
+    expect(AppStrings.english.gameName(GameKind.xiangqi), 'XIANGQI');
   });
 
   test('Xiangqi labels its sides RED and BLACK, never WHITE', () {
-    expect(GameKind.xiangqi.sideLabel(PlayerSide.first), 'RED');
-    expect(GameKind.xiangqi.sideLabel(PlayerSide.second), 'BLACK');
+    expect(
+      AppStrings.english.sideName(GameKind.xiangqi, PlayerSide.first),
+      'RED',
+    );
+    expect(
+      AppStrings.english.sideName(GameKind.xiangqi, PlayerSide.second),
+      'BLACK',
+    );
     for (final side in PlayerSide.values) {
-      expect(GameKind.xiangqi.sideLabel(side), isNot(contains('WHITE')));
+      expect(
+        AppStrings.english.sideName(GameKind.xiangqi, side),
+        isNot(contains('WHITE')),
+      );
     }
   });
 
@@ -53,7 +72,11 @@ void main() {
       AppColors.accentActive,
     };
     for (final game in GameKind.values) {
-      expect(status, isNot(contains(game.accent)), reason: game.label);
+      expect(
+        status,
+        isNot(contains(game.accent)),
+        reason: AppStrings.english.gameName(game),
+      );
     }
   });
 }

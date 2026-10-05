@@ -10,6 +10,8 @@ import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 class FixedSuggestionController extends SuggestionController {
   FixedSuggestionController(this.fixed);
@@ -38,6 +40,7 @@ void main() {
   }) async {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(ChessPackageRules()),
         suggestionControllerProvider.overrideWith(
           () => FixedSuggestionController(suggestion),
@@ -64,8 +67,10 @@ void main() {
     ),
   );
 
-  Color? labelColor(WidgetTester tester) =>
-      tester.widget<Text>(find.text(ConfirmPlayedKey.label)).style?.color;
+  Color? labelColor(WidgetTester tester) => tester
+      .widget<Text>(find.text(AppStrings.english.confirmPlayed))
+      .style
+      ?.color;
 
   testWidgets('enabled: primary (dark label); a tap commits the suggestion', (
     tester,
@@ -89,11 +94,13 @@ void main() {
 
     final check = tester.widget<Icon>(find.byIcon(Icons.check));
     expect(check.color, AppColors.textPrimary);
-    expect(find.text(ConfirmPlayedKey.label), findsOneWidget);
+    expect(find.text(AppStrings.english.confirmPlayed), findsOneWidget);
     expect(find.textContaining('✓'), findsNothing);
     expect(
       tester.getCenter(find.byIcon(Icons.check)).dx,
-      lessThan(tester.getRect(find.text(ConfirmPlayedKey.label)).left),
+      lessThan(
+        tester.getRect(find.text(AppStrings.english.confirmPlayed)).left,
+      ),
     );
     expect(
       tester.getSize(find.byKey(ConfirmPlayedKey.regionKey)).height,
@@ -137,7 +144,7 @@ void main() {
     expect(
       tester.getSemantics(find.byKey(ConfirmPlayedKey.regionKey)),
       matchesSemantics(
-        label: ConfirmPlayedKey.semanticsLabel,
+        label: AppStrings.english.confirmPlayedSpoken,
         isButton: true,
         hasEnabledState: true,
         isEnabled: true,

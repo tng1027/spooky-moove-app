@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_dialog.dart';
@@ -22,9 +23,12 @@ class NewGameKey extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return AppKey(
       onTap: () => _onTap(context, ref),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.scaleDown,
-        child: Text('NEW GAME', style: AppTypography.primary),
+        child: Text(
+          AppStrings.of(context).newGame,
+          style: AppTypography.primary,
+        ),
       ),
     );
   }
@@ -61,9 +65,10 @@ class NewGameConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return AppDialog(
-      title: 'DISCARD THE CURRENT GAME?',
-      spokenTitle: 'Discard the current game?',
+      title: strings.discardTitle,
+      spokenTitle: strings.discardTitleSpoken,
       children: [
         Row(
           spacing: AppDimens.spacing,
@@ -71,14 +76,14 @@ class NewGameConfirmDialog extends StatelessWidget {
             Expanded(
               child: AppKey(
                 key: cancelKey,
-                label: 'CANCEL',
+                label: strings.cancel,
                 onTap: () => Navigator.of(context).maybePop(false),
               ),
             ),
             Expanded(
               child: AppKey(
                 key: confirmKey,
-                label: 'NEW GAME',
+                label: strings.newGame,
                 onTap: () => Navigator.of(context).maybePop(true),
               ),
             ),

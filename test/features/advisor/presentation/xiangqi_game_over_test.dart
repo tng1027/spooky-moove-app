@@ -10,7 +10,6 @@ import 'package:spookymoove/features/advisor/presentation/suggestion_controller.
 import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
@@ -24,6 +23,8 @@ import 'package:spookymoove/features/persona/presentation/persona_tier_controlle
 import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import '../../persona/fake_game_engine.dart';
 
@@ -43,6 +44,7 @@ class Harness {
   Harness(String fen) {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         gameEngineProvider.overrideWithValue(engine),
         boardClockProvider.overrideWithValue(() => now),
         xiangqiRulesProvider.overrideWithValue(DartXiangqiRules(fen: fen)),
@@ -214,7 +216,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(colorOf(tester, 'CHECKMATE'), AppColors.accentGreen);
       expect(colorOf(tester, 'YOU WIN'), AppColors.accentGreen);
-      expect(find.text(TopBar.gameOverLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.gameOver), findsOneWidget);
       expect(find.byKey(StatusLine.newGameKey), findsOneWidget);
       expect(find.byKey(ConfirmPlayedKey.regionKey), findsNothing);
     });

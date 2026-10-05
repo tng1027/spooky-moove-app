@@ -6,6 +6,7 @@ import '../../../core/board/smart_entry.dart';
 import '../../../core/engine/engine_models.dart';
 import '../../../core/game/active_game.dart';
 import '../../../core/game/player_side.dart';
+import '../../../core/l10n/app_strings.dart';
 import '../data/dart_xiangqi_rules.dart';
 import '../domain/xiangqi_game_status.dart';
 import '../domain/xiangqi_models.dart';
@@ -27,15 +28,17 @@ final xiangqiBoardControllerProvider =
     );
 
 /// The Xiangqi board as the advisor layer sees it (OB-042 REQ-002).
-ActiveGameState xiangqiActiveGameState(XiangqiBoardState board) =>
-    ActiveGameState(
-      sideToMove: board.sideToMove,
-      positionId: board.legalMoves,
-      legalMoveCount: board.legalMoves.length,
-      isInCheck: board.checkedGeneral != null,
-      canUndo: board.canUndo,
-      headline: XiangqiResultFormat.headline(board.status, board.userSide),
-    );
+ActiveGameState xiangqiActiveGameState(
+  XiangqiBoardState board,
+  AppStrings strings,
+) => ActiveGameState(
+  sideToMove: board.sideToMove,
+  positionId: board.legalMoves,
+  legalMoveCount: board.legalMoves.length,
+  isInCheck: board.checkedGeneral != null,
+  canUndo: board.canUndo,
+  headline: XiangqiResultFormat.headline(board.status, board.userSide, strings),
+);
 
 /// Immutable snapshot of the board for rendering. Legal moves are computed
 /// once per position, never during build (REQ-009).

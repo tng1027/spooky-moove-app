@@ -59,7 +59,7 @@
 1. Phase 0: ~~scaffold (OB-003)~~, ~~Fairy-Stockfish over FFI (OB-004)~~, ~~engine interface (OB-005)~~, ~~persona core (OB-022)~~, ~~persona row (OB-023)~~ done (simulator); next fair-play notice (OB-008).
 2. Phase 1 Chess: ~~tap board (OB-006)~~ done (simulator), ~~suggestion card (OB-007)~~ done (simulator), ~~new game (OB-011)~~ done (simulator), ~~turn loop (OB-025)~~ done (simulator), ~~game end (OB-024)~~ done (simulator), ~~undo (OB-012)~~ done (simulator), Chess performance pass (OB-010).
 3. Phase 2 Xiangqi (epic OB-009) completes Milestone 1: OB-042 ∥ OB-043 → OB-044 → OB-045 → OB-046 → OB-047 → OB-010 Xiangqi pass.
-4. Release readiness in parallel: licenses screen (OB-033), store positioning (OB-034), counsel on OB-032/OB-040.
+4. Release readiness in parallel: licenses screen (OB-033), store positioning (OB-034), Vietnamese app language (OB-053), counsel on OB-032/OB-040.
 5. Post-M1: ODDAS (OB-014/015), then Shogi, Gomoku/Caro, Othello, Go.
 
 ## Open questions and risks
@@ -73,4 +73,5 @@
 - **Input latency target mismatch:** the BRD says the input cycle is < 1.2 s; the UI consultation says < 1.5 s. 1.2 s is the working target until the PO decides.
 - **Color token mismatch:** the disabled key color is `#1A1B20` in the palette but `#16171E` in the sample code; `bgDark` vs. true black. Provisionally `#1A1B20` / `#0F1015` in `lib/core/theme/app_colors.dart` (PO 2026-10-03); final values open (OB-003 Q1).
 - **Decided 2026-10-04:** no resume after app kill in M1 (OB-001 Q6).
-- **Not decided:** app name and tier-7 label (OB-034); app language beyond the EN/VI fair-play notice; match history (OB-013).
+- **Decided 2026-10-05 (OB-053):** M1 app UI in English + Vietnamese; default = device language, saved choice wins; persona tier names translated; BA/dev draft the Vietnamese copy, PO signs off. Recommended approach: in-house typed EN/VI string catalogue + SDK `flutter_localizations`, no `intl` / ARB.
+- **Not decided:** app name and tier-7 label (OB-034, also the tier-7 Vietnamese name); match history (OB-013).

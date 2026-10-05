@@ -5,7 +5,6 @@ import 'package:integration_test/integration_test.dart';
 import 'package:spookymoove/app.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/widgets/app_block.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
@@ -15,6 +14,8 @@ import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Real app on the simulator. `SHOT:<name>` lines mark states that stay on
 /// screen for [_hold] so an external script can capture them.
@@ -40,6 +41,7 @@ void main() {
 
   testWidgets('choose and change the persona tier', (tester) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -57,7 +59,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(NewGameScreen.startKey));
     await tester.pumpAndSettle();
-    final prompt = find.text(SuggestionCard.pickTierPrompt);
+    final prompt = find.text(AppStrings.english.pickLevel);
 
     expect(container.read(personaTierProvider), PersonaTier.even);
     expect(keyColor(tester, PersonaTier.even), AppColors.accentActive);

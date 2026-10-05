@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_key.dart';
@@ -11,22 +12,22 @@ class SettingsDialog extends StatelessWidget {
 
   static const Key emptyKey = Key('settings.empty');
   static const Key closeKey = Key('settings.close');
-  static const String emptyLabel = 'NO SETTINGS YET';
 
   final List<Widget> entries;
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return AppDialog(
-      title: 'SETTINGS',
-      spokenTitle: 'Settings',
+      title: strings.settingsTitle,
+      spokenTitle: strings.settingsTitleSpoken,
       children: [
         if (entries.isEmpty)
           Semantics(
-            label: 'No settings yet',
+            label: strings.settingsEmptySpoken,
             excludeSemantics: true,
-            child: const Text(
-              emptyLabel,
+            child: Text(
+              strings.settingsEmpty,
               key: emptyKey,
               style: AppTypography.secondary,
             ),
@@ -35,8 +36,8 @@ class SettingsDialog extends StatelessWidget {
           ...entries,
         AppKey(
           key: closeKey,
-          label: 'CLOSE',
-          semanticsLabel: 'Close',
+          label: strings.close,
+          semanticsLabel: strings.closeSpoken,
           onTap: () => Navigator.of(context).maybePop(),
         ),
       ],

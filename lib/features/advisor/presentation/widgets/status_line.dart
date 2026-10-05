@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -20,9 +21,6 @@ class StatusLine extends ConsumerStatefulWidget {
 
   static const Key regionKey = Key('advisor.statusLine');
   static const Key newGameKey = Key('advisor.statusLine.newGame');
-  static const String waitingLabel = 'WAITING FOR OPPONENT';
-  static const String pickLevelLabel = 'PICK A LEVEL ABOVE';
-  static const String newGameLabel = 'NEW GAME';
 
   /// Taps on NEW GAME are ignored this long after it appears, so a double
   /// tap on a mating "I PLAYED IT" can't also leave the game.
@@ -76,11 +74,11 @@ class _StatusLineState extends ConsumerState<StatusLine> {
 
   Widget _buildButton(StatusLineContent content) => switch (content) {
     StatusLineContent.none => const SizedBox.shrink(),
-    StatusLineContent.waitingForOpponent => const _ActionKey(
-      label: StatusLine.waitingLabel,
+    StatusLineContent.waitingForOpponent => _ActionKey(
+      label: AppStrings.of(context).waitingForOpponent,
     ),
-    StatusLineContent.pickLevel => const _ActionKey(
-      label: StatusLine.pickLevelLabel,
+    StatusLineContent.pickLevel => _ActionKey(
+      label: AppStrings.of(context).pickLevelAbove,
     ),
     StatusLineContent.confirmDisabled => const ConfirmPlayedKey(
       isEnabled: false,
@@ -88,7 +86,7 @@ class _StatusLineState extends ConsumerState<StatusLine> {
     StatusLineContent.confirmEnabled => const ConfirmPlayedKey(isEnabled: true),
     StatusLineContent.newGame => _ActionKey(
       key: StatusLine.newGameKey,
-      label: StatusLine.newGameLabel,
+      label: AppStrings.of(context).newGame,
       onTap: () => NewGameKey.openNewGameScreen(context, ref),
     ),
   };

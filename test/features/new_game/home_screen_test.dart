@@ -12,9 +12,11 @@ import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/settings/domain/app_language.dart';
 import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
 import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   final starts = <(GameKind, PlayerSide, PersonaTier?)>[];
+  final languages = <AppLanguage>[];
 
   Finder gameKey(GameKind game) => find.byKey(HomeScreen.gameKey(game));
 
@@ -24,6 +26,7 @@ void main() {
     double textScale = 1.0,
   }) async {
     starts.clear();
+    languages.clear();
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1.0;
     tester.platformDispatcher.textScaleFactorTestValue = textScale;
@@ -33,6 +36,7 @@ void main() {
       MaterialApp(
         home: HomeScreen(
           onStart: (game, side, tier) => starts.add((game, side, tier)),
+          onLanguageSelected: languages.add,
         ),
       ),
     );
@@ -68,7 +72,7 @@ void main() {
             find.descendant(of: gameKey(game), matching: find.byType(AppBlock)),
           )
           .toList();
-      expect(blocks, hasLength(2), reason: game.label);
+      expect(blocks, hasLength(2), reason: AppStrings.english.gameName(game));
       final (row, icon) = (blocks.first, blocks.last);
       expect(row.face, AppColors.surfaceDark);
       expect(row.side, AppColors.surfaceSide);
@@ -86,10 +90,13 @@ void main() {
         const Size.square(AppDimens.gameIconPictogramSize),
       );
       expect(
-        tester.widget<Text>(inRow(find.text(game.label))).style?.color,
+        tester
+            .widget<Text>(inRow(find.text(AppStrings.english.gameName(game))))
+            .style
+            ?.color,
         AppColors.textPrimary,
       );
-      expect(game.tagline, tagline);
+      expect(AppStrings.english.gameTagline(game), tagline);
       expect(
         tester.widget<Text>(inRow(find.text(tagline))).style?.color,
         AppColors.textSecondary,
@@ -123,17 +130,18 @@ void main() {
   });
 
   for (final game in GameKind.values) {
-    testWidgets('${game.label} opens the new-game screen for it', (
-      tester,
-    ) async {
-      await pumpHome(tester);
-      await tester.tap(gameKey(game));
-      await tester.pumpAndSettle();
+    testWidgets(
+      '${AppStrings.english.gameName(game)} opens the new-game screen for it',
+      (tester) async {
+        await pumpHome(tester);
+        await tester.tap(gameKey(game));
+        await tester.pumpAndSettle();
 
-      final screen = tester.widget<NewGameScreen>(find.byType(NewGameScreen));
-      expect(screen.game, game);
-      expect(find.text(game.label), findsOneWidget);
-    });
+        final screen = tester.widget<NewGameScreen>(find.byType(NewGameScreen));
+        expect(screen.game, game);
+        expect(find.text(AppStrings.english.gameName(game)), findsOneWidget);
+      },
+    );
   }
 
   testWidgets('a rapid double tap opens one new-game screen', (tester) async {
@@ -186,7 +194,10 @@ void main() {
           builder: (context) => TextButton(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => HomeScreen(onStart: (_, _, _) {}),
+                builder: (_) => HomeScreen(
+                  onStart: (_, _, _) {},
+                  onLanguageSelected: (_) {},
+                ),
               ),
             ),
             child: const Text('open'),
@@ -358,6 +369,23 @@ void main() {
 
       expect(find.byType(LanguageDialog), findsNothing);
       expect(find.text('PICK A GAME'), findsOneWidget);
+      expect(languages, isEmpty);
+    });
+
+    testWidgets('LANGUAGE: picking TIẾNG VIỆT reports it once', (tester) async {
+      await pumpHome(tester);
+      await tester.tap(find.byKey(HomeScreen.languageKey));
+      await tester.pumpAndSettle();
+
+      final vietnamese = find.byKey(
+        LanguageDialog.languageKey(AppLanguage.vietnamese),
+      );
+      await tester.tap(vietnamese);
+      await tester.tap(vietnamese, warnIfMissed: false);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(LanguageDialog), findsNothing);
+      expect(languages, [AppLanguage.vietnamese]);
     });
   });
 

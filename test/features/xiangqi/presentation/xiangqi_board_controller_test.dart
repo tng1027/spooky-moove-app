@@ -9,6 +9,8 @@ import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_game_status.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 XiangqiPoint pt(String name) => XiangqiPoint.parse(name);
 
@@ -46,6 +48,7 @@ void main() {
     final rules = DartXiangqiRules(fen: fen);
     final container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         xiangqiRulesProvider.overrideWithValue(rules),
         boardClockProvider.overrideWithValue(() => now),
       ],
@@ -276,16 +279,19 @@ void main() {
       );
       expect(over.activePoints, isEmpty);
       expect(
-        xiangqiActiveGameState(over).headline,
+        xiangqiActiveGameState(over, AppStrings.english).headline,
         const GameResultHeadline('CHECKMATE — YOU WIN', ResultTone.win),
       );
-      expect(xiangqiActiveGameState(over).hint, isNull);
+      expect(xiangqiActiveGameState(over, AppStrings.english).hint, isNull);
 
       controller.undo();
       final resumed = read(container);
       expect(resumed.status, const XiangqiInProgress());
       expect(resumed.activePoints, activeBefore);
-      expect(xiangqiActiveGameState(resumed).isOver, isFalse);
+      expect(
+        xiangqiActiveGameState(resumed, AppStrings.english).isOver,
+        isFalse,
+      );
     });
 
     test('the headline follows the user side', () {
@@ -293,7 +299,7 @@ void main() {
       final controller = controllerOf(container)..newGame(PlayerSide.second);
       controller.commitEngineMove('a1a10');
       expect(
-        xiangqiActiveGameState(read(container)).headline,
+        xiangqiActiveGameState(read(container), AppStrings.english).headline,
         const GameResultHeadline('CHECKMATE — YOU LOSE', ResultTone.loss),
       );
     });
@@ -320,7 +326,7 @@ void main() {
     test('maps the board for the advisor layer', () {
       final (container, _) = setUpController();
       final controller = controllerOf(container);
-      var game = xiangqiActiveGameState(read(container));
+      var game = xiangqiActiveGameState(read(container), AppStrings.english);
       expect(game.sideToMove, PlayerSide.first);
       expect(game.legalMoveCount, 44);
       expect(game.isInCheck, isFalse);
@@ -332,7 +338,7 @@ void main() {
       controller
         ..tap(pt('a2'))
         ..tap(pt('a1'));
-      game = xiangqiActiveGameState(read(container));
+      game = xiangqiActiveGameState(read(container), AppStrings.english);
       expect(game.sideToMove, PlayerSide.second);
       expect(game.canUndo, isTrue);
       expect(game.positionId, same(read(container).legalMoves));
@@ -340,14 +346,23 @@ void main() {
 
     test('a selection keeps the same position id', () {
       final (container, _) = setUpController();
-      final before = xiangqiActiveGameState(read(container));
+      final before = xiangqiActiveGameState(
+        read(container),
+        AppStrings.english,
+      );
       controllerOf(container).tap(pt('h3'));
-      expect(xiangqiActiveGameState(read(container)), before);
+      expect(
+        xiangqiActiveGameState(read(container), AppStrings.english),
+        before,
+      );
     });
 
     test('check is reported', () {
       final (container, _) = setUpController(fen: checkmateFen);
-      expect(xiangqiActiveGameState(read(container)).isInCheck, isTrue);
+      expect(
+        xiangqiActiveGameState(read(container), AppStrings.english).isInCheck,
+        isTrue,
+      );
     });
   });
 }

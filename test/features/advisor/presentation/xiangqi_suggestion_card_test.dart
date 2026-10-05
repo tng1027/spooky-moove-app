@@ -13,6 +13,8 @@ import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_suggested_move.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import 'suggestion_card_test.dart' show FixedSuggestionController;
 
@@ -44,6 +46,7 @@ Future<void> pumpCard(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         suggestionControllerProvider.overrideWith(
           () => FixedSuggestionController(state),
         ),

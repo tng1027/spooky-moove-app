@@ -21,11 +21,12 @@ import 'package:spookymoove/features/persona/presentation/widgets/persona_row.da
 import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
 import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
 import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_board.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Real app on the simulator. `SHOT:<name>` lines mark states that stay on
 /// screen for [_hold] so an external script can capture them.
@@ -55,6 +56,7 @@ void main() {
 
   testWidgets('start, cancel, back out and restart a game', (tester) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -136,6 +138,7 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -183,7 +186,7 @@ void main() {
     final board = container.read(xiangqiBoardControllerProvider);
     expect(board.userSide, PlayerSide.second);
     expect(board.sideToMove, PlayerSide.first);
-    expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
     expect(find.text('WHITE'), findsNothing);
     await shot(tester, 'advisor_xiangqi_black');
   });

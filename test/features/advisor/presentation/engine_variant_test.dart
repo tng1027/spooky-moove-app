@@ -10,6 +10,8 @@ import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
 import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import '../../persona/fake_game_engine.dart';
 
@@ -86,11 +88,14 @@ void main() {
     engine = LoggingEngine();
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         gameEngineProvider.overrideWithValue(engine),
         activeGameStateSourceProvider.overrideWith(
           (ref) => ref.watch(useFakeGameProvider)
               ? fakeGameProvider
-              : chessBoardControllerProvider.select(chessActiveGameState),
+              : chessBoardControllerProvider.select(
+                  (b) => chessActiveGameState(b, AppStrings.english),
+                ),
         ),
         activeGameControllerProvider.overrideWith(
           (ref) => ref.watch(useFakeGameProvider)

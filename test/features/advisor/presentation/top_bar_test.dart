@@ -13,6 +13,8 @@ import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
 import 'package:spookymoove/features/persona/application/persona_suggester.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 class FixedSuggestionController extends SuggestionController {
   FixedSuggestionController(this.fixed);
@@ -44,6 +46,7 @@ void main() {
     return tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appStringsProvider.overrideWithValue(AppStrings.english),
           turnStatusProvider.overrideWithValue(turn),
           suggestionControllerProvider.overrideWith(
             () => FixedSuggestionController(suggestion),
@@ -112,7 +115,7 @@ void main() {
       (TurnStatus.yourMove, const SuggestionFailed()),
     ]) {
       await pumpTopBar(tester, turn: turn, suggestion: state);
-      expect(find.text(EvalFormat.winRateCaption), findsOneWidget);
+      expect(find.text(AppStrings.english.winRate), findsOneWidget);
       expect(
         colorOf(tester, EvalFormat.unknownValue),
         AppColors.textSecondary,
@@ -124,7 +127,7 @@ void main() {
   testWidgets('a finished game reads GAME OVER', (tester) async {
     await pumpTopBar(tester, turn: null, fen: '8/8/8/4k3/8/8/8/4KN2 w - - 0 1');
 
-    expect(find.text(TopBar.gameOverLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.gameOver), findsOneWidget);
     expect(find.text(EvalFormat.unknownValue), findsNothing);
   });
 
@@ -132,7 +135,7 @@ void main() {
     await pumpTopBar(tester, turn: null);
 
     expect(find.text(EvalFormat.unknownValue), findsNothing);
-    expect(find.text(TopBar.gameOverLabel), findsNothing);
+    expect(find.text(AppStrings.english.gameOver), findsNothing);
   });
 
   testWidgets('NEW GAME top-left, UNDO top-right', (tester) async {

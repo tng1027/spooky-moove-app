@@ -8,7 +8,6 @@ import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
@@ -21,6 +20,8 @@ import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// Xiangqi game end on the real app and engine (OB-047), started from
 /// mate-in-1 positions. `SHOT:<name>` lines mark states that stay on screen
@@ -46,6 +47,7 @@ void main() {
     PersonaTier tier = PersonaTier.even,
   }) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();
@@ -99,7 +101,7 @@ void main() {
   void expectGameOver(String reason, String outcome) {
     expect(find.text(reason), findsOneWidget);
     expect(find.text(outcome), findsOneWidget);
-    expect(find.text(TopBar.gameOverLabel), findsOneWidget);
+    expect(find.text(AppStrings.english.gameOver), findsOneWidget);
     expect(find.byKey(StatusLine.newGameKey), findsOneWidget);
     expect(
       container.read(xiangqiBoardControllerProvider).activePoints,

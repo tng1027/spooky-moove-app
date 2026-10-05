@@ -13,6 +13,8 @@ dependencies:
   ffi: ^2.2.0
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_riverpod: ^3.4.3
   flutter_svg: ^2.3.0
   hooks: ^2.2.0

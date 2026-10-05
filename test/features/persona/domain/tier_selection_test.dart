@@ -33,7 +33,7 @@ void main() {
   test('a single candidate is chosen by every tier', () {
     final only = _candidates({'A': 30});
     for (final tier in PersonaTier.values) {
-      expect(_pick(only, tier), 'A', reason: tier.label);
+      expect(_pick(only, tier), 'A', reason: tier.name);
     }
   });
 
@@ -148,7 +148,7 @@ void main() {
       PersonaTier.master,
       PersonaTier.god,
     ]) {
-      expect(_picks(candidates, tier), {'A'}, reason: tier.label);
+      expect(_picks(candidates, tier), {'A'}, reason: tier.name);
     }
   });
 }

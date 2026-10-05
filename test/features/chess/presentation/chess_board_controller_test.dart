@@ -7,6 +7,8 @@ import 'package:spookymoove/features/chess/domain/chess_game_status.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/domain/move_entry.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import '../fake_chess_rules.dart';
 
@@ -51,6 +53,7 @@ void main() {
     );
     final container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(rules),
         boardClockProvider.overrideWithValue(() => now),
       ],
@@ -164,6 +167,7 @@ void main() {
   ProviderContainer realRules(String fen) {
     final container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
         boardClockProvider.overrideWithValue(
           () => now += ChessBoardController.commitGuard,

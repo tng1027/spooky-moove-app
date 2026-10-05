@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:spookymoove/core/theme/app_colors.dart';
 import 'package:spookymoove/core/theme/app_dimens.dart';
 import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_tier_icon.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 Future<void> pumpRow(
   WidgetTester tester, {
@@ -21,8 +23,9 @@ Future<void> pumpRow(
   addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
   await tester.pumpWidget(
-    const ProviderScope(
-      child: MaterialApp(
+    ProviderScope(
+      overrides: [appStringsProvider.overrideWithValue(AppStrings.english)],
+      child: const MaterialApp(
         home: Scaffold(body: Column(children: [PersonaRow()])),
       ),
     ),
@@ -55,9 +58,21 @@ void main() {
         findsOneWidget,
       );
       expect(
-        find.descendant(of: _key(tier), matching: find.byType(SvgPicture)),
-        tier == PersonaTier.baby ? findsNothing : findsOneWidget,
-        reason: tier.label,
+        find.descendant(
+          of: _key(tier),
+          matching: find.byIcon(PersonaTierIcon.iconFor(tier)),
+        ),
+        findsOneWidget,
+        reason: tier.name,
+      );
+      expect(
+        tester
+            .widgetList<Text>(
+              find.descendant(of: _key(tier), matching: find.byType(Text)),
+            )
+            .map((text) => text.data),
+        ['${tier.level}'],
+        reason: 'icon and number only (OB-054 D5)',
       );
       expect(_block(tester, tier).face, AppColors.keyNormal);
       expect(_block(tester, tier).side, AppColors.keyNormalSide);
@@ -76,7 +91,7 @@ void main() {
       expect(
         _block(tester, tier).face,
         tier == PersonaTier.baby ? AppColors.accentActive : AppColors.keyNormal,
-        reason: tier.label,
+        reason: tier.name,
       );
     }
     expect(_block(tester, PersonaTier.baby).side, AppColors.accentActiveSide);
@@ -111,7 +126,7 @@ void main() {
     expect(find.byType(AnimatedContainer), findsNothing);
   });
 
-  testWidgets('screen readers get the tier name and selected state', (
+  testWidgets('screen readers get number, name and state, no hint', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
@@ -122,7 +137,7 @@ void main() {
     expect(
       tester.getSemantics(_key(PersonaTier.god)),
       matchesSemantics(
-        label: 'God',
+        label: 'Level 7 of 7, Big brain',
         isButton: true,
         hasSelectedState: true,
         isSelected: true,
@@ -132,7 +147,7 @@ void main() {
     expect(
       tester.getSemantics(_key(PersonaTier.baby)),
       matchesSemantics(
-        label: 'Baby',
+        label: 'Level 1 of 7, Noob',
         isButton: true,
         hasSelectedState: true,
         hasTapAction: true,
@@ -149,11 +164,11 @@ void main() {
     Rect? previous;
     for (final tier in PersonaTier.values) {
       final rect = tester.getRect(_key(tier));
-      expect(rect.width, greaterThanOrEqualTo(44), reason: tier.label);
+      expect(rect.width, greaterThanOrEqualTo(44), reason: tier.name);
       expect(
         rect.height,
         greaterThanOrEqualTo(AppDimens.minKeyHeight),
-        reason: tier.label,
+        reason: tier.name,
       );
       expect(rect.left, greaterThanOrEqualTo(0));
       expect(rect.right, lessThanOrEqualTo(360));

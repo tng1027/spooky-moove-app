@@ -33,9 +33,9 @@ void main() {
         PersonaTier.even,
       ]) {
         final limits = PersonaSuggester.limitsFor(tier, 20);
-        expect(limits.multiPv, 20, reason: tier.label);
-        expect(limits.depth, PersonaConfig.allMoveDepth, reason: tier.label);
-        expect(limits.moveTime, SearchLimits.maxMoveTime, reason: tier.label);
+        expect(limits.multiPv, 20, reason: tier.name);
+        expect(limits.depth, PersonaConfig.allMoveDepth, reason: tier.name);
+        expect(limits.moveTime, SearchLimits.maxMoveTime, reason: tier.name);
       }
     });
 
@@ -47,9 +47,9 @@ void main() {
       };
       for (final MapEntry(key: tier, value: depth) in expected.entries) {
         final limits = PersonaSuggester.limitsFor(tier, 20);
-        expect(limits.multiPv, 1, reason: tier.label);
-        expect(limits.depth, depth, reason: tier.label);
-        expect(limits.moveTime, SearchLimits.maxMoveTime, reason: tier.label);
+        expect(limits.multiPv, 1, reason: tier.name);
+        expect(limits.depth, depth, reason: tier.name);
+        expect(limits.moveTime, SearchLimits.maxMoveTime, reason: tier.name);
       }
     });
   });

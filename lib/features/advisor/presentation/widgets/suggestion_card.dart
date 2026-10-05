@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -21,10 +22,6 @@ class SuggestionCard extends ConsumerWidget {
 
   static const Key regionKey = Key('advisor.suggestionCard');
   static const Key retryKey = Key('suggestionCard.retry');
-  static const String pickTierPrompt = 'PICK A LEVEL';
-  static const String thinkingLabel = 'THINKING...';
-  static const String bestMoveLabel = 'BEST MOVE';
-  static const String errorLabel = 'ENGINE ERROR';
   static const String emptyLine = MoveText.emptyLine;
 
   @override
@@ -58,7 +55,7 @@ class SuggestionCard extends ConsumerWidget {
                       spacing: AppDimens.spacingSmall,
                       children: [
                         if (hasCaption) const _BestMoveCaption(),
-                        _content(state, game, ref),
+                        _content(state, game, ref, AppStrings.of(context)),
                       ],
                     ),
                   ),
@@ -76,7 +73,12 @@ class SuggestionCard extends ConsumerWidget {
     );
   }
 
-  Widget _content(SuggestionState state, GameKind game, WidgetRef ref) {
+  Widget _content(
+    SuggestionState state,
+    GameKind game,
+    WidgetRef ref,
+    AppStrings strings,
+  ) {
     return switch (state) {
       SuggestionReady(:final engineMove, :final suggestion) => _Result(
         move: GameWidgets.suggestedMove(game, engineMove),
@@ -90,11 +92,8 @@ class SuggestionCard extends ConsumerWidget {
           ),
         ),
       ),
-      SuggestionThinking() => const _Empty(
-        caption: thinkingLabel,
-        isDimmed: true,
-      ),
-      SuggestionNoTier() => const _Empty(caption: pickTierPrompt),
+      SuggestionThinking() => _Empty(caption: strings.thinking, isDimmed: true),
+      SuggestionNoTier() => _Empty(caption: strings.pickLevel),
       SuggestionFailed() => _Failed(
         onRetry: ref.read(suggestionControllerProvider.notifier).retry,
       ),
@@ -125,10 +124,7 @@ class _BestMoveCaption extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        const Text(
-          SuggestionCard.bestMoveLabel,
-          style: AppTypography.secondary,
-        ),
+        Text(AppStrings.of(context).bestMove, style: AppTypography.secondary),
       ],
     );
   }
@@ -216,15 +212,20 @@ class _Failed extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       spacing: AppDimens.spacing,
       children: [
         Text(
-          SuggestionCard.errorLabel,
+          strings.engineError,
           style: AppTypography.primary.copyWith(color: AppColors.accentRed),
         ),
-        AppKey(key: SuggestionCard.retryKey, label: 'RETRY', onTap: onRetry),
+        AppKey(
+          key: SuggestionCard.retryKey,
+          label: strings.retry,
+          onTap: onRetry,
+        ),
       ],
     );
   }

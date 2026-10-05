@@ -5,6 +5,7 @@ import 'package:spookymoove/core/widgets/app_key.dart';
 import 'package:spookymoove/features/settings/domain/app_language.dart';
 import 'package:spookymoove/features/settings/presentation/language_dialog.dart';
 import 'package:spookymoove/features/settings/presentation/settings_dialog.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   /// Opens [dialog] over a page; returns a getter for the popped result.
@@ -51,7 +52,7 @@ void main() {
         tester.getSemantics(find.bySemanticsLabel('Settings')),
         matchesSemantics(label: 'Settings', isHeader: true),
       );
-      expect(find.text(SettingsDialog.emptyLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.settingsEmpty), findsOneWidget);
       semantics.dispose();
 
       await tester.tap(find.byKey(SettingsDialog.closeKey));
@@ -74,41 +75,54 @@ void main() {
     Finder english() =>
         find.byKey(LanguageDialog.languageKey(AppLanguage.english));
 
-    testWidgets('lists exactly ENGLISH, selected, announced "English"', (
-      tester,
-    ) async {
-      final semantics = tester.ensureSemantics();
-      await openDialog(
-        tester,
-        const LanguageDialog(selected: AppLanguage.current),
-      );
+    testWidgets(
+      'lists ENGLISH (selected) and TIẾNG VIỆT, each in its own language',
+      (tester) async {
+        final semantics = tester.ensureSemantics();
+        await openDialog(
+          tester,
+          const LanguageDialog(selected: AppLanguage.english),
+        );
 
-      expect(AppLanguage.values, [AppLanguage.english]);
-      expect(find.text('ENGLISH'), findsOneWidget);
-      expect(tester.widget<AppKey>(english()).isSelected, isTrue);
-      expect(
-        tester.getSemantics(english()),
-        matchesSemantics(
-          label: 'English',
-          isButton: true,
-          hasEnabledState: true,
-          isEnabled: true,
-          hasSelectedState: true,
-          isSelected: true,
-          hasTapAction: true,
-        ),
-      );
-      expect(
-        tester.getSemantics(find.bySemanticsLabel('Language')),
-        matchesSemantics(label: 'Language', isHeader: true),
-      );
-      semantics.dispose();
-    });
+        expect(AppLanguage.values, [
+          AppLanguage.english,
+          AppLanguage.vietnamese,
+        ]);
+        expect(find.text('ENGLISH'), findsOneWidget);
+        expect(find.text('TIẾNG VIỆT'), findsOneWidget);
+        expect(
+          tester
+              .widget<AppKey>(
+                find.byKey(LanguageDialog.languageKey(AppLanguage.vietnamese)),
+              )
+              .isSelected,
+          isFalse,
+        );
+        expect(tester.widget<AppKey>(english()).isSelected, isTrue);
+        expect(
+          tester.getSemantics(english()),
+          matchesSemantics(
+            label: 'English',
+            isButton: true,
+            hasEnabledState: true,
+            isEnabled: true,
+            hasSelectedState: true,
+            isSelected: true,
+            hasTapAction: true,
+          ),
+        );
+        expect(
+          tester.getSemantics(find.bySemanticsLabel('Language')),
+          matchesSemantics(label: 'Language', isHeader: true),
+        );
+        semantics.dispose();
+      },
+    );
 
     testWidgets('tapping ENGLISH pops it', (tester) async {
       final result = await openDialog(
         tester,
-        const LanguageDialog(selected: AppLanguage.current),
+        const LanguageDialog(selected: AppLanguage.english),
       );
 
       await tester.tap(english());
@@ -121,7 +135,7 @@ void main() {
     testWidgets('CLOSE pops without a language', (tester) async {
       final result = await openDialog(
         tester,
-        const LanguageDialog(selected: AppLanguage.current),
+        const LanguageDialog(selected: AppLanguage.english),
       );
 
       await tester.tap(find.byKey(LanguageDialog.closeKey));
@@ -134,7 +148,7 @@ void main() {
 
   for (final dialog in const <Widget>[
     SettingsDialog(),
-    LanguageDialog(selected: AppLanguage.current),
+    LanguageDialog(selected: AppLanguage.english),
   ]) {
     testWidgets('${dialog.runtimeType}: no overflow at 360x640, scale 2.0', (
       tester,

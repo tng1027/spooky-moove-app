@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 import '../persona/fake_game_engine.dart';
 
@@ -186,7 +187,7 @@ void main() {
     );
 
     expect(container.read(personaTierProvider), PersonaTier.even);
-    expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
+    expect(find.text(AppStrings.english.pickLevel), findsNothing);
   });
 
   for (final size in [smallPhone, const Size(360, 600)]) {

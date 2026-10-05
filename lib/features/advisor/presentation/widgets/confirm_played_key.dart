@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -16,8 +17,6 @@ class ConfirmPlayedKey extends ConsumerWidget {
   const ConfirmPlayedKey({required this.isEnabled, super.key = regionKey});
 
   static const Key regionKey = Key('advisor.confirmPlayed');
-  static const String label = 'I PLAYED IT';
-  static const String semanticsLabel = 'I played the suggested move';
 
   static const double _chipSize = 24;
   static const double _checkSize = 18;
@@ -27,13 +26,14 @@ class ConfirmPlayedKey extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = isEnabled ? AppColors.bgDark : AppColors.textSecondary;
+    final strings = AppStrings.of(context);
     return AppKey(
       onTap: isEnabled ? () => _commitSuggestion(ref) : null,
       isPrimary: true,
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Semantics(
-          label: semanticsLabel,
+          label: strings.confirmPlayedSpoken,
           excludeSemantics: true,
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -56,7 +56,10 @@ class ConfirmPlayedKey extends ConsumerWidget {
                       : AppColors.textSecondary,
                 ),
               ),
-              Text(label, style: AppTypography.primary.copyWith(color: color)),
+              Text(
+                strings.confirmPlayed,
+                style: AppTypography.primary.copyWith(color: color),
+              ),
             ],
           ),
         ),

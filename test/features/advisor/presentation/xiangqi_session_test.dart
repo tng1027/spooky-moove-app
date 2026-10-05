@@ -13,6 +13,8 @@ import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/xiangqi/data/dart_xiangqi_rules.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import '../../persona/fake_game_engine.dart';
 
@@ -21,6 +23,7 @@ class Harness {
   Harness({String? xiangqiFen}) {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         gameEngineProvider.overrideWithValue(engine),
         boardClockProvider.overrideWithValue(() => now),
         if (xiangqiFen != null)

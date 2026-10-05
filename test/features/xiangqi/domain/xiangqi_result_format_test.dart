@@ -3,6 +3,7 @@ import 'package:spookymoove/core/game/game_result.dart';
 import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_game_status.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_result_format.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 void main() {
   const redMates = XiangqiLoss(
@@ -17,7 +18,11 @@ void main() {
   test('in progress: no headline', () {
     for (final side in PlayerSide.values) {
       expect(
-        XiangqiResultFormat.headline(const XiangqiInProgress(), side),
+        XiangqiResultFormat.headline(
+          const XiangqiInProgress(),
+          side,
+          AppStrings.english,
+        ),
         isNull,
       );
     }
@@ -25,21 +30,37 @@ void main() {
 
   test('checkmate from each side', () {
     expect(
-      XiangqiResultFormat.headline(redMates, PlayerSide.first),
+      XiangqiResultFormat.headline(
+        redMates,
+        PlayerSide.first,
+        AppStrings.english,
+      ),
       const GameResultHeadline('CHECKMATE — YOU WIN', ResultTone.win),
     );
     expect(
-      XiangqiResultFormat.headline(redMates, PlayerSide.second),
+      XiangqiResultFormat.headline(
+        redMates,
+        PlayerSide.second,
+        AppStrings.english,
+      ),
       const GameResultHeadline('CHECKMATE — YOU LOSE', ResultTone.loss),
     );
   });
 
   test('no moves from each side, never a draw', () {
     expect(
-      XiangqiResultFormat.headline(blackBlocks, PlayerSide.second),
+      XiangqiResultFormat.headline(
+        blackBlocks,
+        PlayerSide.second,
+        AppStrings.english,
+      ),
       const GameResultHeadline('NO MOVES — YOU WIN', ResultTone.win),
     );
-    final loss = XiangqiResultFormat.headline(blackBlocks, PlayerSide.first)!;
+    final loss = XiangqiResultFormat.headline(
+      blackBlocks,
+      PlayerSide.first,
+      AppStrings.english,
+    )!;
     expect(
       loss,
       const GameResultHeadline('NO MOVES — YOU LOSE', ResultTone.loss),

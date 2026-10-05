@@ -16,7 +16,7 @@ The per-game order does **not** change milestone scope.
 | Milestone (memory bank) | Phases |
 |-------------------------|--------|
 | **M1** = Chess + Xiangqi (bundled) + fair-play notice + persona (OB-021 D13) | Phase 0 (shared foundation) → Phase 1 (Chess) → Phase 2 (Xiangqi) |
-| **M1 store release** (full-feature, no monetization) | + "M1 release readiness" track (license boundary, licenses screen, positioning, audience), in parallel with Phases 1–2 |
+| **M1 store release** (full-feature, no monetization) | + "M1 release readiness" track (license boundary, licenses screen, positioning, audience), in parallel with Phases 1–2; app UI in English + Vietnamese (OB-053, PO 2026-10-05) |
 | Later (PO to resume) | "Deferred: Monetization" (OB-035–OB-039) |
 | Post-M1 (on-demand games, need ODDAS) | Phase 3 (shared ODDAS) → Phase 4 Shogi → Phase 5 Gomoku/Caro → Phase 6 Othello → Phase 7 Go |
 
@@ -43,7 +43,7 @@ Every game phase must include: input (tap board, no-notation principle), undo (O
 | 0.6 | [OB-005](OB-005-engine-abstraction-and-uci-adapter.md) | Game-agnostic engine interface + UCI adapter (multi-line, depth caps, 900 ms cap) | TECHNICAL_TASK | P0 | OB-004 | **Done on iOS simulator** (2026-10-03); UCCI not needed (`UCI_Variant xiangqi`); device timing deferred to OB-010 / final device pass |
 | 0.7 | [OB-022](OB-022-persona-move-selection.md) (core) | Persona tier logic core: WC conversion + 7-tier selection (pure Dart) | NEW_FEATURE | P0 | OB-003 | **Done on iOS simulator** (2026-10-03): tier logic, WC conversion, config, plus engine-facing `PersonaSuggester` (tier search limits, cache per position+tier, superseded results discarded); screen wiring in Phase 1 (row 1.5) |
 | 0.8 | [OB-023](OB-023-persona-selector-ui.md) | Persona tier selector row (7 buttons, design tokens) | NEW_FEATURE | P0 | OB-003 | **Done on iOS simulator** (2026-10-03): `PersonaRow` + nullable `personaTierProvider`, card prompt until a tier is chosen; Open Question 2 (< 360 dp) still open |
-| 0.9 | [OB-008](OB-008-fair-play-terms-notice.md) | One-time fair-play notice (EN/VI), acknowledged before first use | NEW_FEATURE | P0 | OB-003, OB-011 (info key) | **Done on iOS simulator** (2026-10-03): EN/VI one-time gate, versioned acknowledgment; FAIR PLAY key on the new-game screen header. Legal review of the text before release |
+| 0.9 | [OB-008](OB-008-fair-play-terms-notice.md) | One-time fair-play notice (EN/VI), acknowledged before first use | NEW_FEATURE | P0 | OB-003, OB-011 (info key) | **Done** (PO accepted 2026-10-05): EN/VI one-time gate, versioned acknowledgment; FAIR PLAY key on the new-game screen header. Wording v4 (chess/xiangqi federations, no "cheating") |
 
 ---
 
@@ -114,6 +114,7 @@ PO request (2026-10-03): "For chess, it is all good now. I would like to move al
 | 2.5d | [OB-050](OB-050-screen-headers-and-new-game-navigation.md) | Three-slot headers: new-game `[BACK] CHESS [FAIR PLAY]` (bottom HOME row removed); game `[NEW GAME] WIN RATE [UNDO]` (corners swapped); in-game NEW GAME navigation | ENHANCEMENT | P1 | OB-049, OB-011, OB-012, OB-041 | **Done on iOS simulator** (2026-10-04): shared `ScreenHeader`; game discarded on confirming NEW GAME; Home is the root again with no BACK key. Revises OB-049 Design / BR-003 |
 | 2.5e | [OB-051](OB-051-home-settings-and-language.md) | Home header `[SETTINGS] PICK A GAME [LANGUAGE]`: small Settings modal (content later) and Language modal (English only) | NEW_FEATURE | P1 | OB-050 (frees Home's top-left), OB-049, OB-008 | **Done on iOS simulator** (2026-10-04): Settings ships with `NO SETTINGS YET` + release gate (≥ 1 entry or hide the key before submission); fair-play notice keeps device language; ABOUT (OB-033) becomes a Settings row |
 | 2.5f | [OB-052](OB-052-gamification-isometric-restyle.md) | Gamified isometric restyle of the app UI (boards stay top-down) + per-game identity accents: Chess `#ED96D7`, Xiangqi `#578EF5`; background stays `#0F1015` | ENHANCEMENT | P1 | OB-003, OB-049, OB-050, OB-051, OB-010 (FPS check) | **Implemented incl. Home layout revision (2026-10-05); analyze + tests pass; PO to verify on iOS simulator.** DS-9 / D9: Home rows (`surfaceDark` block, 48 dp accent icon block, upper-case name + tagline from `GameCopy` in `game_registry.dart`, grey chevron, ≥ 72 dp, top-aligned), optional static neutral `HomeHero` (shares `NewGameHero.isShown`; copy pending PO / OB-034 check), text header keys kept; future accents recorded only (Shogi, Go, Othello, Caro). DS-1–DS-7 as before (`AppBlock`, `GameKind` accents, advisor layout; accent lines removed per D6). DS-8 / D7: new-game screen with `‹ BACK` / FAIR PLAY header, painted isometric hero (`NewGameHero`, solid faces, hidden below 700 dp body height or text scale > 1.3), `PLAYING` + accent `display` title, 6 dp surface panel with 01 / 02 sections, side cards with FIRST / SECOND MOVE and radio dot, pinned accent START GAME with arrow chip and helper text. OB-010 FPS check before / after still to run |
+| 2.5g | [OB-053](OB-053-vietnamese-app-language.md) | Vietnamese app language: `TIẾNG VIỆT` in the Language dialog, all in-app UI and screen-reader labels translated, device-language default, saved choice, fair-play notice follows the app language (OB-051 D2) | ENHANCEMENT | P1 (M1 release) | OB-051, OB-008, OB-034 (copy rules, tier-7 name), OB-052 (copy settled) | **Implemented 2026-10-05, PO verifying**: awaiting PO sign-off of the VI copy table in the ticket (D2). Earlier: Ready for development (PO 2026-10-05, D1–D4): ships in M1; BA/dev draft the VI copy, PO signs off; tier names translated (tier 7 follows OB-034); default = device language. Approach: in-house typed EN/VI string catalogue + SDK `flutter_localizations` for platform strings; no `intl` / ARB. Store listing VI stays in OB-034 |
 | 2.6 | [OB-010](OB-010-milestone1-size-latency-thermal-validation.md) (Xiangqi pass) | Performance for Xiangqi per tier; asset size; input cycle with snapping; WC slope check | TECHNICAL_TASK | P1 | OB-043–OB-047 | **In progress** (2026-10-04): harness done (9-position set, per-tier latency, input cycle with snapping, frames, WC band check); size ≈ 9.7 MB iOS / 9.5 MB Android arm64 compressed (pass); simulator latency run pending; device numbers in the final device pass |
 
 **Order:** OB-042 ∥ OB-043 → OB-044 → OB-045 → OB-046 → OB-047 → OB-010 Xiangqi pass. OB-045 comes right after the board so Xiangqi is reachable from the UI for simulator testing.
@@ -243,7 +244,7 @@ PO requirement 2026-10-02 ("7-Tier Persona Engine", 🥚 Baby → 👑 God). Ful
 4. **Match history** has no requirements at all (→ OB-013).
 5. ~~**Fair-play notice** format~~ → resolved (OB-008), in `productContext.md`.
 6. ~~**Business model**~~ → monetization deferred, no analytics (OB-035), in `projectbrief.md`/`productContext.md`.
-7. **Localization/accessibility** are not mentioned.
+7. **Localization/accessibility** are not mentioned. → Localization: PO 2026-10-05 "need to support Vietnamese" → OB-053 (EN + VI, incl. screen-reader labels).
 8. **Engine strength/time settings** — superseded by the persona tiers (OB-021).
 9. **Download policy** — Wi-Fi-only vs. mobile data, background download on iOS, behavior when storage is full.
 10. **No Settings screen** — the licenses screen (OB-033) is placed behind an ABOUT key on the new-game screen. → PO 2026-10-04: a Settings dialog on Home (OB-051, content later); ABOUT moves there (decided).
@@ -298,7 +299,7 @@ Non-blocking:
 6. **Size budget (OB-010):** If 30 MB is infeasible, what gives?
 7. **Latency target:** confirm 1.2 s (not 1.5 s) as the binding input-cycle target.
 8. ~~**Phase 2 Xiangqi decisions XQ1–XQ11**~~ — **resolved** (PO 2026-10-03, all defaults accepted; includes Xiangqi notation = OB-001 Q10 → XQ4 and the rules module → XQ11).
-9. **App language:** only the fair-play notice is bilingual (EN/VI); is the rest of the app English-only, or should it be localized? Partly answered (PO 2026-10-04, OB-051): a Language picker on Home, English only for now; the fair-play notice keeps the device language (OB-051 D2, decided).
+9. **App language:** ~~English-only or localized?~~ → answered (PO 2026-10-05): **support Vietnamese**, full in-app UI (OB-053). Earlier: Language picker on Home, English only (OB-051); fair-play notice follows the app language once Vietnamese ships (OB-051 D2). OB-053 decisions (PO 2026-10-05): Vietnamese ships in **M1**; BA/dev draft the copy, PO signs off; persona tier names translated (tier 7 follows OB-034); default = device language, saved choice wins. **Resolved.**
 
 **Before store submission (deferred by the PO, not needed for development):**
 10. Counsel assignment for OB-032 and OB-040's legal questions.

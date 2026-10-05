@@ -11,7 +11,6 @@ import 'package:spookymoove/core/widgets/app_block.dart';
 import 'package:spookymoove/core/widgets/app_key.dart';
 import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/suggestion_card.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
@@ -24,25 +23,56 @@ import 'package:spookymoove/features/new_game/presentation/home_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_hero.dart';
 import 'package:spookymoove/features/new_game/presentation/widgets/new_game_key.dart';
+import 'package:spookymoove/features/new_game/presentation/widgets/level_card.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
+import 'package:spookymoove/features/persona/domain/persona_tier_copy.dart';
+import 'package:spookymoove/features/persona/presentation/widgets/persona_tier_icon.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
 import 'package:spookymoove/features/persona/presentation/widgets/persona_row.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spookymoove/core/board/intersection_board.dart';
 import 'package:spookymoove/core/engine/engine_models.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
-import 'package:spookymoove/features/advisor/presentation/widgets/status_line.dart';
 import 'package:spookymoove/features/new_game/presentation/game_registry.dart';
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_board.dart';
 import 'package:spookymoove/features/xiangqi/presentation/widgets/xiangqi_piece_disc.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
 
 import '../persona/fake_game_engine.dart';
 
 ChessSquare sq(String name) => ChessSquare.parse(name);
 
 /// Pumps the app on the Home screen.
+/// Static `LEVEL` heading and a level card showing [tier] (OB-054).
+void expectLevelCard(WidgetTester tester, PersonaTier tier) {
+  final copy = PersonaTierCopy.english[tier]!;
+  expect(find.text('LEVEL'), findsOneWidget);
+  expect(find.textContaining('LEVEL ·'), findsNothing);
+  final card = find.byKey(NewGameScreen.levelCardKey);
+  expect(
+    find.descendant(of: card, matching: find.byKey(LevelCard.nameKey)),
+    findsOneWidget,
+  );
+  expect(
+    find.descendant(of: card, matching: find.text(copy.name)),
+    findsOneWidget,
+  );
+  expect(
+    tester.widget<Text>(find.byKey(LevelCard.descriptionKey)).data,
+    copy.description,
+  );
+  expect(tester.widget<Text>(find.byKey(LevelCard.nameKey)).data, copy.name);
+  expect(
+    find.descendant(
+      of: find.byKey(LevelCard.iconKey),
+      matching: find.byIcon(PersonaTierIcon.iconFor(tier)),
+    ),
+    findsOneWidget,
+  );
+}
+
 Future<ProviderContainer> pumpApp(
   WidgetTester tester, {
   Size size = const Size(392, 800),
@@ -181,8 +211,8 @@ void main() {
       expect(back.right, lessThan(fairPlay.left));
       expect(name.top, greaterThanOrEqualTo(back.bottom));
       expect(name.bottom, lessThan(start.top));
-      expect(find.text(NewGameScreen.playingLabel), findsOneWidget);
-      expect(find.text(NewGameScreen.helperLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.playing), findsOneWidget);
+      expect(find.text(AppStrings.english.levelHelper), findsOneWidget);
       expect(find.textContaining('NEW GAME'), findsNothing);
       expect(find.text('HOME'), findsNothing);
       expect(find.text('XIANGQI'), findsNothing);
@@ -193,7 +223,7 @@ void main() {
     ) async {
       final container = await pumpNewGame(tester);
 
-      expect(find.text('LEVEL · EVEN'), findsOneWidget);
+      expectLevelCard(tester, PersonaTier.even);
       AppKey key(Key k) => tester.widget<AppKey>(find.byKey(k));
       expect(key(NewGameScreen.sideKey(PlayerSide.first)).isSelected, isTrue);
       expect(key(NewGameScreen.sideKey(PlayerSide.second)).isSelected, isFalse);
@@ -249,7 +279,7 @@ void main() {
       expect(find.byType(NewGameScreen), findsNothing);
       expect(find.byType(HomeScreen), findsNothing);
       expect(container.read(personaTierProvider), PersonaTier.even);
-      expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
+      expect(find.text(AppStrings.english.pickLevel), findsNothing);
       final board = container.read(chessBoardControllerProvider);
       expect(board.pieces, hasLength(32));
       expect(board.sideToMove, PieceColor.white);
@@ -351,26 +381,27 @@ void main() {
     Finder hero() => find.byType(NewGameHero);
 
     for (final game in GameKind.values) {
-      testWidgets('${game.label}: hero on a tall phone, accent slab', (
-        tester,
-      ) async {
-        await pumpNewGame(tester, game: game, size: const Size(393, 852));
+      testWidgets(
+        '${AppStrings.english.gameName(game)}: hero on a tall phone, accent slab',
+        (tester) async {
+          await pumpNewGame(tester, game: game, size: const Size(393, 852));
 
-        expect(hero(), findsOneWidget);
-        final height = tester.getSize(hero()).height;
-        expect(height, NewGameScreen.heroMaxHeight);
-        expect(
-          find.descendant(of: hero(), matching: find.byType(CustomPaint)),
-          findsWidgets,
-        );
-        expect(find.byType(BackdropFilter), findsNothing);
-        expect(tester.takeException(), isNull);
-      });
+          expect(hero(), findsOneWidget);
+          final height = tester.getSize(hero()).height;
+          expect(height, NewGameScreen.heroMaxHeight);
+          expect(
+            find.descendant(of: hero(), matching: find.byType(CustomPaint)),
+            findsWidgets,
+          );
+          expect(find.byType(BackdropFilter), findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
 
       for (final size in const [Size(360, 640), Size(360, 600)]) {
         for (final textScale in const [1.0, 2.0]) {
           testWidgets(
-            '${game.label}: no hero, no overflow at $size x$textScale',
+            '${AppStrings.english.gameName(game)}: no hero, no overflow at $size x$textScale',
             (tester) async {
               await pumpNewGame(
                 tester,
@@ -393,7 +424,7 @@ void main() {
       }
 
       testWidgets(
-        '${game.label}: START GAME in the accent with an arrow chip',
+        '${AppStrings.english.gameName(game)}: START GAME in the accent with an arrow chip',
         (tester) async {
           await pumpNewGame(tester, game: game);
 
@@ -407,7 +438,7 @@ void main() {
           expect(start.side, game.accentSide);
           expect(
             tester
-                .widget<Text>(find.text(NewGameScreen.startLabel))
+                .widget<Text>(find.text(AppStrings.english.startGame))
                 .style
                 ?.color,
             AppColors.bgDark,
@@ -420,7 +451,10 @@ void main() {
             findsOneWidget,
           );
           expect(
-            tester.widget<Text>(find.text(game.label)).style?.color,
+            tester
+                .widget<Text>(find.text(AppStrings.english.gameName(game)))
+                .style
+                ?.color,
             game.accent,
           );
         },
@@ -560,12 +594,14 @@ void main() {
       final semantics = tester.ensureSemantics();
       await pumpNewGame(tester);
 
-      expect(find.text('LEVEL · EVEN'), findsOneWidget);
+      expectLevelCard(tester, PersonaTier.even);
       for (final tier in PersonaTier.values) {
         expect(
           tester.getSemantics(tierKey(tier)),
           matchesSemantics(
-            label: tier.label,
+            label:
+                'Level ${tier.level} of 7, ${PersonaTierCopy.english[tier]!.spoken}',
+            hint: PersonaTierCopy.english[tier]!.description,
             isButton: true,
             hasSelectedState: true,
             isSelected: tier == PersonaTier.even,
@@ -593,14 +629,14 @@ void main() {
       await tester.pump();
       await tester.tap(tierKey(PersonaTier.soft));
       await tester.pump();
-      expect(find.text('LEVEL · SOFT'), findsOneWidget);
+      expectLevelCard(tester, PersonaTier.soft);
       expect(container.read(personaTierProvider), isNull);
 
       await tapSide(tester, PlayerSide.first);
 
       expect(find.byType(AdvisorScreen), findsOneWidget);
       expect(container.read(personaTierProvider), PersonaTier.soft);
-      expect(find.text(SuggestionCard.pickTierPrompt), findsNothing);
+      expect(find.text(AppStrings.english.pickLevel), findsNothing);
     });
 
     testWidgets('keys are at least 44 x 48 dp on a 360 dp screen', (
@@ -610,14 +646,57 @@ void main() {
 
       for (final tier in PersonaTier.values) {
         final rect = tester.getRect(tierKey(tier));
-        expect(rect.width, greaterThanOrEqualTo(44), reason: tier.label);
+        expect(rect.width, greaterThanOrEqualTo(44), reason: tier.name);
         expect(
           rect.height,
           greaterThanOrEqualTo(AppDimens.minKeyHeight),
-          reason: tier.label,
+          reason: tier.name,
         );
       }
     });
+
+    testWidgets('each level updates the card at a constant height', (
+      tester,
+    ) async {
+      await pumpNewGame(tester, size: const Size(360, 800));
+      final heights = <double>{};
+      for (final tier in PersonaTier.values) {
+        await tester.tap(tierKey(tier));
+        await tester.pump();
+        expectLevelCard(tester, tier);
+        final bar = tester.widget<Row>(
+          find.descendant(
+            of: find.byKey(LevelCard.barKey),
+            matching: find.byType(Row),
+          ),
+        );
+        final filled = bar.children.whereType<Container>().where(
+          (segment) => segment.color == AppColors.textPrimary,
+        );
+        expect(filled, hasLength(tier.level), reason: tier.name);
+        heights.add(
+          tester.getSize(find.byKey(NewGameScreen.levelCardKey)).height,
+        );
+      }
+      expect(heights, hasLength(1));
+    });
+
+    for (final size in const [Size(320, 568), Size(360, 640)]) {
+      testWidgets('no overflow with the level card at $size, scale 2.0', (
+        tester,
+      ) async {
+        await pumpNewGame(tester, size: size, textScale: 2.0);
+        for (final tier in PersonaTier.values) {
+          await tester.tap(tierKey(tier));
+          await tester.pump();
+          expect(tester.takeException(), isNull, reason: tier.name);
+        }
+        expect(
+          find.byKey(NewGameScreen.startKey).hitTestable(),
+          findsOneWidget,
+        );
+      });
+    }
 
     testWidgets('a level picked mid-game starts the new game with it', (
       tester,
@@ -658,7 +737,7 @@ void main() {
       expect(find.byType(AdvisorScreen), findsNothing);
       expect(find.byType(NewGameScreen), findsOneWidget);
       expect(find.text('CHESS'), findsOneWidget);
-      expect(find.text('LEVEL · EVEN'), findsOneWidget);
+      expectLevelCard(tester, PersonaTier.even);
     });
 
     testWidgets('confirm, BACK: Home with no BACK and no way back', (
@@ -741,7 +820,7 @@ void main() {
         XiangqiPiece(PlayerSide.second, XiangqiPieceKind.general),
       ]);
       expect(key(tester, sideKey(PlayerSide.first)).isSelected, isTrue);
-      expect(find.text('LEVEL · EVEN'), findsOneWidget);
+      expectLevelCard(tester, PersonaTier.even);
     });
 
     testWidgets('picking a side clicks', (tester) async {
@@ -840,8 +919,8 @@ void main() {
         ),
       );
       expect(
-        tester.getSemantics(find.bySemanticsLabel('Level, Even')),
-        matchesSemantics(label: 'Level, Even', isHeader: true),
+        tester.getSemantics(find.bySemanticsLabel('Level, Fifty-fifty')),
+        matchesSemantics(label: 'Level, Fifty-fifty', isHeader: true),
       );
       expect(
         tester.getSemantics(find.bySemanticsLabel('Your side')),
@@ -956,7 +1035,7 @@ void main() {
           tester.getCenter(find.byKey(IntersectionBoard.pointKey(4, 0))).dy,
         ),
       );
-      expect(find.text(StatusLine.waitingLabel), findsOneWidget);
+      expect(find.text(AppStrings.english.waitingForOpponent), findsOneWidget);
       expect(find.text('WHITE'), findsNothing);
     });
 

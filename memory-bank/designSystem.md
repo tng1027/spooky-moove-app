@@ -104,10 +104,11 @@ class AppColors {
 - Labels `A`–`I` / `1`–`10` in the outer half-cell, in Red's frame; flipped when the user plays Black.
 - **Exception (XQ3):** cells ≥ 40 dp at 360 dp width (≈ 35 dp at 360×640), below the 44 dp board rule. Mitigation: a tap snaps to the only target point within one cell; ties are ignored.
 
-## Persona row (OB-023, revised OB-052 DS-7)
+## Persona row (OB-023, revised OB-052 DS-7, OB-054)
 - 7 equal isometric keys (48 dp incl. depth) in a 52 dp row; the same `PersonaTierKeys` on the advisor and the new-game screen. Unselected neutral block; selected `accentActive` block. No caption, no scale animation.
-- One game-agnostic set on every game (tiers are game-agnostic): 1 dot (8 dp), 2 pawn, 3 knight, 4 bishop, 5 rook, 6 queen, 7 king. Cburnett `b*.svg` drawn as 24 dp one-colour silhouettes: `textPrimary` on normal, `bgDark` on amber. Emoji are no longer used.
-- Number badge 1–7: 14 dp `bgDark` circle with a 10 sp w700 `textPrimary` digit, 2 dp inside the face's bottom-right corner. Pictogram and badge don't scale with text; the tier name is in semantics.
+- Names (OB-054 D3): 1 NOOB / GÀ MỜ, 2 ROOKIE / TÂN BINH, 3 CHILL GUY / CHILL CHILL, 4 50/50 / HÊN XUI, 5 HUSTLER / CÁO GIÀ, 6 LOCAL BOSS / ÔNG TRÙM, 7 BIG BRAIN / CAO THỦ. Names, spoken forms and short descriptions live in `PersonaTierCopy`.
+- One game-agnostic icon set (OB-054 D9, replaces the DS-7 piece pictograms): Material Icons `egg_alt`, `military_tech`, `local_cafe`, `balance`, `pets`, `business_center`, `psychology` (`PersonaTierIcon`), 24 dp, one colour: `textPrimary` on normal, `bgDark` on amber. Emoji are never rendered in the app.
+- Number badge 1–7: 14 dp `bgDark` circle with a 10 sp w700 `textPrimary` digit, 2 dp inside the face's bottom-right corner. Icon and badge don't scale with text. Semantics label "Level 4 of 7, Fifty-fifty"; the description is a hint on the new-game keys only. In-game keys show icon + number only (OB-054 D5).
 - All 7 tiers are always enabled and look the same (no gating in M1; the mockup's dimmed tiers 5–7 aren't adopted).
 
 ## Game identity accents (OB-052)
@@ -148,8 +149,12 @@ class AppColors {
  PLAYING                                   16  secondary w700, textSecondary
  CHESS                                     40  display 32 sp, game accent
 ┌ surfaceDark panel, radius 6, pad 8 ────┐
-│ 01  LEVEL · EVEN                       │  section header
-│ [•¹][♟²][♞³][▓♝⁴▓][♜⁵][♛⁶][♚⁷]        │  48  PersonaTierKeys, amber = selected
+│ 01  LEVEL                              │  section header (static, OB-054)
+│ [◯¹][✪²][☕³][▓⚖⁴▓][✿⁵][▣⁶][✺⁷]        │  48  PersonaTierKeys, amber = selected
+│ ┌ level card, bgDark well ───────────┐ │
+│ │ ⚖ 50/50             ■■■■□□□        │ │  icon · name · strength bar
+│ │ Keeps it 50/50: eases up when …    │ │  short description, wraps
+│ └────────────────────────────────────┘ │
 │ 02  YOUR SIDE                          │
 │ [♔ WHITE ◉ FIRST MOVE][♚ BLACK ○ SECOND MOVE]  60  side cards
 └────────────────────────────────────────┘
@@ -160,9 +165,15 @@ class AppColors {
 - **Hero:** static `CustomPainter`: 2:1 isometric slab, top face game accent, side faces game side colour (0.1 × width deep); Chess = 4 × 4 checker, Xiangqi = intersection grid with a river gap; two upright `sidePictogram` pieces (kings / 帥 將). Solid fills only, **no glow**, no animation, no semantics. **Shown only at ≥ 700 dp body height and text scale ≤ 1.3**; height `min(0.25 × H, 200)`. Hidden on 360 × 640 / 360 × 600.
 - Title: `PLAYING` caption + upper-case game label in `AppTypography.display`, accent colour; semantics header "New game, Chess".
 - Panel: non-pressable `surfaceDark` / `surfaceSide` block, highlight, radius 6 dp. Section headers `01` / `02` (`secondary`, `textSecondary`) + title (`primary`). No level pill, no divider lines.
+- Level card (OB-054, `LevelCard`): non-pressable `bgDark` well, radius 4, padding 8, 8 dp under the keys. Icon 24 dp + upper-case name (`primary`, scale-down, one line) and a 7-segment bar (10 × 6 dp, filled `textPrimary`, empty `keyNormal`) in a `Wrap`; short description below (`secondary`, line height 1.4, wraps, no ellipsis). Height fixed to the longest of the 7 descriptions; excluded from semantics. Spec: `docs/design/OB-054-level-descriptions-design.md`.
 - Side cards: `AppKey`, ≥ 60 dp incl. depth; 32 dp side pictogram + label + sub-label `FIRST MOVE` / `SECOND MOVE` (from `PlayerSide`); text `textPrimary` on normal, `bgDark` on amber. 12 dp radio dot top-right (ring `textSecondary`; selected: `bgDark` ring + dot). Selected = amber block, never an accent outline (D6). Semantics "White, first move".
 - START GAME: game accent block, `bgDark` label + 24 dp `bgDark` arrow chip (`chevron_right` 18 dp white), like I PLAYED IT's check chip.
 - Xiangqi: same layout in blue; side cards RED / BLACK with 帥 / 將 discs.
+
+## Languages (OB-053)
+- English and Vietnamese. All UI copy, visible and spoken, lives in `AppStrings` (`lib/core/l10n/`); widgets read `AppStrings.of(context)`, never literals. Persona copy: `PersonaTierCopy`; fair-play notice: `FairPlayNoticeText`.
+- Vietnamese labels are upper case like English and often longer: keep one-line labels in a scale-down `FittedBox`, check 360 × 640 × 2.0 with diacritics unclipped.
+- Never translated: app name, move coordinates and marks, the engine expert line, Xiangqi characters, license texts.
 
 ## Motion and haptics
 - Animations are minimal and cheap (`flutter_animate`): number/color transitions on the suggestion only.

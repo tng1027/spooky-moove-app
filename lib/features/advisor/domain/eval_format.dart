@@ -1,34 +1,62 @@
 import '../../../core/engine/engine_models.dart';
+import '../../../core/l10n/app_strings.dart';
 
 /// Evaluation text for the advisor screen (OB-007, OB-041). Scores are from
 /// the user's side and describe the suggested move (OB-021 D12).
 abstract final class EvalFormat {
-  static const String winRateCaption = 'WIN RATE';
-
-  /// The value shown under [winRateCaption] while there is no suggestion.
+  /// The value shown under the win-rate caption while there is no
+  /// suggestion.
   static const String unknownValue = '--';
+
+  /// `WIN RATE` / `--`, shown while there is no suggestion to evaluate.
+  static EvalHeadline unknown(AppStrings strings) =>
+      _headline(strings.winRate, unknownValue, strings, isFavorable: false);
 
   /// `WIN RATE` / `62%`, `YOU MATE IN` / `4` or `OPPONENT MATES IN` / `4`
   /// (OB-052 DS-7: caption above value). [EvalHeadline.isFavorable] picks
   /// green (true) or red.
-  static EvalHeadline headline(EngineScore score, double winChance) {
+  static EvalHeadline headline(
+    EngineScore score,
+    double winChance,
+    AppStrings strings,
+  ) {
     return switch (score) {
-      MateScore(:final moves) when moves > 0 => EvalHeadline(
-        'YOU MATE IN',
+      MateScore(:final moves) when moves > 0 => _headline(
+        strings.youMateIn,
         '$moves',
+        strings,
         isFavorable: true,
       ),
-      MateScore(:final moves) => EvalHeadline(
-        'OPPONENT MATES IN',
+      MateScore(:final moves) => _headline(
+        strings.opponentMatesIn,
         '${moves.abs()}',
+        strings,
         isFavorable: false,
       ),
-      CentipawnScore() => EvalHeadline(
-        winRateCaption,
+      CentipawnScore() => _headline(
+        strings.winRate,
         '${winChance.round()}%',
+        strings,
         isFavorable: winChance.round() >= 50,
       ),
     };
+  }
+
+  /// One spoken label, e.g. `Win rate 62 percent`: upper-case captions
+  /// would be spelled out by screen readers.
+  static EvalHeadline _headline(
+    String caption,
+    String value,
+    AppStrings strings, {
+    required bool isFavorable,
+  }) {
+    final text = '$caption $value'.replaceAll('%', ' ${strings.percentSpoken}');
+    return EvalHeadline(
+      caption,
+      value,
+      spoken: text[0] + text.substring(1).toLowerCase(),
+      isFavorable: isFavorable,
+    );
   }
 
   static const String expertSeparator = ' • ';
@@ -61,27 +89,30 @@ abstract final class EvalFormat {
 }
 
 final class EvalHeadline {
-  const EvalHeadline(this.caption, this.value, {required this.isFavorable});
+  const EvalHeadline(
+    this.caption,
+    this.value, {
+    required this.spoken,
+    required this.isFavorable,
+  });
 
   final String caption;
   final String value;
-  final bool isFavorable;
 
   /// One label for screen readers, e.g. `Win rate 62 percent`.
-  String get spoken {
-    final text = '$caption $value'.replaceAll('%', ' percent');
-    return text[0] + text.substring(1).toLowerCase();
-  }
+  final String spoken;
+  final bool isFavorable;
 
   @override
   bool operator ==(Object other) =>
       other is EvalHeadline &&
       other.caption == caption &&
       other.value == value &&
+      other.spoken == spoken &&
       other.isFavorable == isFavorable;
 
   @override
-  int get hashCode => Object.hash(caption, value, isFavorable);
+  int get hashCode => Object.hash(caption, value, spoken, isFavorable);
 
   @override
   String toString() => 'EvalHeadline($caption $value, favorable: $isFavorable)';

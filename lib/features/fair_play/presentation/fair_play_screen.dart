@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_typography.dart';
@@ -44,15 +45,13 @@ class FairPlayScreen extends StatelessWidget {
   }
 }
 
-/// Title and paragraphs of the fair-play notice, in Vietnamese on a
-/// Vietnamese device and English otherwise.
+/// Title and paragraphs of the fair-play notice, in the app language
+/// (OB-053 REQ-009).
 class FairPlayNoticeBody extends StatelessWidget {
   const FairPlayNoticeBody(this.text, {super.key});
 
   static FairPlayNoticeText textOf(BuildContext context) =>
-      FairPlayNoticeText.forLanguage(
-        View.of(context).platformDispatcher.locale.languageCode,
-      );
+      FairPlayNoticeText.forLanguage(AppStrings.of(context).language);
 
   static const TextStyle _bodyStyle = TextStyle(
     fontFamily: AppTypography.fontFamily,

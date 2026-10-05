@@ -15,6 +15,7 @@ import 'package:spookymoove/features/new_game/presentation/new_game_screen.dart'
 import 'package:spookymoove/features/xiangqi/domain/xiangqi_models.dart';
 import 'package:spookymoove/features/xiangqi/presentation/xiangqi_board_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 /// OB-010 Xiangqi pass: input cycle on the real app, playing BLACK at the
 /// default level. Each cycle enters Red's move like a user (first tap on the
@@ -48,6 +49,7 @@ void main() {
 
   Future<void> launchAsBlack(WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({
+      AppLanguageController.languageKey: 'en',
       FairPlayController.acknowledgedVersionKey: fairPlayNoticeVersion,
     });
     final preferences = await SharedPreferences.getInstance();

@@ -18,9 +18,10 @@ Plan and ticket statuses: `tickets/README.md` (per game: Phase 0 shared → Phas
 - [x] Legal-only tap board — OB-006; verified on iOS simulator 2026-10-03. Device timing deferred to OB-010.
 - [ ] Suggestion card + haptics — OB-007
 - [ ] New game, turn loop, game end, undo — OB-011, OB-025, OB-024, OB-012
-- [x] Fair-play notice gate (EN/VI, versioned acknowledgment in `shared_preferences`) — OB-008 (2026-10-03). Remaining: place the "FAIR PLAY" key opening `FairPlayScreen.readOnly()` on the new-game screen in OB-011 (REQ-005).
+- [x] Fair-play notice gate (EN/VI, versioned acknowledgment in `shared_preferences`) — OB-008 (2026-10-03); FAIR PLAY key on the new-game header (OB-011/OB-050); wording v4; PO accepted, done (2026-10-05).
 - [ ] Size / latency / thermal validation against NFRs — OB-010
 - [ ] Licenses (ABOUT) screen + parental gate — OB-033
+- [ ] Vietnamese app language (all in-app UI, device-language default, saved choice) — OB-053, M1 (PO 2026-10-05); ready for development
 - [ ] Match history storage (SQLite / KV) — requirements undefined (OB-013)
 - [ ] ODDAS: manifest, downloader, verification, lifecycle, storage settings — OB-014/015
 - [ ] Shogi (USI, `shogi.nnue`, drop tray, promotion prompt)

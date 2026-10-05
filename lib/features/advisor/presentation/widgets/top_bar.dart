@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -20,7 +21,6 @@ class TopBar extends ConsumerWidget {
   const TopBar({super.key = regionKey});
 
   static const Key regionKey = Key('advisor.topBar');
-  static const String gameOverLabel = 'GAME OVER';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,10 +28,11 @@ class TopBar extends ConsumerWidget {
       ref.watch(activeGameStateSourceProvider).select((game) => game.isOver),
     );
     final hasGame = ref.watch(turnStatusProvider) != null;
+    final strings = AppStrings.of(context);
     final label = isOver
-        ? const _Label(gameOverLabel)
+        ? _Label(strings.gameOver)
         : hasGame
-        ? _winRateLabel(ref.watch(suggestionControllerProvider))
+        ? _winRateLabel(ref.watch(suggestionControllerProvider), strings)
         : null;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingSmall),
@@ -45,20 +46,17 @@ class TopBar extends ConsumerWidget {
 
   /// The suggested move's win rate (or mate distance), green when favorable;
   /// `WIN RATE` / `--` while there is no suggestion to evaluate.
-  static Widget _winRateLabel(SuggestionState suggestion) {
+  static Widget _winRateLabel(SuggestionState suggestion, AppStrings strings) {
     if (suggestion is! SuggestionReady) {
-      return const _Headline(
-        EvalHeadline(
-          EvalFormat.winRateCaption,
-          EvalFormat.unknownValue,
-          isFavorable: false,
-        ),
+      return _Headline(
+        EvalFormat.unknown(strings),
         color: AppColors.textSecondary,
       );
     }
     final headline = EvalFormat.headline(
       suggestion.suggestion.score,
       suggestion.suggestion.winChance,
+      strings,
     );
     return _Headline(
       headline,

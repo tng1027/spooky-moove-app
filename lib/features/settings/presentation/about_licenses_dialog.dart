@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/legal/open_source_info.dart';
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_typography.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../../core/widgets/app_key.dart';
@@ -14,10 +15,11 @@ class AboutLicensesKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return AppKey(
       key: openKey,
-      label: 'ABOUT & LICENSES',
-      semanticsLabel: 'About and licenses',
+      label: strings.aboutTitle,
+      semanticsLabel: strings.aboutTitleSpoken,
       onTap: () => showDialog<void>(
         context: context,
         builder: (_) => const AboutLicensesDialog(),
@@ -52,53 +54,43 @@ class _AboutLicensesDialogState extends State<AboutLicensesDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppStrings.of(context);
     return AppDialog(
-      title: 'ABOUT & LICENSES',
-      spokenTitle: 'About and licenses',
+      title: strings.aboutTitle,
+      spokenTitle: strings.aboutTitleSpoken,
       children: [
-        const Text(
-          '${OpenSourceInfo.appName} is free software under '
-          '${OpenSourceInfo.appLicense}.',
-          style: AppTypography.secondary,
-        ),
-        const Text(
-          'Chess & Xiangqi engine: ${OpenSourceInfo.engineName} '
-          '${OpenSourceInfo.engineTag} (${OpenSourceInfo.engineLicense}), '
-          'modified for ${OpenSourceInfo.appName}.',
-          style: AppTypography.secondary,
-        ),
-        const Text('SOURCE CODE', style: AppTypography.primary),
+        Text(strings.aboutFreeSoftware, style: AppTypography.secondary),
+        Text(strings.aboutEngine, style: AppTypography.secondary),
+        Text(strings.aboutSourceHeading, style: AppTypography.primary),
         const SelectableText(
           OpenSourceInfo.appSourceUrl,
           style: AppTypography.secondary,
         ),
-        const Text(
-          'Each release is tagged v<version>. Engine commit '
-          '${OpenSourceInfo.engineCommit}.',
-          style: AppTypography.secondary,
-        ),
+        Text(strings.aboutReleaseTags, style: AppTypography.secondary),
         AppKey(
           key: AboutLicensesDialog.copySourceKey,
-          label: _isSourceCopied ? 'COPIED' : 'COPY SOURCE URL',
-          semanticsLabel: _isSourceCopied ? 'Copied' : 'Copy source URL',
+          label: _isSourceCopied
+              ? strings.aboutCopied
+              : strings.aboutCopySource,
+          semanticsLabel: _isSourceCopied
+              ? strings.aboutCopiedSpoken
+              : strings.aboutCopySourceSpoken,
           onTap: _copySourceUrl,
         ),
         AppKey(
           key: AboutLicensesDialog.licensesKey,
-          label: 'VIEW LICENSES',
-          semanticsLabel: 'View licenses',
+          label: strings.aboutViewLicenses,
+          semanticsLabel: strings.aboutViewLicensesSpoken,
           onTap: () => showLicensePage(
             context: context,
             applicationName: OpenSourceInfo.appName,
-            applicationLegalese:
-                '${OpenSourceInfo.appLicense}. '
-                'Source: ${OpenSourceInfo.appSourceUrl}',
+            applicationLegalese: strings.aboutLegalese,
           ),
         ),
         AppKey(
           key: AboutLicensesDialog.closeKey,
-          label: 'CLOSE',
-          semanticsLabel: 'Close',
+          label: strings.close,
+          semanticsLabel: strings.closeSpoken,
           onTap: () => Navigator.of(context).maybePop(),
         ),
       ],

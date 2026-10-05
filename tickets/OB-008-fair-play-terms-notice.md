@@ -1,6 +1,6 @@
 # Ticket Analysis
 
-> **Status: Done on iOS simulator (2026-10-03).** One-time EN/VI notice gate with a versioned acknowledgment in `shared_preferences` (`lib/features/fair_play`); `FairPlayScreen.readOnly()` opens from the new-game screen's FAIR PLAY key (header since OB-050). Legal review of the text is still required before release.
+> **Status: Done (PO accepted 2026-10-05).** One-time EN/VI notice gate with a versioned acknowledgment in `shared_preferences` (`lib/features/fair_play`); `FairPlayScreen.readOnly()` opens from the new-game screen's FAIR PLAY key (header since OB-050). Wording v4 applied and accepted 2026-10-05.
 
 TICKET_TYPE: NEW_FEATURE
 CONFIDENCE: HIGH
@@ -25,16 +25,17 @@ On first launch, show a full-screen fair-play notice in plain language (English 
 - Language: Vietnamese if the device language is Vietnamese, otherwise English.
 - Design language: dark background, JetBrains Mono, high contrast, no imagery or motion; the button is a design-system key (≥ 48 dp).
 
-## Draft wording (version 1)
+## Current wording (version 4, 2026-10-05)
+History: v1 initial draft; v2/v3 app renames (Ghost64, SpookyMoove); v4 PO-approved designer feedback from the compliance QA (Q33): Go federations (EGF, Nihon Ki-in) replaced by chess/xiangqi federations, since M1 ships Chess + Xiangqi only; "cheating" softened to "breaks fair-play rules".
 
 **English**
 > **FAIR PLAY**
 >
 > SpookyMoove is for training, casual study, handicap games and friendly offline play.
 >
-> Do NOT use it during rated, sanctioned or tournament games (FIDE, EGF, Nihon Ki-in or any other organisation) unless the arbiter has allowed it.
+> Do NOT use it during rated, sanctioned or tournament games (FIDE, national chess or xiangqi federations, or any other organisation) unless the arbiter has allowed it.
 >
-> Using move suggestions in competitive play is cheating and can get you disqualified. You are responsible for how you use this app.
+> Using move suggestions in competitive play breaks fair-play rules and can get you disqualified. You are responsible for how you use this app.
 >
 > **[ I UNDERSTAND ]**
 
@@ -43,9 +44,9 @@ On first launch, show a full-screen fair-play notice in plain language (English 
 >
 > SpookyMoove dành cho luyện tập, học cờ, chơi chấp quân và các ván giao hữu ngoài đời.
 >
-> KHÔNG sử dụng trong các ván đấu tính điểm, giải đấu chính thức hoặc thi đấu (FIDE, EGF, Nihon Ki-in hay bất kỳ tổ chức nào khác) nếu chưa được trọng tài cho phép.
+> KHÔNG sử dụng trong các ván đấu tính điểm, giải đấu chính thức hoặc thi đấu (FIDE, các liên đoàn cờ vua hoặc cờ tướng quốc gia, hay bất kỳ tổ chức nào khác) nếu chưa được trọng tài cho phép.
 >
-> Dùng gợi ý nước đi khi thi đấu là gian lận và có thể bị truất quyền thi đấu. Bạn chịu trách nhiệm về cách sử dụng ứng dụng này.
+> Dùng gợi ý nước đi khi thi đấu là vi phạm luật chơi công bằng và có thể bị truất quyền thi đấu. Bạn chịu trách nhiệm về cách sử dụng ứng dụng này.
 >
 > **[ TÔI ĐÃ HIỂU ]**
 
@@ -114,7 +115,7 @@ New-game screen → [FAIR PLAY] info key → read-only notice → close
 
 ## Assumptions
 - Plain-language wording is acceptable to legal; legal may edit it before release (→ wording version 2 if changed after shipping).
-- Organisations named: FIDE, EGF, Nihon Ki-in as in `projectbrief.md`; "any other organisation" covers Xiangqi, Gomoku and Othello federations.
+- Organisations named (v4): FIDE and national chess/xiangqi federations, matching M1 games; "any other organisation" covers federations of games added later (Go, Shogi, Gomoku, Othello). Revisit the list when a new game ships.
 
 ## Open Questions
 None blocking. Non-blocking: legal review of the draft text before store release.

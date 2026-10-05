@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/game/player_side.dart';
+import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimens.dart';
 import '../../../core/theme/app_typography.dart';
@@ -19,7 +20,11 @@ import 'new_game_screen.dart';
 /// LANGUAGE. Layout per OB-052 DS-9: the rows, top-aligned and scrolling. Always the root: no game is ever beneath it
 /// (OB-050 D1).
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({required this.onStart, super.key});
+  const HomeScreen({
+    required this.onStart,
+    required this.onLanguageSelected,
+    super.key,
+  });
 
   static const Key settingsKey = Key('home.settings');
   static const Key languageKey = Key('home.language');
@@ -27,6 +32,9 @@ class HomeScreen extends StatefulWidget {
   static Key gameKey(GameKind game) => Key('home.game.${game.name}');
 
   final StartNewGame onStart;
+
+  /// Called with the language picked in the Language dialog (OB-053).
+  final ValueChanged<AppLanguage> onLanguageSelected;
 
   /// Pushes the new-game screen for [game]. START leaves only the root route,
   /// so no Home or new-game screen stays beneath the advisor (REQ-006).
@@ -110,50 +118,55 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _header() {
+    final strings = AppStrings.of(context);
     return ScreenHeader(
       leading: HeaderKey(
         key: HomeScreen.settingsKey,
-        label: 'SETTINGS',
-        semanticsLabel: 'Settings',
+        label: strings.settingsTitle,
+        semanticsLabel: strings.settingsTitleSpoken,
         onTap: () => _guarded(
           () => showDialog<void>(
             context: context,
-            builder: (_) =>
-                const SettingsDialog(entries: [AboutLicensesKey()]),
+            builder: (_) => const SettingsDialog(entries: [AboutLicensesKey()]),
           ),
         ),
       ),
       middle: Semantics(
         header: true,
-        label: 'Pick a game',
+        label: strings.homeTitleSpoken,
         excludeSemantics: true,
-        child: const FittedBox(
+        child: FittedBox(
           fit: BoxFit.scaleDown,
-          child: Text('PICK A GAME', style: AppTypography.primary),
+          child: Text(strings.homeTitle, style: AppTypography.primary),
         ),
       ),
       trailing: HeaderKey(
         key: HomeScreen.languageKey,
-        label: 'LANGUAGE',
-        semanticsLabel: 'Language',
-        onTap: () => _guarded(
-          () => showDialog<AppLanguage>(
-            context: context,
-            builder: (_) => const LanguageDialog(selected: AppLanguage.current),
-          ),
-        ),
+        label: strings.languageTitle,
+        semanticsLabel: strings.languageTitleSpoken,
+        onTap: () => _guarded(() => _pickLanguage(strings.language)),
       ),
     );
+  }
+
+  Future<void> _pickLanguage(AppLanguage current) async {
+    final picked = await showDialog<AppLanguage>(
+      context: context,
+      builder: (_) => LanguageDialog(selected: current),
+    );
+    if (picked != null && picked != current) widget.onLanguageSelected(picked);
   }
 
   /// A neutral row (OB-052 DS-9): `surfaceDark` keeps the tagline legible;
   /// only the icon block carries the game accent.
   Widget _gameRow(GameKind game) {
+    final strings = AppStrings.of(context);
     return Semantics(
       key: HomeScreen.gameKey(game),
       button: true,
       enabled: true,
-      label: '${NewGameScreen.spoken(game.label)}, ${game.spokenTagline}',
+      label:
+          '${strings.gameNameSpoken(game)}, ${strings.gameTaglineSpoken(game)}',
       child: ConstrainedBox(
         constraints: const BoxConstraints(
           minHeight: AppDimens.gameRowMinHeight,
@@ -185,10 +198,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: AlignmentDirectional.centerStart,
-                          child: Text(game.label, style: AppTypography.primary),
+                          child: Text(
+                            strings.gameName(game),
+                            style: AppTypography.primary,
+                          ),
                         ),
                         Text(
-                          game.tagline,
+                          strings.gameTagline(game),
                           style: AppTypography.secondary,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

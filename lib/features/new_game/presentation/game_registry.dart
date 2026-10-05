@@ -15,6 +15,7 @@ import '../../chess/presentation/chess_board_controller.dart';
 import '../../chess/presentation/widgets/chess_board.dart';
 import '../../chess/presentation/widgets/chess_piece_pictogram.dart';
 import '../../chess/presentation/widgets/chess_suggested_move.dart';
+import '../../settings/application/app_language_controller.dart';
 import '../../xiangqi/domain/xiangqi_models.dart';
 import '../../xiangqi/presentation/widgets/xiangqi_board.dart';
 import '../../xiangqi/presentation/widgets/xiangqi_expert_line.dart';
@@ -43,16 +44,17 @@ final gameControllerProvider = Provider.family<ActiveGameController, GameKind>(
 /// derived provider, so listeners hear a board change synchronously (derived
 /// providers notify on the next scheduler flush).
 final activeGameStateSourceProvider =
-    Provider<ProviderListenable<ActiveGameState>>(
-      (ref) => switch (ref.watch(activeGameKindProvider)) {
+    Provider<ProviderListenable<ActiveGameState>>((ref) {
+      final strings = ref.watch(appStringsProvider);
+      return switch (ref.watch(activeGameKindProvider)) {
         GameKind.chess => chessBoardControllerProvider.select(
-          chessActiveGameState,
+          (board) => chessActiveGameState(board, strings),
         ),
         GameKind.xiangqi => xiangqiBoardControllerProvider.select(
-          xiangqiActiveGameState,
+          (board) => xiangqiActiveGameState(board, strings),
         ),
-      },
-    );
+      };
+    });
 
 final activeGameControllerProvider = Provider<ActiveGameController>(
   (ref) => ref.watch(gameControllerProvider(ref.watch(activeGameKindProvider))),
@@ -75,18 +77,6 @@ extension GameAccent on GameKind {
     GameKind.chess => AppColors.accentChessSide,
     GameKind.xiangqi => AppColors.accentXiangqiSide,
   };
-}
-
-/// Per-game copy next to [GameKind.label] (OB-052 DS-9).
-extension GameCopy on GameKind {
-  /// What a screen reader says for the Home row's tagline.
-  String get spokenTagline => switch (this) {
-    GameKind.chess => 'classic strategy',
-    GameKind.xiangqi => 'Chinese chess',
-  };
-
-  /// Home row tagline, e.g. `CLASSIC STRATEGY`.
-  String get tagline => spokenTagline.toUpperCase();
 }
 
 /// Per-game widgets placed by shared screens.

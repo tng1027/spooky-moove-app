@@ -79,7 +79,7 @@ void main() {
             timesByTier[tier]!.add(ms);
             depthsByTier[tier]!.add(suggestion!.depth ?? 0);
             debugPrint(
-              'BENCH|${tier.label}|${position.name}|$ms'
+              'BENCH|${tier.name}|${position.name}|$ms'
               '|depth ${suggestion.depth}|nps ${suggestion.nps}'
               '|legal ${legal.length}|${_score(suggestion.score)}'
               '|wc ${suggestion.winChance.toStringAsFixed(1)}',
@@ -87,7 +87,7 @@ void main() {
             expect(
               legal,
               contains(suggestion.move),
-              reason: '${tier.label} ${position.name}',
+              reason: '${tier.name} ${position.name}',
             );
           }
         }
@@ -95,16 +95,14 @@ void main() {
 
       for (final tier in PersonaTier.values) {
         debugPrint(
-          _summary(tier.label, timesByTier[tier]!, depthsByTier[tier]!),
+          _summary(tier.name, timesByTier[tier]!, depthsByTier[tier]!),
         );
       }
       await engine.dispose();
     });
   });
 
-  testWidgets('Xiangqi: win-chance spread vs. the tier bands', (
-    tester,
-  ) async {
+  testWidgets('Xiangqi: win-chance spread vs. the tier bands', (tester) async {
     await tester.runAsync(() async {
       final engine = UciEngine(transportFactory: FairyStockfishEngine.new);
       await engine.start();
@@ -114,9 +112,9 @@ void main() {
       var counted = 0;
 
       for (final position in xiangqiBenchPositions) {
-        final legalCount = DartXiangqiRules(
-          fen: position.fen,
-        ).legalMoves.length;
+        final legalCount = DartXiangqiRules(fen: position.fen)
+            .legalMoves
+            .length;
         await engine.setVariant('xiangqi');
         final result = await engine
             .search(
@@ -124,9 +122,8 @@ void main() {
               PersonaSuggester.limitsFor(PersonaTier.even, legalCount),
             )
             .result;
-        final chances =
-            result.lines.map((l) => winChance(l.score)).toList()
-              ..sort((a, b) => b.compareTo(a));
+        final chances = result.lines.map((l) => winChance(l.score)).toList()
+          ..sort((a, b) => b.compareTo(a));
         final best = chances.first;
         final losses = chances.map((c) => best - c).toList();
         final hasGentle = losses.any(PersonaConfig.gentleLoss.contains);

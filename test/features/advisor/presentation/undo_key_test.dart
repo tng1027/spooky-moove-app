@@ -7,6 +7,8 @@ import 'package:spookymoove/features/advisor/presentation/widgets/undo_key.dart'
 import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 void main() {
   late ProviderContainer container;
@@ -15,6 +17,7 @@ void main() {
   Future<void> pumpUndoKey(WidgetTester tester) async {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(ChessPackageRules()),
         boardClockProvider.overrideWithValue(
           () => now += ChessBoardController.commitGuard,
@@ -40,7 +43,7 @@ void main() {
   );
 
   Color? labelColor(WidgetTester tester) =>
-      tester.widget<Text>(find.text(UndoKey.label)).style?.color;
+      tester.widget<Text>(find.text(AppStrings.english.undo)).style?.color;
 
   void play(String from, String to) {
     container.read(chessBoardControllerProvider.notifier)

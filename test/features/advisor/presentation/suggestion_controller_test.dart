@@ -14,6 +14,8 @@ import 'package:spookymoove/features/new_game/domain/game_kind.dart';
 import 'package:spookymoove/features/new_game/presentation/game_session_controller.dart';
 import 'package:spookymoove/features/persona/domain/persona_tier.dart';
 import 'package:spookymoove/features/persona/presentation/persona_tier_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 import '../../persona/fake_game_engine.dart';
 
@@ -23,6 +25,7 @@ class Harness {
   Harness({String? fen}) {
     container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         gameEngineProvider.overrideWithValue(engine),
         chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
         boardClockProvider.overrideWithValue(() => now),
@@ -286,6 +289,7 @@ void main() {
       ChessResultFormat.headline(
         const ChessCheckmate(winner: PieceColor.black),
         h.board.userSide,
+        AppStrings.english,
       ),
     );
     expect(h.engine.searches, isEmpty);
@@ -313,6 +317,7 @@ void main() {
         ChessResultFormat.headline(
           const ChessCheckmate(winner: PieceColor.black),
           h.board.userSide,
+          AppStrings.english,
         ),
       );
       expect(h.engine.stopCount, 1);
@@ -339,6 +344,7 @@ void main() {
       ChessResultFormat.headline(
         const ChessDraw(reason: DrawReason.insufficientMaterial),
         h.board.userSide,
+        AppStrings.english,
       ),
     );
     expect(h.engine.searches, isEmpty);

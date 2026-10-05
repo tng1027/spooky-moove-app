@@ -5,6 +5,7 @@ import '../../../core/board/board_clock.dart';
 import '../../../core/engine/engine_models.dart';
 import '../../../core/game/active_game.dart';
 import '../../../core/game/player_side.dart';
+import '../../../core/l10n/app_strings.dart';
 import '../data/chess_package_rules.dart';
 import '../domain/chess_game_status.dart';
 import '../domain/chess_models.dart';
@@ -23,7 +24,10 @@ final chessBoardControllerProvider =
     );
 
 /// The Chess board as the advisor layer sees it (OB-042 REQ-002).
-ActiveGameState chessActiveGameState(ChessBoardState board) {
+ActiveGameState chessActiveGameState(
+  ChessBoardState board,
+  AppStrings strings,
+) {
   final isPromotionPending = board.entry is PromotionPending;
   return ActiveGameState(
     sideToMove: board.sideToMove.side,
@@ -32,8 +36,8 @@ ActiveGameState chessActiveGameState(ChessBoardState board) {
     isInCheck: board.checkedKing != null,
     canUndo: board.canUndo || isPromotionPending,
     isEntryBlocked: isPromotionPending,
-    headline: ChessResultFormat.headline(board.status, board.userSide),
-    hint: ChessResultFormat.hint(board.status),
+    headline: ChessResultFormat.headline(board.status, board.userSide, strings),
+    hint: ChessResultFormat.hint(board.status, strings),
   );
 }
 

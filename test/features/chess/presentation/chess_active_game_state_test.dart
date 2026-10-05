@@ -5,6 +5,8 @@ import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/features/chess/data/chess_package_rules.dart';
 import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +14,7 @@ void main() {
   (ProviderContainer, ChessBoardController) setUp(String? fen) {
     final container = ProviderContainer(
       overrides: [
+        appStringsProvider.overrideWithValue(AppStrings.english),
         chessRulesProvider.overrideWithValue(ChessPackageRules(fen: fen)),
         boardClockProvider.overrideWithValue(() => const Duration(days: 1)),
       ],
@@ -24,6 +27,7 @@ void main() {
     final (container, _) = setUp(null);
     final state = chessActiveGameState(
       container.read(chessBoardControllerProvider),
+      AppStrings.english,
     );
     expect(state.sideToMove, PlayerSide.first);
     expect(state.legalMoveCount, 20);
@@ -40,6 +44,7 @@ void main() {
       ..tap(ChessSquare.parse('e7'));
     final state = chessActiveGameState(
       container.read(chessBoardControllerProvider),
+      AppStrings.english,
     );
     expect(state.isEntryBlocked, isTrue);
     expect(state.canUndo, isTrue);
@@ -60,10 +65,12 @@ void main() {
     );
     final before = chessActiveGameState(
       container.read(chessBoardControllerProvider),
+      AppStrings.english,
     );
     controller.commitEngineMove('d8h4');
     final after = chessActiveGameState(
       container.read(chessBoardControllerProvider),
+      AppStrings.english,
     );
     expect(identical(after.positionId, before.positionId), isFalse);
     expect(after.isOver, isTrue);

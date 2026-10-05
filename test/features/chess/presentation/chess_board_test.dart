@@ -10,6 +10,8 @@ import 'package:spookymoove/features/chess/domain/chess_models.dart';
 import 'package:spookymoove/features/chess/presentation/chess_board_controller.dart';
 import 'package:spookymoove/features/chess/presentation/widgets/chess_board.dart';
 import 'package:spookymoove/features/chess/presentation/widgets/promotion_chooser.dart';
+import 'package:spookymoove/core/l10n/app_strings.dart';
+import 'package:spookymoove/features/settings/application/app_language_controller.dart';
 
 const double boardSize = 360;
 
@@ -79,6 +81,7 @@ Future<BoardHarness> pumpBoard(
   late BoardHarness harness;
   final container = ProviderContainer(
     overrides: [
+      appStringsProvider.overrideWithValue(AppStrings.english),
       chessRulesProvider.overrideWithValue(rules),
       boardClockProvider.overrideWithValue(() => harness.clock),
     ],

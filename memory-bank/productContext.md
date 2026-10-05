@@ -66,7 +66,13 @@ Every decided Chess behaviour carries over (new-game flow, persona, turn loop, �
 ## Fair-play and ethics (OB-008)
 For personal training, casual study, handicap analysis and offline recreational games only. Format:
 - A one-time, blocking, full-screen notice with one button ("I UNDERSTAND" / "TÔI ĐÃ HIỂU").
-- EN/VI by device language.
+- EN/VI in the app language (device language until Vietnamese ships as an app language, OB-051 D2 / OB-053).
+
+## App language (OB-051, OB-053)
+- M1 ships in English and Vietnamese (PO 2026-10-05). Language picked from the LANGUAGE key on Home (`ENGLISH`, `TIẾNG VIỆT`); applies immediately and is saved on the device.
+- Default without a saved choice: Vietnamese on a Vietnamese device, English otherwise; a saved choice wins.
+- All in-app text and screen-reader labels are translated, incl. game names (`CỜ VUA` / `CỜ TƯỚNG`) and persona tier names (tier-7 name follows OB-034). Not translated: app name, move coordinates, engine/expert line, Xiangqi characters, license texts.
+- Vietnamese copy: drafted by BA/developer, signed off by the PO; same plain-wording and positioning rules as English.
 - Versioned: shown again when the wording version changes.
 - Re-viewable from a "FAIR PLAY" key on the new-game screen.
 - Forbids competitive/rated/tournament use without arbiter permission.
