@@ -74,6 +74,9 @@ class _NewGameScreenState extends State<NewGameScreen> {
   /// double tap starts only one game or navigates only once.
   bool _isLeaving = false;
 
+  /// A rapid double tap on FAIR PLAY opens only one sheet.
+  bool _isFairPlayOpen = false;
+
   void _selectTier(PersonaTier tier) {
     if (tier == _selectedTier) return;
     setState(() => _selectedTier = tier);
@@ -97,6 +100,13 @@ class _NewGameScreenState extends State<NewGameScreen> {
     _isLeaving = true;
     final didPop = await Navigator.of(context).maybePop();
     if (!didPop) _isLeaving = false;
+  }
+
+  Future<void> _showFairPlay() async {
+    if (_isFairPlayOpen) return;
+    _isFairPlayOpen = true;
+    await FairPlaySheet.show(context);
+    _isFairPlayOpen = false;
   }
 
   AppStrings get _strings => AppStrings.of(context);
@@ -173,7 +183,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
         key: NewGameScreen.fairPlayKey,
         label: _strings.fairPlay,
         semanticsLabel: _strings.fairPlaySpoken,
-        onTap: () => FairPlaySheet.show(context),
+        onTap: _showFairPlay,
       ),
     );
   }
@@ -284,6 +294,7 @@ class _NewGameScreenState extends State<NewGameScreen> {
           children: [
             Text(
               _strings.startGame,
+              semanticsLabel: _strings.startGameSpoken,
               style: AppTypography.primary.copyWith(color: AppColors.bgDark),
             ),
             const ExcludeSemantics(child: _ArrowChip()),

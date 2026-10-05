@@ -21,7 +21,7 @@ class FairPlayNoticeText {
   static const FairPlayNoticeText english = FairPlayNoticeText(
     title: 'FAIR PLAY',
     paragraphs: [
-      'SpookyMoove is for training, casual study, handicap games and '
+      'Spooky Moove is for training, casual study, handicap games and '
           'friendly offline play.',
       'Do NOT use it during rated, sanctioned or tournament games (FIDE, '
           'national chess or xiangqi federations, or any other organisation) '
@@ -37,7 +37,7 @@ class FairPlayNoticeText {
   static const FairPlayNoticeText vietnamese = FairPlayNoticeText(
     title: 'CHƠI CỜ CÔNG BẰNG',
     paragraphs: [
-      'SpookyMoove dành cho luyện tập, học cờ, chơi chấp quân và các ván '
+      'Spooky Moove dành cho luyện tập, học cờ, chơi chấp quân và các ván '
           'giao hữu ngoài đời.',
       'KHÔNG sử dụng trong các ván đấu tính điểm, giải đấu chính thức hoặc thi '
           'đấu (FIDE, các liên đoàn cờ vua hoặc cờ tướng quốc gia, hay bất kỳ '

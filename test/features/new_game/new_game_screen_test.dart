@@ -354,6 +354,17 @@ void main() {
       expect(find.byType(NewGameScreen), findsOneWidget);
     });
 
+    testWidgets('a rapid double tap on FAIR PLAY opens one sheet', (
+      tester,
+    ) async {
+      await pumpNewGame(tester);
+
+      await tester.tap(find.byKey(NewGameScreen.fairPlayKey));
+      await tester.tap(find.byKey(NewGameScreen.fairPlayKey));
+      await tester.pumpAndSettle();
+      expect(find.byType(FairPlaySheet), findsOneWidget);
+    });
+
     testWidgets('FAIR PLAY sheet fits at text scale 2.0 on a small phone', (
       tester,
     ) async {
@@ -715,6 +726,15 @@ void main() {
   });
 
   group('NEW GAME during a game', () {
+    testWidgets('a rapid double tap opens one confirmation', (tester) async {
+      await pumpGameInProgress(tester);
+
+      await tester.tap(find.byKey(NewGameKey.regionKey));
+      await tester.tap(find.byKey(NewGameKey.regionKey));
+      await tester.pumpAndSettle();
+      expect(find.byType(NewGameConfirmDialog), findsOneWidget);
+    });
+
     testWidgets('cancel keeps the game, tier and side', (tester) async {
       final container = await pumpGameInProgress(tester);
       await openNewGameConfirm(tester);

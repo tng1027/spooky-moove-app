@@ -45,8 +45,8 @@ class ChessBoard extends ConsumerWidget {
         DestinationSelected(:final sources) when sources.contains(square) =>
           BoardSquareState.candidate,
         _ when square == removed => BoardSquareState.suggestedCapture,
-        _ when !state.activeSquares.contains(square) => BoardSquareState.dimmed,
         _ when square == state.checkedKing => BoardSquareState.check,
+        _ when !state.activeSquares.contains(square) => BoardSquareState.dimmed,
         _ when suggested.contains(square) => BoardSquareState.suggested,
         _ => BoardSquareState.normal,
       };

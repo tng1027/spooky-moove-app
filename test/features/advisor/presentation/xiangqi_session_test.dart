@@ -133,7 +133,7 @@ void main() {
     expect(haptics, contains('HapticFeedbackType.heavyImpact'));
   });
 
-  testWidgets('a timeout shows ENGINE ERROR; RETRY searches again', (
+  testWidgets('a timeout shows the engine error; RETRY searches again', (
     tester,
   ) async {
     final h = harness()

@@ -92,7 +92,7 @@ void main() {
         PieceColor.white,
         vi,
       )!.lines,
-      ['CHIẾU HẾT', 'BẠN THẮNG'],
+      ['CHIẾU TƯỚNG', 'BẠN THẮNG'],
     );
     expect(
       ChessResultFormat.headline(
@@ -111,7 +111,7 @@ void main() {
         PlayerSide.second,
         vi,
       )!.lines,
-      ['HẾT NƯỚC ĐI', 'BẠN THUA'],
+      ['HẾT CỜ', 'BẠN THUA'],
     );
   });
 

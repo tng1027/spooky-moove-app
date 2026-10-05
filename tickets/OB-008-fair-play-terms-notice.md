@@ -63,7 +63,7 @@ So that the product is positioned as a training and handicap tool, not a cheatin
 
 ## Functional Requirements
 - REQ-001: On first launch, show the fair-play screen before anything else; the advisor is unreachable until "I UNDERSTAND" is tapped.
-- REQ-002: Show the version-1 wording in the device language (Vietnamese → VI, otherwise EN).
+- REQ-002: Show the current wording (v4, `fairPlayNoticeVersion`) in the app language (OB-053; was the device language).
 - REQ-003: Persist locally the acknowledged wording version; skip the screen while it matches the current version.
 - REQ-004: When the current wording version is higher than the acknowledged one, show the screen again on next launch.
 - REQ-005: A "FAIR PLAY" info key on the new-game screen (OB-011) opens the notice read-only (with a close action, no re-acknowledgment).

@@ -178,6 +178,8 @@ class SuggestionController extends Notifier<SuggestionState> {
       _fail(request, error, stackTrace);
     } on EngineFailureException catch (error, stackTrace) {
       _fail(request, error, stackTrace);
+    } on StateError catch (error, stackTrace) {
+      _fail(request, error, stackTrace);
     }
   }
 

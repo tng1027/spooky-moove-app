@@ -84,7 +84,7 @@ So that every move takes one or two taps and I can't enter an illegal move.
 ## Business Rules
 - BR-001: Only strictly legal moves can be entered (OB-043).
 - BR-002: No notation in the input UI. Characters on pieces are allowed (they are on the physical pieces).
-- BR-003: Cells ≥ 40 dp on 360 dp-wide screens with ≥ 652 dp of safe-area height. This is a documented exception to the 44 dp board rule (XQ3); smaller safe areas (e.g. 360×640 phones, ≈ 35 dp) are accepted with snapping and verified in the device pass.
+- BR-003: Cells ≥ 40 dp on 360 dp-wide screens with ≥ 652 dp of safe-area height. This is a documented exception to the 44 dp board rule (XQ3); smaller safe areas (e.g. 360×640 phones, ≈ 35 dp) are accepted with snapping and verified in the device pass. Update (OB-052 Open Question 7): after the restyle the default is ≈ 39.1 dp at 360 dp width; accepted.
 - BR-004: Colors carry meaning only: amber = selected / candidate, green = suggestion, red = check, `pieceRed` = Red side only. No shadows, gradients or decorative motion.
 
 ## User Flow

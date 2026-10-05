@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_dimens.dart';
 import '../../domain/chess_models.dart';
@@ -58,6 +59,7 @@ class PromotionChooser extends StatelessWidget {
                     _ChoiceKey(
                       key: choiceKey(kind),
                       piece: ChessPiece(color, kind),
+                      semanticsLabel: _spokenName(AppStrings.of(context), kind),
                       size: size,
                       isHighlighted: kind == highlighted,
                       onTap: () => onChosen(kind),
@@ -75,6 +77,7 @@ class PromotionChooser extends StatelessWidget {
 class _ChoiceKey extends StatelessWidget {
   const _ChoiceKey({
     required this.piece,
+    required this.semanticsLabel,
     required this.size,
     required this.isHighlighted,
     required this.onTap,
@@ -82,27 +85,45 @@ class _ChoiceKey extends StatelessWidget {
   });
 
   final ChessPiece piece;
+  final String semanticsLabel;
   final double size;
   final bool isHighlighted;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Container(
-        width: size,
-        height: size,
-        padding: const EdgeInsets.all(AppDimens.spacingSmall),
-        decoration: BoxDecoration(
-          color: isHighlighted ? AppColors.accentActive : AppColors.keyNormal,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(AppDimens.radius),
+    return Semantics(
+      button: true,
+      selected: isHighlighted,
+      label: semanticsLabel,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onTap,
+        child: Container(
+          width: size,
+          height: size,
+          padding: const EdgeInsets.all(AppDimens.spacingSmall),
+          decoration: BoxDecoration(
+            color: isHighlighted ? AppColors.accentActive : AppColors.keyNormal,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(AppDimens.radius),
+            ),
           ),
+          child: ChessPiecePictogram(piece),
         ),
-        child: ChessPiecePictogram(piece),
       ),
     );
   }
 }
+
+String _spokenName(AppStrings strings, PieceKind kind) => switch (kind) {
+  PieceKind.queen => strings.queenSpoken,
+  PieceKind.rook => strings.rookSpoken,
+  PieceKind.bishop => strings.bishopSpoken,
+  PieceKind.knight => strings.knightSpoken,
+  PieceKind.pawn || PieceKind.king => throw ArgumentError.value(
+    kind,
+    'kind',
+    'not a promotion choice',
+  ),
+};

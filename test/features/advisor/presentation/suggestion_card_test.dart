@@ -164,7 +164,7 @@ void main() {
     expect(find.text(AppStrings.english.pickLevel), findsNothing);
   });
 
-  testWidgets('BEST MOVE caption only while ready or thinking', (tester) async {
+  testWidgets('SUGGESTION caption only while ready or thinking', (tester) async {
     for (final (state, isShown) in [
       (ready(moveIn(_startFen, 'e2e4')), true),
       (const SuggestionThinking(), true),
@@ -175,7 +175,7 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await pumpCard(tester, state);
       expect(
-        find.text(AppStrings.english.bestMove),
+        find.text(AppStrings.english.suggestionCaption),
         isShown ? findsOneWidget : findsNothing,
         reason: '$state',
       );

@@ -27,7 +27,7 @@ Why A:
 ## 3. Placement
 
 - **New-game screen (only place with names and descriptions, PO Q5):** inside the existing panel, directly below the level keys: heading → keys → **level card** → `02 YOUR SIDE`. It is always visible, because the screen always has a selection (default level 4).
-- **Advisor screen:** the level keys show **icon + number badge only**, with no visible name or description and no description hint for screen readers (PO Q5). Screen readers still hear the level name in the key label (section 9). The board budget is unchanged. The helper `LEVEL CAN BE CHANGED DURING THE GAME` already tells users the advisor row is the same picker.
+- **Advisor screen:** the level keys show **icon + number badge only**, with no visible name or description and no description hint for screen readers (PO Q5). Screen readers still hear the level name in the key label (section 9). The board budget is unchanged. The helper `YOU CAN CHANGE THE LEVEL WHILE PLAYING` already tells users the advisor row is the same picker.
 - No tooltip or long-press. Hidden gestures conflict with the "glanceable" rule.
 
 ## 4. Wireframes
@@ -56,7 +56,7 @@ Key-row legend (Material Icons proposal, section 6): `◯` egg, `✪` medal, `�
 │ [♔ WHITE        ◉][♚ BLACK        ○]            │  60  side cards
 └─────────────────────────────────────────────────┘
  [            START GAME  [›]            ]           48  pinned, accent block
-     LEVEL CAN BE CHANGED DURING THE GAME                pinned helper
+     YOU CAN CHANGE THE LEVEL WHILE PLAYING                pinned helper
 ```
 
 Same screen in Vietnamese:

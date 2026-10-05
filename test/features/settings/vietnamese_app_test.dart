@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,8 @@ import 'package:spookymoove/core/widgets/app_key.dart';
 import 'package:spookymoove/features/advisor/presentation/advisor_screen.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_providers.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/top_bar.dart';
+import 'package:spookymoove/features/chess/domain/chess_models.dart';
+import 'package:spookymoove/features/chess/presentation/widgets/promotion_chooser.dart';
 import 'package:spookymoove/features/fair_play/domain/fair_play_notice.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_controller.dart';
 import 'package:spookymoove/features/fair_play/presentation/fair_play_screen.dart';
@@ -181,6 +184,44 @@ void main() {
       find.bySemanticsLabel('${vi.chessNameSpoken}, ${vi.chessTaglineSpoken}'),
       findsOneWidget,
     );
+
+    await tapKey(tester, HomeScreen.gameKey(GameKind.chess));
+    expect(find.bySemanticsLabel(vi.startGameSpoken), findsOneWidget);
+    await tapKey(tester, NewGameScreen.startKey);
+    expect(find.bySemanticsLabel(vi.undoSpoken), findsOneWidget);
+    expect(find.bySemanticsLabel(vi.newGameSpoken), findsOneWidget);
+    semantics.dispose();
+  });
+
+  testWidgets('Vietnamese screen readers hear the promotion choices', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('vi'),
+        supportedLocales: const [Locale('en'), Locale('vi')],
+        localizationsDelegates: const [
+          AppStrings.delegate,
+          ...GlobalMaterialLocalizations.delegates,
+        ],
+        home: PromotionChooser(
+          color: PieceColor.white,
+          keySize: 48,
+          onChosen: (_) {},
+          onCancel: () {},
+        ),
+      ),
+    );
+
+    for (final label in [
+      vi.queenSpoken,
+      vi.rookSpoken,
+      vi.bishopSpoken,
+      vi.knightSpoken,
+    ]) {
+      expect(find.bySemanticsLabel(label), findsOneWidget, reason: label);
+    }
     semantics.dispose();
   });
 
@@ -237,7 +278,7 @@ void main() {
           ),
         ]);
         await tester.pumpAndSettle();
-        expect(find.text(vi.bestMove), findsOneWidget);
+        expect(find.text(vi.suggestionCaption), findsOneWidget);
         expect(
           find.descendant(
             of: find.byKey(TopBar.regionKey),

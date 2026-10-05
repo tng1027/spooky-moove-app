@@ -103,7 +103,7 @@ class SuggestionCard extends ConsumerWidget {
   }
 }
 
-/// `• BEST MOVE` above the suggestion; the dot is green because it labels
+/// `• SUGGESTION` above the suggestion; the dot is green because it labels
 /// the suggestion, never the game accent (OB-052 DS-7).
 class _BestMoveCaption extends StatelessWidget {
   const _BestMoveCaption();
@@ -124,7 +124,7 @@ class _BestMoveCaption extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
-        Text(AppStrings.of(context).bestMove, style: AppTypography.secondary),
+        Text(AppStrings.of(context).suggestionCaption, style: AppTypography.secondary),
       ],
     );
   }
@@ -224,6 +224,7 @@ class _Failed extends StatelessWidget {
         AppKey(
           key: SuggestionCard.retryKey,
           label: strings.retry,
+          semanticsLabel: strings.retrySpoken,
           onTap: onRetry,
         ),
       ],

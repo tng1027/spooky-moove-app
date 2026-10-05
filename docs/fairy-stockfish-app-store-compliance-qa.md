@@ -1,50 +1,57 @@
 # Fairy-Stockfish & App Store Compliance — Q&A
 
-Ngày: 2026-10-05 · Người trả lời: Developer, BA, Designer · Phạm vi: bản iOS `1.0.0+1` (app commit `64cee59`, chưa có tag release).
+Ngày: 2026-10-05 · Người trả lời: Developer, BA, Designer · Phạm vi ban đầu: bản iOS `1.0.0+1` (app commit `64cee59`, chưa có tag release).
+
+**Recheck 2026-10-05 22:45:** bản `1.0.0+2`, tag `v1.0.0+2` @ `4550df9` (đã push), IPA `build/ios/ipa/spookymoove.ipa` (export `app-store-connect`, team `Z9ZLKTXDX5`). Các câu có thay đổi được đánh dấu **Recheck**.
 
 > Không phải tư vấn pháp lý. Các câu liên quan GPLv3 §6/§10 và Apple EULA cần counsel xác nhận (`tickets/OB-032`).
 
 ## Tóm tắt
 
-**Trạng thái: CHƯA sẵn sàng submit App Store.**
+**Trạng thái (recheck 2026-10-05): phần GPLv3 kỹ thuật đã đủ; CHƯA sẵn sàng submit App Store** vì còn counsel (OB-032), test trên iPhone thật/TestFlight và store metadata.
 
 Đã ổn:
-- Engine build từ source, pin tại commit `433d4115a31ebcf0d9c0e4238b12915b70a0b7c1` (tag `fairy_sf_14_0_1_xq`), không sửa upstream.
+- Engine build từ source, pin tại commit `433d4115a31ebcf0d9c0e4238b12915b70a0b7c1` (tag `fairy_sf_14_0_1_xq`), không sửa upstream; fork public `tng1027/Fairy-Stockfish`.
 - Engine chạy in-process qua Dart FFI, offline, không NNUE, không network/analytics, không tải code động (Guideline 2.5.2 OK).
-- Fair-play notice đã có (EN/VI).
+- Source public: `github.com/tng1027/spooky-moove-app` trả 200 ẩn danh; tag `v1.0.0` và `v1.0.0+2` đã push; `LICENSE`, `NOTICE.md` (modification notice có ngày), `BUILDING.md` (toolchain + cách tự cài).
+- App: Settings → ABOUT & LICENSES (GPLv3, tag/commit engine, source URL + COPY, VIEW LICENSES); license Fairy-Stockfish có trong IPA.
+- IPA `1.0.0+2` đã kiểm tra: `fairy_stockfish.framework`, 0 file `.nnue`, 2 license asset, `CFBundleLocalizations` en/vi.
+- Fair-play notice EN/VI đã sửa (chỉ FIDE/liên đoàn cờ vua, cờ tướng; không còn EGF/Nihon Ki-in, không "cheating"; version 4) và theo ngôn ngữ app (OB-053).
+- Cấp "God" đã đổi thành BIG BRAIN / CAO THỦ, mô tả định tính (OB-054); Settings không còn rỗng; Language có ENGLISH + TIẾNG VIỆT.
 
-Blockers:
-1. Counsel chưa xác nhận GPLv3 vs Apple Usage Rules/EULA (OB-032; tiền lệ VLC 2011).
-2. App không hiển thị GPLv3/copyright Fairy-Stockfish; không có màn hình About/Licenses (OB-033).
-3. Không có source public: repo `github.com/tng1027/spooky-moove-app` trả 404 khi truy cập ẩn danh (BA kiểm tra), không có LICENSE ở root, không có tag release, engine chỉ là submodule trỏ upstream (chưa mirror), chưa có modification notice cho shim.
-4. Chưa ghi build-info (Xcode/clang/Flutter) và chưa build archive/IPA.
-5. Chưa test trên iPhone thật, chưa TestFlight; chưa có store metadata, Review Notes, privacy policy URL, App Privacy answers, `PrivacyInfo.xcprivacy`, `ITSAppUsesNonExemptEncryption`.
-6. Design: app icon vẽ Shogi/Go/Gomoku + mặt nạ (gây hiểu lầm, nguồn artwork chưa rõ); Settings rỗng và chọn ngôn ngữ chỉ có 1 lựa chọn; cấp "God" chưa đổi tên; fair-play copy nhắc EGF/Nihon Ki-in (tổ chức cờ vây).
+Blockers còn lại:
+1. Counsel chưa xác nhận GPLv3 vs Apple Usage Rules/EULA (OB-032 Q7–Q10; tiền lệ VLC 2011).
+2. Chưa test trên iPhone thật, chưa TestFlight (IPA có rồi nhưng chưa upload/chạy).
+3. Chưa có store metadata, Review Notes, privacy policy URL, App Privacy answers. (`PrivacyInfo.xcprivacy` + `ITSAppUsesNonExemptEncryption = false` đã thêm sau IPA `1.0.0+2`, có trong release build; vào build upload kế tiếp.)
+4. App icon vẫn vẽ Shogi/Go/Gomoku + mặt nạ, nguồn artwork chưa rõ (Q32).
+5. License inventory đầy đủ cho mọi dependency chưa lập thành file (Q30).
 
-Quyết định cần PO: chấp nhận rủi ro bị gỡ khi copyright holder khiếu nại; đổi tên cấp "God" và claim sức mạnh engine; ẩn hay hoàn thiện Settings; giữ TestFlight internal tới khi OB-032 đóng; "game packs" chỉ chứa dữ liệu.
+Quyết định cần PO: chấp nhận rủi ro bị gỡ khi copyright holder khiếu nại; giữ TestFlight internal tới khi OB-032 đóng; "game packs" chỉ chứa dữ liệu; thay app icon.
 
 ---
 
-## GPLv3 checklist (cập nhật 2026-10-05)
+## GPLv3 checklist (recheck 2026-10-05, bản `1.0.0+2`)
 
 | Question | SpookyMoove | Evidence / việc còn lại |
 |---|---|---|
-| GPL source available? | ❌ chưa public | `github.com/tng1027/spooky-moove-app` trả 404 ẩn danh. PO public repo + tag `v1.0.0`. |
+| GPL source available? | ✅ | `github.com/tng1027/spooky-moove-app` trả 200 ẩn danh; tag `v1.0.0`, `v1.0.0+2` đã push. |
 | Exact version identified? | ✅ | Tag `fairy_sf_14_0_1_xq` (`NOTICE.md`, `lib/core/legal/open_source_info.dart`). |
 | Exact commit identified? | ✅ | `433d4115a31ebcf0d9c0e4238b12915b70a0b7c1`. |
 | Modifications disclosed? | ✅ | `NOTICE.md` §Modifications (có ngày) + SPDX header trên 3 file shim. |
-| Complete corresponding source? | ⚠️ chờ app repo public | Engine: fork public `tng1027/Fairy-Stockfish` có nhánh `xq` + tag `fairy_sf_14_0_1_xq` @ `433d411` (đã xác minh 2026-10-05); `.gitmodules` trỏ sang fork. `BUILDING.md` ghi toolchain. Còn: app repo public. |
-| GPL license included? | ✅ | Repo: `LICENSE`. App: `assets/licenses/fairy_stockfish_copying.txt`, có trong release build. |
-| Copyright notices included? | ✅ | `NOTICE.md`; app đăng ký AUTHORS + GPLv3 qua `registerEngineLicense()`. |
-| Source link in app? | ✅ (URL chờ public) | Settings → ABOUT & LICENSES: URL selectable + COPY SOURCE URL; VIEW LICENSES mở `showLicensePage`. |
-| User can obtain source? | ❌ tới khi repo + fork public | |
-| App imposes proprietary restrictions? | ⚠️ | App đã công bố GPL-3.0-or-later (`LICENSE`, README, About). Còn Apple Standard EULA — OB-032 Q8. |
+| Complete corresponding source? | ✅ | App repo public + tag theo từng build; engine fork public `tng1027/Fairy-Stockfish` (nhánh `xq`, tag `fairy_sf_14_0_1_xq` @ `433d411`, trả 200); `.gitmodules` trỏ sang fork; `BUILDING.md` ghi toolchain. |
+| GPL license included? | ✅ | Repo: `LICENSE`. IPA: `assets/licenses/fairy_stockfish_copying.txt` (đã kiểm tra trong `spookymoove.ipa`). |
+| Copyright notices included? | ✅ | `NOTICE.md`; app đăng ký AUTHORS + GPLv3 qua `registerEngineLicense()`; `fairy_stockfish_authors.txt` có trong IPA. |
+| Source link in app? | ✅ | Settings → ABOUT & LICENSES (EN/VI): URL selectable + COPY SOURCE URL; VIEW LICENSES mở `showLicensePage`. |
+| User can obtain source? | ✅ | Repo + fork public, tag `v1.0.0+2` trùng commit build IPA. |
+| App imposes proprietary restrictions? | ⚠️ | App công bố GPL-3.0-or-later (`LICENSE`, README, About). Còn Apple Standard EULA — OB-032 Q8. |
 | Apple EULA conflict? | ❓ counsel | OB-032 Q7–Q9. |
 | Dynamic executable download? | ✅ không | |
 | Engine network dependency? | ✅ không | |
 | DRM preventing GPL rights? | ❓ counsel | App không thêm DRM, nhưng App Store áp FairPlay + Usage Rules (OB-032 Q7). `BUILDING.md` hướng dẫn tự cài bản sửa đổi qua Xcode. |
 
-Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `Frameworks/` gồm `App`, `Flutter`, `fairy_stockfish` (export `fs_start/fs_send/fs_join/fs_free`, chỉ phụ thuộc libc++/Foundation/libSystem); 0 file `.nnue`; hai license asset có trong `flutter_assets`. Chưa làm: build IPA đã ký, kiểm tra About trên iPhone thật.
+Release build check (`flutter build ipa`, 2026-10-05 22:44, tag `v1.0.0+2`): `Frameworks/` gồm `App`, `Flutter`, `fairy_stockfish`; 0 file `.nnue`; hai license asset có trong `flutter_assets`; `CFBundleShortVersionString` 1.0.0, `CFBundleVersion` 2; `CFBundleLocalizations` en, vi; ký team `Z9ZLKTXDX5`. IPA này chưa có `PrivacyInfo.xcprivacy` / `ITSAppUsesNonExemptEncryption`; đã thêm vào source sau đó (release build kiểm tra: có cả hai). Chưa làm: kiểm tra About trên iPhone thật.
+
+Kiểm tra trước đó (bản `1.0.0+1`, `flutter build ios --release --no-codesign`): `Frameworks/` gồm `App`, `Flutter`, `fairy_stockfish` (export `fs_start/fs_send/fs_join/fs_free`, chỉ phụ thuộc libc++/Foundation/libSystem); 0 file `.nnue`; hai license asset có trong `flutter_assets`. Chưa làm: build IPA đã ký, kiểm tra About trên iPhone thật.
 
 ---
 
@@ -64,11 +71,13 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Commit `433d4115a31ebcf0d9c0e4238b12915b70a0b7c1`, tag upstream `fairy_sf_14_0_1_xq` (branch `xq`, 2021-11-19). Ghi trong gitlink và `.gitmodules`. App repo ở `64cee59` ("release v1.0.0"), chưa có git tag.
 - **BA:** Chưa thể chứng minh bản submit dùng đúng commit này khi chưa có tag release — Developer cần tag.
 - **Designer:** About cần hiển thị version/commit này; Dev cấp hằng số/asset để UI đọc (OB-033 REQ-003).
+- **Recheck:** App repo có tag `v1.0.0` và `v1.0.0+2` (đã push); mỗi build upload có tag riêng `v<version>+<build>` (`BUILDING.md`). IPA `1.0.0+2` build từ `4550df9` = tag `v1.0.0+2`.
 
 ### 4. Chúng ta có sửa đổi source code của Fairy-Stockfish không? Nếu có, toàn bộ modification đã được xác định và lưu lại chưa?
 - **Developer:** Không sửa file upstream (submodule sạch). Thay đổi bên ngoài: `fairy_stockfish_main.cpp` đổi `main` → `fs_main`; `fairy_stockfish_shim.cpp` redirect `cin/cout/cerr` và cung cấp C API `fs_start/fs_send/fs_join`; build defines riêng (`hook/build.dart:92–101`). Tất cả có trong git nhưng chưa có modification notice (GPLv3 §5a).
 - **BA:** Đồng ý. Shim + build flags (`LARGEBOARDS`, `NNUE_EMBEDDING_OFF`…) thuộc Corresponding Source; cần notice sửa đổi kèm ngày.
 - **Designer:** Nếu coi là modified, About thêm dòng "Modified for SpookyMoove" + link source.
+- **Recheck:** Modification notice có ngày trong `NOTICE.md` §Modifications + SPDX header trên shim. ✅
 
 ### 5. Có thành phần nào khác của Fairy-Stockfish được bundle không, ngoài engine source/binary?
 - **Developer:** Không. Không có NNUE, `variants.ini`, opening book, Syzygy. `pubspec.yaml` chỉ khai báo font và quân cờ.
@@ -84,36 +93,43 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Về kỹ thuật có (submodule pin + `hook/build.dart` + shim + `pubspec.lock`). Chưa sẵn sàng: chưa tag build submit, chưa xác minh repo public, chưa có archive để đối chiếu.
 - **BA:** Hiện chưa: repo origin trả 404 ẩn danh, không tag, không LICENSE. Cần public repo + tag đúng commit build (Developer/PO).
 - **Designer:** Ngoài phạm vi.
+- **Recheck:** Có — repo public, tag `v1.0.0+2` trùng commit IPA, engine fork public. ✅
 
 ### 8. Source được cung cấp có thể build lại đúng Fairy-Stockfish binary mà chúng ta phân phối không?
 - **Developer:** Tương đương về chức năng: cùng source/defines, `native_toolchain_c` theo `pubspec.lock`, Flutter revision `5fc34683…` (`.metadata`). Xcode/clang không được ghi lại → không đảm bảo bit-identical. Cần build-info cho release.
 - **BA:** GPL không đòi bit-identical nhưng cần build được binary tương đương. Thiếu pin toolchain (không `.fvmrc`), `native_toolchain_c` còn experimental.
 - **Designer:** Ngoài phạm vi.
+- **Recheck:** `BUILDING.md` ghi Flutter 3.47.6 (rev `5fc34683…`), Xcode 27.0, macOS 26.6.2; vẫn không bit-identical (GPL không yêu cầu).
 
 ### 9. Chúng ta sẽ cung cấp source code bằng URL nào cho người dùng?
 - **Developer:** Chưa xác định; app không chứa URL nào. Ứng viên: `https://github.com/tng1027/spooky-moove-app` — PO/dev cần chốt.
 - **BA:** Unknown — PO/Developer chọn URL public, ví dụ GitHub repo + tag `v1.0.0`.
 - **Designer:** Đặt nút "SOURCE CODE" dưới mục Fairy-Stockfish trên About, link thẳng tới tag/commit, kèm URL dạng text để chép khi offline.
+- **Recheck:** Đã chốt `https://github.com/tng1027/spooky-moove-app` (`OpenSourceInfo.appSourceUrl`), hiển thị trong ABOUT & LICENSES dạng text + nút COPY (không link ngoài → không cần parental gate).
 
 ### 10. URL đó có tồn tại và truy cập được trước thời điểm App Store release không?
 - **Developer:** Không xác minh được từ repo (không có `gh`). Release owner cần xác nhận.
 - **BA:** Hiện **không** — origin trả 404 công khai. Phải là điều kiện bắt buộc trong release checklist (cả TestFlight external). Owner: PO.
 - **Designer:** Không release About/screenshot chứa link khi URL chưa hoạt động.
+- **Recheck:** Có — trả 200 ẩn danh (cả fork engine và tag `v1.0.0`). ✅
 
 ### 11. Source repository có chứa đầy đủ Fairy-Stockfish source, modification, build configuration và các thành phần cần thiết để reproduce binary không?
 - **Developer:** Chỉ có gitlink submodule, phụ thuộc upstream GitHub; có build config và shim. Nên fork/mirror hoặc vendor source vào repo/release archive.
 - **BA:** Chưa đầy đủ. Đề xuất mirror source engine vào repo public + thêm `BUILDING.md` hướng dẫn build iOS release.
 - **Designer:** Ngoài phạm vi.
+- **Recheck:** Engine qua submodule trỏ fork public `tng1027/Fairy-Stockfish` (nhánh `xq`, tag giữ nguyên); `BUILDING.md` hướng dẫn build. ✅
 
 ### 12. App có hiển thị GPLv3 license và copyright notices phù hợp không?
 - **Developer:** Không. `LicenseRegistry` chỉ đăng ký OFL font, Cburnett, Noto Serif TC (`lib/main.dart:26–48`); không có `Copying.txt` của Fairy-Stockfish; không có `showLicensePage`.
 - **BA:** Không — release blocker (OB-033).
 - **Designer:** Chưa đạt. Thêm entry "Fairy-Stockfish — GPLv3" với toàn văn license + copyright (từ `AUTHORS`), đọc được offline.
+- **Recheck:** Có — `registerEngineLicense()` đăng ký GPLv3 + AUTHORS; asset có trong IPA; ABOUT & LICENSES hiển thị tên engine, tag, GPLv3. ✅
 
 ### 13. App có một Open Source / Licenses / About screen để người dùng truy cập các thông tin license và source code không?
 - **Developer:** Không. `SettingsDialog` chỉ hiện "NO SETTINGS YET" (`settings_dialog.dart:15`); About/Licenses ở trạng thái Planned (OB-033).
 - **BA:** Không. OB-033 đã có spec (engine, GPLv3, link source, parental gate) nhưng chưa làm.
 - **Designer:** Chưa có. Đề xuất "ABOUT & LICENSES" trong Settings (thay "NO SETTINGS YET"): tên app + version; "Chess & Xiangqi engine: Fairy-Stockfish <version> — GPLv3" với [VIEW LICENSE] [SOURCE CODE]; [OPEN-SOURCE PACKAGES] mở `showLicensePage`. Link ngoài qua parental gate (OB-040).
+- **Recheck:** Có — Settings → ABOUT & LICENSES (OB-033): GPLv3, engine tag/commit, source URL + COPY, VIEW LICENSES (`showLicensePage`). Không hiển thị version app (lấy từ `pubspec.yaml`, chưa đưa lên UI). ✅
 
 ### 14. App Store Description, Screenshots, Keywords và Promotional Text có mô tả Fairy-Stockfish hoặc open-source components một cách chính xác không?
 - **Developer:** Unknown — metadata không có trong repo; chỉ có hướng dẫn ở `docs/marketing-feature-list.md` §5 và OB-034.
@@ -124,6 +140,7 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Không có LICENSE ở root, README không ghi license, `publish_to: 'none'`. Trên thực tế chưa công bố GPLv3 dù PO đã quyết (`tickets/OB-002:3–5`).
 - **BA:** Không có tuyên bố "proprietary", nhưng repo private + không LICENSE + Apple Standard EULA mặc định → thực tế đang "đóng", mâu thuẫn quyết định GPLv3 (OB-002, 2026-10-04). Cần LICENSE GPLv3; Legal xét custom EULA.
 - **Designer:** Tránh "proprietary AI"/"our own engine"; dùng "powered by open-source Fairy-Stockfish".
+- **Recheck:** `LICENSE` GPLv3 ở root, README có mục License, About ghi "free software under GPL-3.0-or-later". Còn Apple Standard EULA (OB-032 Q8).
 
 ### 16. Chúng ta đã xác định chính xác phần nào của SpookyMoove được GPLv3 bao phủ và phần nào độc lập chưa?
 - **Developer:** PO quyết định toàn bộ app GPLv3 (OB-002:4). Asset bên thứ ba giữ license riêng (Cburnett BSD, fonts OFL). Chưa phản ánh trong repo; counsel chưa xác nhận.
@@ -214,11 +231,13 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Có: "for training, casual study, handicap games…" và "Do NOT use it during rated, sanctioned or tournament games", có bản VI (`fair_play_notice.dart:22–39`). Wording chờ legal review.
 - **BA:** Có (OB-008 xong): hiện lần đầu, EN/VI, cấm dùng trong ván rated/giải nếu chưa được trọng tài cho phép. Chờ Legal duyệt.
 - **Designer:** Đạt về ý, mở lại được qua nút "FAIR PLAY". Nhưng copy nhắc EGF/Nihon Ki-in (cờ vây) → đổi thành "FIDE, national chess or xiangqi federations, or any other organisation"; thay "cheating" bằng "breaks fair-play rules"; tăng `fairPlayNoticeVersion`. Marketing lặp lại đúng câu "training, casual study, handicap games and friendly offline play".
+- **Recheck:** Copy đã sửa: "FIDE, national chess or xiangqi federations, or any other organisation", "breaks fair-play rules" (không còn EGF/Nihon Ki-in/cheating), `fairPlayNoticeVersion` = 4; hiển thị theo ngôn ngữ app (OB-053). Chờ Legal duyệt wording.
 
 ### 34. Các claims về engine strength trong App Store metadata có chính xác và có bằng chứng kiểm chứng không?
 - **Developer:** Unknown — không có benchmark/Elo; `docs/marketing-feature-list.md:160` cấm claim "Grandmaster-level"/rating khi chưa sign-off.
 - **BA:** Chưa có metadata. Engine giới hạn ~900 ms và 2 thread (OB-021 D14) → "Full-strength"/"Maximum strength analysis" có nguy cơ sai (Guideline 2.3). PO sửa wording.
 - **Designer:** Không có bằng chứng sức mạnh. Đổi tên cấp "God" (`persona_tier.dart`) thành "Champion" hoặc "Max"; copy chỉ định tính.
+- **Recheck:** Cấp 7 đổi thành BIG BRAIN / CAO THỦ với mô tả định tính ("strongest move the app can find"), không claim tuyệt đối (OB-054). Metadata store vẫn chưa có.
 
 ### 35. App có hoạt động ổn định trên real iPhones, không chỉ simulator, trước khi submit không?
 - **Developer:** Chưa — chỉ simulator (`memory-bank/progress.md:33`, `docs/marketing-feature-list.md:149`). Cần `flutter run --release` trên iPhone thật cho Chess và Xiangqi + `integration_test/fairy_stockfish_engine_test.dart`.
@@ -234,11 +253,13 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Có rủi ro: "Fast suggestions" và "about 10 MB" chưa xác nhận trên máy thật; Settings placeholder; About/Licenses Planned; restyle In progress (`docs/marketing-feature-list.md:45,102,110–111,128`).
 - **BA:** Có. CHANGELOG liệt kê "Settings and Language dialogs" trong khi Settings là placeholder. Không đưa vào metadata; xét ẩn Settings rỗng (2.1). Owner: PO.
 - **Designer:** Có rủi ro. Listing/screenshot không nhắc Settings, ngôn ngữ, tablet, lịch sử ván, Shogi/Go/Gomoku, "≈1s / 10MB". Ẩn nút Settings/ngôn ngữ hoặc để Settings chỉ chứa About.
+- **Recheck:** Settings có ABOUT & LICENSES; Language có ENGLISH + TIẾNG VIỆT (OB-053). "Fast suggestions" / "about 10 MB" vẫn chưa đo trên máy thật.
 
 ### 38. App có đáp ứng App Review Guideline về minimum functionality và cung cấp utility/experience thực sự native không?
 - **Developer:** Theo code đáp ứng: Flutter native, luật Chess/Xiangqi, engine on-device, 7 level, undo, haptics; không phải web wrapper.
 - **BA:** Nhiều khả năng đạt; rủi ro nhỏ từ Settings rỗng và nút ngôn ngữ một lựa chọn.
 - **Designer:** Về cơ bản có giá trị thật (2 game, 7 cấp, offline, haptics, nhãn screen reader). Bỏ placeholder; screenshot thể hiện bối cảnh dùng với bàn cờ thật.
+- **Recheck:** Không còn placeholder (Settings có About, Language 2 lựa chọn).
 
 ### 39. App Review Notes có giải thích rõ Fairy-Stockfish được sử dụng ở đâu, license là GPLv3, source code ở đâu và cách reviewer kiểm tra feature này không?
 - **Developer:** Chưa có bản nháp. Cần nêu: Fairy-Stockfish (GPLv3), commit `433d411`, URL source, cách kiểm tra (New game → đi một nước → xem suggestion).
@@ -249,11 +270,13 @@ Release build check (`flutter build ios --release --no-codesign`, 2026-10-05): `
 - **Developer:** Có ngay: license (`third_party/fairy-stockfish/Copying.txt`), commit `433d411`, build config (`hook/build.dart`). Thiếu: URL source public đã xác minh, tag app repo, build-info (Xcode/Flutter).
 - **BA:** Hiện chưa. Chuẩn bị "compliance pack" trước khi submit (Developer/PO).
 - **Designer:** Chuẩn bị sẵn screenshot About và màn license để gửi kèm.
+- **Recheck:** Có: license, commit `433d411`, URL public, tag `v1.0.0+2`, toolchain (`BUILDING.md`). Còn soạn Review Notes (Q39).
 
 ### 41. Toàn bộ thông tin trên đã được kiểm tra lại trên chính archive/IPA build sẽ submit, thay vì chỉ kiểm tra source repository chưa?
 - **Developer:** Chưa. Không có `build/ios/archive` hay `build/ios/ipa`, chỉ build Debug simulator. Cần `flutter build ipa --release` rồi kiểm tra framework, không NNUE, notice, commit/tag.
 - **BA:** Chưa. Kiểm tra thêm privacy manifest và `ITSAppUsesNonExemptEncryption` (chưa có trong `Info.plist`, khuyến nghị ở `docs/ios-testflight-release.md` §4.2).
 - **Designer:** Chụp About/license/Fair Play trên đúng IPA submit để version khớp `1.0.0+1`.
+- **Recheck:** IPA `1.0.0+2` đã kiểm tra: framework engine có, 0 `.nnue`, license assets có, version 1.0.0 (2), localizations en/vi. Thiếu `PrivacyInfo.xcprivacy` và `ITSAppUsesNonExemptEncryption`. Chưa chụp About trên máy thật.
 
 ### 42. Có bất kỳ điều khoản nào trong Apple Developer Program License Agreement / App Review Guidelines mâu thuẫn với cách chúng ta đang phân phối Fairy-Stockfish không?
 - **Developer:** Unknown — GPLv3 vs Usage Rules/DPLA đang tranh cãi (OB-032:34); `docs/ios-testflight-release.md:17–22` đánh dấu release blocker. Counsel kết luận.

@@ -194,35 +194,36 @@ Draft by the developer; PO 2026-10-05 set ĐI LẠI, TÔI NGHE THEO RỒI, TỚI
 | `back` | ‹ BACK (spoken: Back) | ‹ QUAY LẠI (spoken: Quay lại) |
 | `fairPlay` | FAIR PLAY (spoken: Fair play) | CAM KẾT CÔNG BẰNG (spoken: Cam kết công bằng) |
 | `newGameTitleSpokenPrefix` | New game | Ván mới |
-| `playing` | PLAYING | TỚI LƯỢT BẠN |
+| `playing` | PLAYING | BẠN ĐANG CHƠI |
 | `yourSide` | YOUR SIDE (spoken: Your side) | PHE CỦA BẠN (spoken: Phe của bạn) |
 | `firstMove` | FIRST MOVE (spoken: first move) | ĐI TRƯỚC (spoken: đi trước) |
 | `secondMove` | SECOND MOVE (spoken: second move) | ĐI SAU (spoken: đi sau) |
-| `startGame` | START GAME | BẮT ĐẦU |
-| `levelHelper` | LEVEL CAN BE CHANGED DURING THE GAME | CÓ THỂ ĐỔI CẤP ĐỘ KHI ĐANG CHƠI |
-| `newGame` | NEW GAME | VÁN MỚI |
-| `discardTitle` | DISCARD THE CURRENT GAME? (spoken: Discard the current game?) | BỎ VÁN ĐANG CHƠI? (spoken: Bỏ ván đang chơi?) |
+| `startGame` | START GAME (spoken: Start game) | BẮT ĐẦU (spoken: Bắt đầu) |
+| `levelHelper` | YOU CAN CHANGE THE LEVEL WHILE PLAYING | CÓ THỂ ĐỔI CẤP ĐỘ KHI ĐANG CHƠI |
+| `newGame` | NEW GAME (spoken: New game) | VÁN MỚI (spoken: Ván mới) |
+| `discardTitle` | DISCARD THIS GAME? (spoken: Discard this game?) | BỎ VÁN NÀY? (spoken: Bỏ ván này?) |
 | `cancel` | CANCEL | HỦY |
 | `gameOver` | GAME OVER | HẾT VÁN |
-| `waitingForOpponent` | WAITING FOR OPPONENT | CHỜ ĐỐI THỦ ĐI |
-| `pickLevelAbove` | PICK A LEVEL ABOVE | CHỌN CẤP ĐỘ Ở TRÊN |
-| `confirmPlayed` | I PLAYED IT (spoken: I played the suggested move) | TÔI NGHE THEO RỒI (spoken: Tôi nghe theo nước gợi ý rồi) |
-| `undo` | UNDO | ĐI LẠI |
+| `waitingForOpponent` | WAITING FOR OPPONENT (spoken: Waiting for the opponent) | CHỜ ĐỐI THỦ (spoken: Chờ đối thủ) |
+| `pickLevelAbove` | PICK A LEVEL ABOVE (spoken: Pick a level above) | CHỌN CẤP ĐỘ Ở TRÊN (spoken: Chọn cấp độ ở trên) |
+| `confirmPlayed` | I PLAYED IT (spoken: I played the suggested move) | ĐÃ CHƠI THEO GỢI Ý (spoken: Đã chơi theo gợi ý) |
+| `undo` | UNDO (spoken: Undo) | ĐI LẠI (spoken: Đi lại) |
 | `pickLevel` | PICK A LEVEL | CHỌN CẤP ĐỘ |
 | `thinking` | THINKING... | ĐANG NGHĨ... |
-| `bestMove` | BEST MOVE | NƯỚC HAY NHẤT |
-| `engineError` | ENGINE ERROR | MẤT KẾT NỐI |
-| `retry` | RETRY | THỬ LẠI |
+| `suggestionCaption` | SUGGESTION | GỢI Ý |
+| `engineError` | AN ERROR OCCURRED | LỖI XẢY RA |
+| `retry` | RETRY (spoken: Retry) | THỬ LẠI (spoken: Thử lại) |
 | `winRate` | WIN RATE | TỶ LỆ THẮNG |
-| `youMateIn` | YOU MATE IN | BẠN CHIẾU HẾT SAU |
-| `opponentMatesIn` | OPPONENT MATES IN | ĐỐI THỦ CHIẾU HẾT SAU |
+| `youMateIn` | YOU MATE IN | BẠN CHIẾU TƯỚNG SAU |
+| `opponentMatesIn` | OPPONENT MATES IN | ĐỐI THỦ CHIẾU TƯỚNG SAU |
 | `percentSpoken` | percent | phần trăm |
-| `checkmate` | CHECKMATE | CHIẾU HẾT |
-| `noMoves` | NO MOVES | HẾT NƯỚC ĐI |
+| `queenSpoken` … `knightSpoken` | (spoken) Queen, Rook, Bishop, Knight | (spoken) Hậu, Xe, Tượng, Mã |
+| `checkmate` | CHECKMATE | CHIẾU TƯỚNG |
+| `noMoves` | NO MOVES | HẾT CỜ |
 | `youWin` | YOU WIN | BẠN THẮNG |
 | `youLose` | YOU LOSE | BẠN THUA |
-| `stalemateDraw` | STALEMATE — DRAW | HẾT NƯỚC ĐI — HÒA |
-| `drawInsufficientMaterial` | DRAW — NOT ENOUGH PIECES TO WIN | HÒA — KHÔNG ĐỦ QUÂN ĐỂ THẮNG |
+| `stalemateDraw` | STALEMATE — DRAW | HẾT CỜ — HÒA |
+| `drawInsufficientMaterial` | DRAW — NOT ENOUGH PIECES TO WIN | HÒA — KHÔNG ĐỦ CỜ ĐỂ THẮNG |
 | `drawFivefold` | DRAW — SAME POSITION 5 TIMES | HÒA — LẶP THẾ CỜ 5 LẦN |
 | `drawSeventyFiveMoves` | DRAW — 75 MOVES WITHOUT CAPTURE OR PAWN MOVE | HÒA — 75 NƯỚC KHÔNG ĂN QUÂN HAY ĐI TỐT |
 | `hintThreefold` | DRAW POSSIBLE — SAME POSITION 3 TIMES | CÓ THỂ XIN HÒA — LẶP THẾ CỜ 3 LẦN |

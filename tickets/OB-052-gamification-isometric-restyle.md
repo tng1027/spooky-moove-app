@@ -57,7 +57,7 @@ So that the app feels fun to use and I recognise which game I'm in at a glance.
 - BR-001 (identity only, D4): game accents identify a game. They never mean good, bad, selected, check, legal, suggested or any other status. They're never used on board squares or points, piece glyphs, the win-rate label, the suggestion move text or status messages.
 - BR-002: Status colours are unchanged and keep priority: green = suggestion / good / I PLAYED IT, red = check / danger, amber = selected. A selected key inside a game-accented area is still amber.
 - BR-003: Tokens in one place: identity accents, side-face shades, extrusion depth and press-sink values are design tokens in `lib/core/theme/` (`AppColors` / `AppDimens`), not literals in widgets.
-- BR-004: Accent per game comes from `GameKind` data through one mapping (README guardrail, OB-042 REQ-008). No `game == GameKind.chess`-style checks in widgets. A new game is registered by adding its accent in that one place, and a missing accent is a compile-time error.
+- BR-004: Accent per game comes from `GameKind` data through one mapping (README guardrail, OB-042 REQ-008). Since OB-053, names and taglines come from `lib/core/l10n/app_strings.dart` (EN/VI), not `GameCopy`. No `game == GameKind.chess`-style checks in widgets. A new game is registered by adding its accent in that one place, and a missing accent is a compile-time error.
 - BR-005: App-level chrome that doesn't belong to one game (Home header, Settings / Language dialogs, fair-play screen, discard prompt) uses neutral colours, not a game accent.
 - BR-006: Text and pictograms on an accent surface use `bgDark` (Chess pink ≈ 9.0:1, Xiangqi blue ≈ 6.0:1). White text on an accent is not allowed (≈ 2.1:1 on pink, ≈ 3.2:1 on blue, below WCAG AA 4.5:1 for 16 sp bold).
 - BR-007: Existing rules stay: JetBrains Mono, tabular figures, Latin labels, text labels on keys (no icons), dark theme only.
@@ -584,7 +584,7 @@ PO input 2026-10-05: a mockup of the Home screen; PO choices recorded as D9. Thi
      - Tagline: `AppTypography.secondary` (12 sp w400), `textSecondary` (5.3:1). Up to 2 lines, then ellipsis.
   4. 8 dp gap.
   5. Chevron: `Icons.chevron_right` 24 dp, `textSecondary` (5.3:1 non-text). Not the game accent. Fixed size. Excluded from semantics.
-- **Taglines** (per-game data next to `label`, one place; a game without a tagline must not compile, BR-004): Chess `CLASSIC STRATEGY`, Xiangqi `CHINESE CHESS`.
+- **Taglines** (since OB-053 in `app_strings.dart`, EN/VI; originally per-game data next to `label`, one place; a game without a tagline must not compile, BR-004): Chess `CLASSIC STRATEGY`, Xiangqi `CHINESE CHESS`.
 - Semantics: one node per row, `button`, label "Chess, classic strategy" / "Xiangqi, Chinese chess" (spoken label + tagline in sentence case); children excluded. Keys unchanged: `HomeScreen.gameKey(game)`.
 - Navigation unchanged: tap opens the new-game screen for that game (`HomeScreen.openNewGame`), double-tap guard unchanged.
 - Not added: count pill, coming-soon / locked / download rows (only `GameKind.values` are listed).

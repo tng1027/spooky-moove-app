@@ -14,33 +14,10 @@ import '../home_screen.dart';
 ///
 /// Asks for confirmation; confirming discards the current game and opens the
 /// new-game screen (OB-050). CANCEL leaves the game unchanged.
-class NewGameKey extends ConsumerWidget {
+class NewGameKey extends ConsumerStatefulWidget {
   const NewGameKey({super.key = regionKey});
 
   static const Key regionKey = Key('advisor.newGame');
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return AppKey(
-      onTap: () => _onTap(context, ref),
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Text(
-          AppStrings.of(context).newGame,
-          style: AppTypography.primary,
-        ),
-      ),
-    );
-  }
-
-  Future<void> _onTap(BuildContext context, WidgetRef ref) async {
-    final isConfirmed = await showDialog<bool>(
-      context: context,
-      builder: (_) => const NewGameConfirmDialog(),
-    );
-    if (isConfirmed != true || !context.mounted) return;
-    openNewGameScreen(context, ref);
-  }
 
   /// Discards the current game without asking (OB-050 D1) and opens the
   /// new-game screen for the same game, with Home as the root beneath it.
@@ -53,6 +30,42 @@ class NewGameKey extends ConsumerWidget {
     final game = ref.read(gameSessionProvider)?.game ?? GameKind.values.first;
     session.discard();
     HomeScreen.openNewGame(navigator, game: game, onStart: session.start);
+  }
+
+  @override
+  ConsumerState<NewGameKey> createState() => _NewGameKeyState();
+}
+
+class _NewGameKeyState extends ConsumerState<NewGameKey> {
+  /// A rapid double tap opens only one confirmation dialog.
+  bool _isDialogOpen = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppKey(
+      onTap: _onTap,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          AppStrings.of(context).newGame,
+          semanticsLabel: AppStrings.of(context).newGameSpoken,
+          style: AppTypography.primary,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onTap() async {
+    if (_isDialogOpen) return;
+    _isDialogOpen = true;
+    final isConfirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => const NewGameConfirmDialog(),
+    );
+    if (!mounted) return;
+    _isDialogOpen = false;
+    if (isConfirmed != true) return;
+    NewGameKey.openNewGameScreen(context, ref);
   }
 }
 
@@ -84,6 +97,7 @@ class NewGameConfirmDialog extends StatelessWidget {
               child: AppKey(
                 key: confirmKey,
                 label: strings.newGame,
+                semanticsLabel: strings.newGameSpoken,
                 onTap: () => Navigator.of(context).maybePop(true),
               ),
             ),

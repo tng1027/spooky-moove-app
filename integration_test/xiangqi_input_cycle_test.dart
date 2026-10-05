@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:spookymoove/app.dart';
 import 'package:spookymoove/core/board/intersection_board.dart';
+import 'package:spookymoove/core/board/smart_entry.dart';
 import 'package:spookymoove/core/game/player_side.dart';
 import 'package:spookymoove/features/advisor/presentation/suggestion_controller.dart';
 import 'package:spookymoove/features/advisor/presentation/widgets/confirm_played_key.dart';
@@ -32,6 +33,9 @@ import 'package:spookymoove/features/settings/application/app_language_controlle
 /// Tap-to-tap time of a real user is not included (taps are instant here).
 const _cycles = 10;
 const _budgetMs = 1200;
+
+/// Timers may fire slightly before the board's stopwatch reaches the guard.
+const _guardMargin = Duration(milliseconds: 50);
 const _orthogonal = [(1, 0), (-1, 0), (0, 1), (0, -1)];
 
 void main() {
@@ -103,11 +107,16 @@ void main() {
         if (board().isOver) break;
         final moves = board().legalMoves;
         final move = moves[(cycle * 7) % moves.length];
-        await wait(tester, XiangqiBoardController.commitGuard);
+        await wait(tester, XiangqiBoardController.commitGuard + _guardMargin);
 
         final stopwatch = Stopwatch()..start();
         await tester.tap(point(move.from));
         await tester.pump();
+        expect(
+          board().entry,
+          isA<SourceSelected<XiangqiPoint, XiangqiMove>>(),
+          reason: 'first tap on ${move.uci}',
+        );
         final neighbour = offTargetNeighbour(move.to);
         final snapped = neighbour != null;
         final at = snapped
@@ -119,6 +128,11 @@ void main() {
             : tester.getCenter(point(move.to));
         await tester.tapAt(at);
         await tester.pump();
+        expect(
+          board().sideToMove,
+          PlayerSide.second,
+          reason: 'second tap on ${move.uci}: ${board().entry}',
+        );
         await awaitSuggestion(tester);
         stopwatch.stop();
 

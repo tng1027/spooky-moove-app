@@ -1,6 +1,6 @@
 # Ticket Analysis
 
-> **Status: Ready for development (PO 2026-10-05). Priority P1, part of the M1 store release (tier names and copy ship with OB-053 and close the OB-034 tier-7 item).** All questions answered (Decisions D1–D9): short on-screen copy approved (D8), icon set approved (D9). The design spec `docs/design/OB-054-level-descriptions-design.md` is the **source of truth for layout and semantics**; the approved copy and icons are recorded in this ticket.
+> **Status: Implemented 2026-10-05, PO verifying** (names, copy, icons, level card and screen-reader hints in `persona_tier_copy.dart` / `persona_tier_keys.dart`). Earlier: **Ready for development (PO 2026-10-05). Priority P1, part of the M1 store release (tier names and copy ship with OB-053 and close the OB-034 tier-7 item).** All questions answered (Decisions D1–D9): short on-screen copy approved (D8), icon set approved (D9). The design spec `docs/design/OB-054-level-descriptions-design.md` is the **source of truth for layout and semantics**; the approved copy and icons are recorded in this ticket.
 >
 > Previous status: Ready for design finalization (2026-10-05, Q7 open); before that Draft (Q1–Q6 open).
 

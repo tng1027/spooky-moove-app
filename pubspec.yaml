@@ -2,7 +2,7 @@ name: spookymoove
 description: "Offline multi-board game advisor."
 publish_to: 'none'
 
-version: 1.0.0+2
+version: 1.0.0+4
 
 environment:
   sdk: ^3.13.5

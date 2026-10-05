@@ -68,26 +68,36 @@ final class AppStrings {
     required this.secondMove,
     required this.secondMoveSpoken,
     required this.startGame,
+    required this.startGameSpoken,
     required this.levelHelper,
     required this.newGame,
+    required this.newGameSpoken,
     required this.discardTitle,
     required this.discardTitleSpoken,
     required this.cancel,
     required this.gameOver,
     required this.waitingForOpponent,
+    required this.waitingForOpponentSpoken,
     required this.pickLevelAbove,
+    required this.pickLevelAboveSpoken,
     required this.confirmPlayed,
     required this.confirmPlayedSpoken,
     required this.undo,
+    required this.undoSpoken,
     required this.pickLevel,
     required this.thinking,
-    required this.bestMove,
+    required this.suggestionCaption,
     required this.engineError,
     required this.retry,
+    required this.retrySpoken,
     required this.winRate,
     required this.youMateIn,
     required this.opponentMatesIn,
     required this.percentSpoken,
+    required this.queenSpoken,
+    required this.rookSpoken,
+    required this.bishopSpoken,
+    required this.knightSpoken,
     required this.checkmate,
     required this.noMoves,
     required this.youWin,
@@ -177,30 +187,42 @@ final class AppStrings {
   final String secondMove;
   final String secondMoveSpoken;
   final String startGame;
+  final String startGameSpoken;
   final String levelHelper;
 
   // Advisor screen (OB-007, OB-011, OB-012, OB-041)
   final String newGame;
+  final String newGameSpoken;
   final String discardTitle;
   final String discardTitleSpoken;
   final String cancel;
   final String gameOver;
   final String waitingForOpponent;
+  final String waitingForOpponentSpoken;
   final String pickLevelAbove;
+  final String pickLevelAboveSpoken;
   final String confirmPlayed;
   final String confirmPlayedSpoken;
   final String undo;
+  final String undoSpoken;
   final String pickLevel;
   final String thinking;
-  final String bestMove;
+  final String suggestionCaption;
   final String engineError;
   final String retry;
+  final String retrySpoken;
 
   // Evaluation headline (OB-041, OB-052 DS-7)
   final String winRate;
   final String youMateIn;
   final String opponentMatesIn;
   final String percentSpoken;
+
+  // Chess promotion choices (OB-006), spoken only.
+  final String queenSpoken;
+  final String rookSpoken;
+  final String bishopSpoken;
+  final String knightSpoken;
 
   // Game results (OB-024, OB-047). Keep the ` — ` separator in two-part
   // texts: the card splits on it.

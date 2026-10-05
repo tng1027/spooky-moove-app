@@ -203,6 +203,16 @@ void main() {
     expect(board.fill('e1'), AppColors.accentRed);
   });
 
+  testWidgets('the king in check is red even when it cannot move', (
+    tester,
+  ) async {
+    final board = await pumpBoard(
+      tester,
+      fen: '4r2k/8/8/8/R7/8/3P1P2/3QKB2 w - - 0 1',
+    );
+    expect(board.fill('e1'), AppColors.accentRed);
+  });
+
   testWidgets('the suggestion and its castling rook squares are green', (
     tester,
   ) async {

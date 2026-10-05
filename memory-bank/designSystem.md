@@ -73,7 +73,7 @@ class AppColors {
 │ [NEW GAME]  WIN RATE   [↶ UNDO]  │ 48 dp  TopBar; value 24 sp green / red / grey
 │               62%                │        (OB-050 corners, OB-041 rev 3 win rate)
 │ [•¹][♟²][♞³][♝⁴][♜⁵][♛⁶][♚⁷]     │ 52 dp  PersonaRow, amber = selected (OB-023)
-│ ┌ • BEST MOVE ─────────────────┐ │ ≥ 88   SuggestionCard (takes the slack)
+│ ┌ • SUGGESTION ─────────────────┐ │ ≥ 88   SuggestionCard (takes the slack)
 │ │        E2 ➔ E4  (48 sp green)│ │
 │ │ EVAL +0.4 • DEPTH 16 • 850k  │ │
 │ └──────────────────────────────┘ │
@@ -85,7 +85,7 @@ class AppColors {
 ```
 - Fixed heights subtracted by `boardSizeFor`: 48 + 52 + 88 + 12 + 52 = 252 dp. Cell = `min((W − 8) / files, (H − 252) / ranks)`; the 8 dp is the tray's side padding. Chess at 360 dp: 44 dp cells (≥ 44 ✔); at ≥ 392 dp: ≥ 48 ✔. Height-limited boards keep their earlier size.
 - Top bar: corner keys neutral, ≤ 30 % width. Centre is two lines: caption (`secondary`) `WIN RATE` / `YOU MATE IN` / `OPPONENT MATES IN`, value (`winRate`, 24 sp) `62%` / `4` / `--`; green when favourable (rounded win ≥ 50 % or the user mates), red otherwise, `textSecondary` with no suggestion; `GAME OVER` single line. Scales down at text scale 2.0.
-- Suggestion card: outer padding 8 dp sides / 4 dp top-bottom; `• BEST MOVE` caption (green dot) in the ready and thinking states; move in `accentGreen`; expert line separated by ` • `.
+- Suggestion card: outer padding 8 dp sides / 4 dp top-bottom; `• SUGGESTION` caption (green dot) in the ready and thinking states; move in `accentGreen`; expert line separated by ` • `.
 - Board tray: neutral surface block (`surfaceDark` / `surfaceSide` / highlight), not pressable, 4 dp padding all round, no accent frame. Full width when the board is width-limited.
 - Status line: the single full-width key carries the turn status (OB-041 table: `WAITING FOR OPPONENT`, `PICK A LEVEL ABOVE`, I PLAYED IT, `NEW GAME`). I PLAYED IT = green block with a 24 dp `bgDark` check chip (18 dp white check) + label in `bgDark`. UNDO lives in the top bar.
 - Earlier layouts (card / persona / board / status with `YOUR MOVE [UNDO]`, 2026-10-02; 35 / 10 / 55 % keypad split) are superseded.
@@ -159,7 +159,7 @@ class AppColors {
 │ [♔ WHITE ◉ FIRST MOVE][♚ BLACK ○ SECOND MOVE]  60  side cards
 └────────────────────────────────────────┘
 [       START GAME  [›]       ]            48  accent block, pinned
-  LEVEL CAN BE CHANGED DURING THE GAME     pinned helper
+  YOU CAN CHANGE THE LEVEL WHILE PLAYING     pinned helper
 ```
 - Screen padding 8 dp sides, 16 dp top / bottom. Header and bottom block are fixed; hero, title and panel scroll. START GAME is always visible.
 - **Hero:** static `CustomPainter`: 2:1 isometric slab, top face game accent, side faces game side colour (0.1 × width deep); Chess = 4 × 4 checker, Xiangqi = intersection grid with a river gap; two upright `sidePictogram` pieces (kings / 帥 將). Solid fills only, **no glow**, no animation, no semantics. **Shown only at ≥ 700 dp body height and text scale ≤ 1.3**; height `min(0.25 × H, 200)`. Hidden on 360 × 640 / 360 × 600.

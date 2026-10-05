@@ -76,9 +76,11 @@ class _StatusLineState extends ConsumerState<StatusLine> {
     StatusLineContent.none => const SizedBox.shrink(),
     StatusLineContent.waitingForOpponent => _ActionKey(
       label: AppStrings.of(context).waitingForOpponent,
+      spoken: AppStrings.of(context).waitingForOpponentSpoken,
     ),
     StatusLineContent.pickLevel => _ActionKey(
       label: AppStrings.of(context).pickLevelAbove,
+      spoken: AppStrings.of(context).pickLevelAboveSpoken,
     ),
     StatusLineContent.confirmDisabled => const ConfirmPlayedKey(
       isEnabled: false,
@@ -87,6 +89,7 @@ class _StatusLineState extends ConsumerState<StatusLine> {
     StatusLineContent.newGame => _ActionKey(
       key: StatusLine.newGameKey,
       label: AppStrings.of(context).newGame,
+      spoken: AppStrings.of(context).newGameSpoken,
       onTap: () => NewGameKey.openNewGameScreen(context, ref),
     ),
   };
@@ -94,9 +97,15 @@ class _StatusLineState extends ConsumerState<StatusLine> {
 
 /// A full-width key with a single label; disabled when [onTap] is null.
 class _ActionKey extends StatelessWidget {
-  const _ActionKey({required this.label, this.onTap, super.key});
+  const _ActionKey({
+    required this.label,
+    required this.spoken,
+    this.onTap,
+    super.key,
+  });
 
   final String label;
+  final String spoken;
   final VoidCallback? onTap;
 
   @override
@@ -108,7 +117,11 @@ class _ActionKey extends StatelessWidget {
       onTap: onTap,
       child: FittedBox(
         fit: BoxFit.scaleDown,
-        child: Text(label, style: AppTypography.primary.copyWith(color: color)),
+        child: Text(
+          label,
+          semanticsLabel: spoken,
+          style: AppTypography.primary.copyWith(color: color),
+        ),
       ),
     );
   }

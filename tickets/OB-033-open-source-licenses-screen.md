@@ -1,5 +1,7 @@
 # Ticket Analysis
 
+> **Status: Partially implemented (2026-10-05).** Settings → ABOUT & LICENSES ships: engine and app source links (copied, not opened, so no parental gate yet) and the Flutter licence page. Open: app version (REQ-002) and the parental gate once a link opens externally.
+
 TICKET_TYPE: NEW_FEATURE
 CONFIDENCE: MEDIUM
 

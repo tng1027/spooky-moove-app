@@ -36,6 +36,7 @@ class UndoKey extends ConsumerWidget {
             ),
             Text(
               AppStrings.of(context).undo,
+              semanticsLabel: AppStrings.of(context).undoSpoken,
               style: AppTypography.primary.copyWith(color: color),
             ),
           ],

@@ -35,7 +35,7 @@
 - No resume after the app is killed in M1: the app always opens at Home (OB-001 Q6, PO 2026-10-04).
 
 ### Move entry (tap board, OB-006)
-- **Move-based (Chess, Xiangqi):** smart 1–2-tap entry. The first tap on an own movable piece = source; on any other square = destination. The move auto-commits when unambiguous. Chess promotion = a 4-pictogram chooser (queen first). Xiangqi: see "Xiangqi (Phase 2)" below.
+- **Move-based (Chess, Xiangqi):** 2-tap entry (OB-048). The first tap on an own movable piece = source; on any other square = destination. The first tap always shows the options; the second tap commits. Chess promotion = a 4-pictogram chooser (queen first). Xiangqi: see "Xiangqi (Phase 2)" below.
 - **Placement-based (Gomoku, Go, Othello):** target point only. Details per game phase.
   - Othello: only legal flipping coordinates are tappable.
   - Go 19×19: quadrant zoom or coordinate grid, plus `[Pass]` / `[Resign]`; all still open (OB-019).
@@ -59,7 +59,7 @@ Every decided Chess behaviour carries over (new-game flow, persona, turn loop, �
 - Rules module: hand-written pure Dart, no new dependency (XQ11).
 
 ### Persona tiers (OB-021 is the source of truth)
-- 🥚 Baby, 🐣 Gentle, 🐥 Soft, 🥉 Even, 🥈 Solid, 🥇 Master, 👑 God. The same tiers in every game.
+- Noob, Rookie, Chill guy, 50/50, Hustler, Local boss, Big brain (OB-054; VI names and icons in `persona_tier_copy.dart`). Internal keys stay `baby` … `god`. The same tiers in every game.
 - The persona changes only the move **suggested to the user**; the app never plays as an opponent.
 - Tiers are defined on the user's win chance, so they work for every engine. All tiers respect the ≤ 1000 ms / 2-thread budget. Exact bands and rules: OB-021, OB-022.
 

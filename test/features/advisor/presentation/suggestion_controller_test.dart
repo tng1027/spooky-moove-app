@@ -502,6 +502,16 @@ void main() {
     expect(h.engine.searches, isEmpty);
   });
 
+  test('an engine that stopped running shows the error', () async {
+    final h = harness()..start(PieceColor.white);
+    h.selectTier(PersonaTier.god);
+    await settle();
+
+    h.engine.last.fail(StateError('UciEngine is not running.'));
+    await settle();
+    expect(h.state, isA<SuggestionFailed>());
+  });
+
   test('an illegal engine move shows the error', () async {
     final h = harness()..start(PieceColor.white);
     h.selectTier(PersonaTier.god);
