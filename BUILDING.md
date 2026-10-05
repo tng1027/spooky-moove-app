@@ -20,7 +20,7 @@ release.
 ```sh
 git clone --recurse-submodules https://github.com/tng1027/spooky-moove-app.git
 cd spooky-moove-app
-git checkout v1.0.0
+git checkout v1.0.0+2   # the tag of the build you installed: v<version>+<build>
 git submodule update --init --recursive
 ```
 

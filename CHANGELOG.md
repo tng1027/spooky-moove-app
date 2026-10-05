@@ -3,6 +3,15 @@
 All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow `x.y.z+build` from `pubspec.yaml`.
 
+## [1.0.0+2] - 2026-10-05
+
+### Added
+- Vietnamese app language: TIẾNG VIỆT in the Language dialog, all screens and screen-reader labels translated, device language by default, saved choice wins; the fair-play notice follows the app language.
+- Level card on the new-game screen: icon, name, strength bar and a short description of the selected level.
+
+### Changed
+- The seven levels are renamed (Noob … Big brain / Gà mờ … Cao thủ) and each has its own icon; level keys during a game show the icon only.
+
 ## [1.0.0+1] - 2026-10-05
 
 First release.
