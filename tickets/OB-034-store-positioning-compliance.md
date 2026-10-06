@@ -1,5 +1,7 @@
 # Ticket Analysis
 
+> **Update (PO 2026-10-06): iOS listing signed off** — EN/VI name, subtitle, promotional text, description, keywords and Review Notes in `docs/store-listing-ios.md`; iPhone only; review contact wafari.on.0919@gmail.com. Still open: screenshots, support and privacy policy URLs, Android listing.
+
 > **Update (PO 2026-10-04): app name = SpookyMoove**, bundle/application ID `com.spookymoove.app` (briefly Ghost64) (Open Question 1 answered; replaces "OmniChess Advisor"). The name contains none of the banned terms. Still open: tier-7 label and the rest of the listing checklist.
 
 TICKET_TYPE: TECHNICAL_TASK

@@ -117,6 +117,6 @@ void main() {
 
   test('untranslated parts stay identical (REQ-008)', () {
     expect(AppStrings.vietnamese.aboutEngine, contains('Fairy-Stockfish'));
-    expect(AppStrings.vietnamese.aboutFreeSoftware, contains('SpookyMoove'));
+    expect(AppStrings.vietnamese.aboutFreeSoftware, contains('Spooky Moove'));
   });
 }

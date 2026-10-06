@@ -2,7 +2,7 @@
 /// [LicenseRegistry]. Must match `NOTICE.md` and the
 /// `third_party/fairy-stockfish` submodule commit.
 abstract final class OpenSourceInfo {
-  static const String appName = 'SpookyMoove';
+  static const String appName = 'Spooky Moove';
   static const String appLicense = 'GPL-3.0-or-later';
 
   /// Every release is tagged `v<version>` in this repository.

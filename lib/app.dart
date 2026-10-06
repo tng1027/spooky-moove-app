@@ -19,7 +19,7 @@ class SpookyMooveApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(appLanguageProvider);
     return MaterialApp(
-      title: 'SpookyMoove',
+      title: 'Spooky Moove',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark(),
       darkTheme: AppTheme.dark(),

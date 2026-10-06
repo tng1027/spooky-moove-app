@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Must match AppColors.bgDark so the native launch screen hands off to Flutter without a flash. -->
+    <color name="launch_background">#0F1015</color>
+</resources>
